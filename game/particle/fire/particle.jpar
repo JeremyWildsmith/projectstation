@@ -1,0 +1,28 @@
+{
+  "baseVelocity": {
+    "x": 0,
+    "y": 0,
+    "z": 3
+  },
+  "baseAcceleration": {
+    "x": 0,
+    "y": 0,
+    "z": 6
+  },
+  "baseLife": 5000,
+  "lifeVariance": 4000,
+  "magnitudeVariance": 3,
+  "angleVariance": 0.25,
+  "count": 20,
+  "components": [
+    {
+      "sprite": "sprite.jsf",
+      "bounds": {
+        "width": 0.1,
+        "height": 0.1,
+        "depth": 0.1
+      },
+      "loop": false
+    }
+    ]
+}

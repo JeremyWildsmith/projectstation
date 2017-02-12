@@ -1,0 +1,28 @@
+{
+  "style": "file:///ui/style/tech/tech.juis",
+  "bounds": {
+    "width": 600,
+    "height": 20
+  },
+  "controls": [
+    {
+      "type": "valueGuage",
+      "name": "loadingProgressBar",
+      "location": {
+        "x": 5,
+        "y": 5
+      },
+      "config": {
+        "color": {
+					"x": 255,
+					"y": 0,
+					"z": 0
+				},
+				"bounds": {
+					"width": 590,
+					"height": 10
+				}
+      }
+    }
+  ]
+}

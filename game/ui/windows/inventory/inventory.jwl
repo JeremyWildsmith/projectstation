@@ -1,0 +1,300 @@
+{
+  "controls" : [ {
+    "name" : "btnNextItems",
+    "location" : {
+      "x" : 290,
+      "y" : 100
+    },
+    "type" : "button",
+    "config" : {
+      "text" : ""
+    },
+    "style" : "file:///ui/style/parpg/button/forward/style.juis"
+  },{
+    "name" : "lblCurrentPage",
+    "location" : {
+      "x" : 158,
+      "y" : 100
+    },
+    "type" : "label",
+    "config" : {
+      "text" : "1/1"
+    }
+  },{
+    "name" : "btnPreviousItems",
+    "location" : {
+      "x" : 15,
+      "y" : 100
+    },
+    "type" : "button",
+    "config" : {
+      "text" : ""
+    },
+    "style" : "file:///ui/style/parpg/button/back/style.juis"
+  }, {
+    "name" : "itemContainer0",
+    "location" : {
+      "x" : 13,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer1",
+    "location" : {
+      "x" : 43,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer2",
+    "location" : {
+      "x" : 73,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer3",
+    "location" : {
+      "x" : 103,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer4",
+    "location" : {
+      "x" : 133,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer5",
+    "location" : {
+      "x" : 163,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer6",
+    "location" : {
+      "x" : 193,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer7",
+    "location" : {
+      "x" : 223,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer8",
+    "location" : {
+      "x" : 253,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer9",
+    "location" : {
+      "x" : 283,
+      "y" : 25
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer10",
+    "location" : {
+      "x" : 13,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer11",
+    "location" : {
+      "x" : 43,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer12",
+    "location" : {
+      "x" : 73,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer13",
+    "location" : {
+      "x" : 103,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer14",
+    "location" : {
+      "x" : 133,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer15",
+    "location" : {
+      "x" : 163,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer16",
+    "location" : {
+      "x" : 193,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer17",
+    "location" : {
+      "x" : 223,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer18",
+    "location" : {
+      "x" : 253,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  }, {
+    "name" : "itemContainer19",
+    "location" : {
+      "x" : 283,
+      "y" : 55
+    },
+    "type" : "itemContainer",
+    "config" : {
+      "bounds" : {
+        "width" : 30,
+        "height" : 30
+      }
+    }
+  } ],
+  "bounds" : {
+    "width" : 327,
+    "height" : 138
+  },
+  "style" : "file:///ui/style/parpg/inventory.juis"
+}

@@ -1,0 +1,181 @@
+{
+  "texture": "texture.png",
+  "animations": [
+    {
+      "frames": [
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 192,
+            "width": 64,
+            "y": 0,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 0,
+            "width": 64,
+            "y": 64,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 64,
+            "width": 64,
+            "y": 64,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 128,
+            "width": 64,
+            "y": 64,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 192,
+            "width": 64,
+            "y": 64,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 0,
+            "width": 64,
+            "y": 128,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 64,
+            "width": 64,
+            "y": 128,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 128,
+            "width": 64,
+            "y": 128,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 192,
+            "width": 64,
+            "y": 128,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 0,
+            "width": 64,
+            "y": 192,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 64,
+            "width": 64,
+            "y": 192,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 128,
+            "width": 64,
+            "y": 192,
+            "height": 64
+          }
+        },
+        {
+          "delay": 156,
+          "anchor": {
+            "x": 32,
+            "y": 32
+          },
+          "region": {
+            "x": 192,
+            "width": 64,
+            "y": 192,
+            "height": 64
+          }
+        }
+      ],
+      "name": "idle"
+    }
+  ],
+  "scale": 1.0,
+  "defaultAnimation": "idle"
+}

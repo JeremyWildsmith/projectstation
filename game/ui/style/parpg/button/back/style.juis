@@ -1,0 +1,50 @@
+{
+  "defaultStyle": "default",
+  "componentStyles": [
+    {
+      "components": [
+        "button"
+      ],
+      "defaultStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 190,
+            "z": 190
+          }
+        },
+        "frame": {
+          "background": "default.jsf"
+        }
+      },
+      "enterStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        },
+        "frame": {
+          "background": "enter.jsf"
+        }
+      },
+      "activatedStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        },
+        "frame": {
+          "background": "activated.jsf"
+        },
+        "audioEnter": "file:///ui/style/tech/audio/down.wav"
+      }
+    }
+  ]
+}

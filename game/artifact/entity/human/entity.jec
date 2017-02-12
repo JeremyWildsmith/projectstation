@@ -1,0 +1,27 @@
+{
+      "inventorySize" : 50,
+      "model" : "model.jmf",
+      "blood" : "file:///particle/blood/particle.jpar",
+      "items" : [ ],
+      "loadout" : { 
+        "Head" : "file:///item/bodyparts/head/item.jitm",
+        "LeftArm" : "file:///item/bodyparts/leftArm/item.jitm",
+        "RightArm" : "file:///item/bodyparts/rightArm/item.jitm",
+        "LeftLeg" : "file:///item/bodyparts/leftLeg/item.jitm",
+        "RightLeg" : "file:///item/bodyparts/rightLeg/item.jitm",
+        "Chest" : "file:///item/bodyparts/chest/item.jitm",
+        "Uniform" : "file:///item/uniform/chemist/item.jitm"
+      },
+      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform" ],
+      "attributes" : {
+	  "Action": 3.0,
+    	  "Speed": 6.0,
+    	  "Hits" : 10.0,
+    	  "Max Hits": 10.0,
+    	  "View Distance": 3.0,
+    	  "Field Of View": 1.04719755,
+    	  "Allegiance": 2.0
+    	  },
+      "statusStyle": "file:///ui/style/status/style.juis",
+      "collisionRadius" : 0.8
+}

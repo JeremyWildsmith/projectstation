@@ -1,0 +1,98 @@
+{
+  "defaultStyle": "default",
+  "componentStyles": [
+    {
+      "components": [
+        "panel"
+      ],
+      "defaultStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 100,
+            "y": 100,
+            "z": 100
+          }
+        },
+        "frame": {
+          "background": "frame/dialogue.jsf"
+        }
+      }
+    },
+    {
+      "components": [
+        "button"
+      ],
+      "defaultStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 190,
+            "z": 190
+          }
+        },
+        "frame": {
+          "background": "file:///ui/style/parpg/button/default.jsf"
+        }
+      },
+      "enterStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        },
+        "frame": {
+          "background": "button/active.jsf"
+        }
+      },
+      "activatedStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        },
+        "frame": {
+          "background": "button/default.jsf"
+        },
+        "audioEnter": "file:///ui/style/tech/audio/down.wav"
+      }
+    },
+    {
+      "components": [
+        "viewport"
+      ],
+      "defaultStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        }
+      }
+    },
+    {
+      "components": [
+        "default"
+      ],
+      "defaultStateStyle": {
+        "font": {
+          "font": "file:///ui/font/parpg/large.juif",
+          "color": {
+            "x": 255,
+            "y": 255,
+            "z": 255
+          }
+        }
+      }
+    }
+  ]
+}

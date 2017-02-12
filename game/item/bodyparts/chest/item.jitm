@@ -1,0 +1,9 @@
+{
+  "name": "Right Arm",
+  "model": "model.jmf",
+  "function": "Chest Armor",
+  "description": "This is a human arm.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  }
+}

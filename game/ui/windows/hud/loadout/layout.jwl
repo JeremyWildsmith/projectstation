@@ -1,0 +1,51 @@
+{
+  "controls": [
+    {
+      "name": "Jacket",
+      "location": {
+        "x": 13,
+        "y": 25
+      },
+      "type": "itemContainer",
+      "config": {
+        "bounds": {
+          "width": 30,
+          "height": 30
+        }
+      }
+    },
+    {
+      "name": "Uniform",
+      "location": {
+        "x": 43,
+        "y": 25
+      },
+      "type": "itemContainer",
+      "config": {
+        "bounds": {
+          "width": 30,
+          "height": 30
+        }
+      }
+    },
+    {
+      "name": "Waist",
+      "location": {
+        "x": 73,
+        "y": 25
+      },
+      "type": "itemContainer",
+      "config": {
+        "bounds": {
+          "width": 30,
+          "height": 30
+        }
+      }
+    }
+  ],
+  "bounds": {
+    "width": 327,
+    "height": 138
+  },
+  "style": "style.juis"
+}

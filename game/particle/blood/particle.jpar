@@ -1,0 +1,32 @@
+{
+  "bounds": {
+    "width": 5,
+    "height": 5,
+    "depth": 5
+  },
+  "baseVelocity": {
+    "x": 0,
+    "y": 0,
+    "z": 1
+  },
+  "baseAcceleration": {
+    "x": 0,
+    "y": 0,
+    "z": 5
+  },
+  "baseLife": 6000,
+  "lifeVariance": 3000,
+  "magnitudeVariance": 5,
+  "angleVariance": 0.25,
+  "count": 1000,
+  "components": [
+    {
+      "sprite": "0.jsf",
+      "bounds": {
+        "width": 0.1,
+        "height": 0.1,
+        "depth": 0.1
+      }
+    }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+  "style": "file:///ui/style/mainmenu/style.juis",
+  "bounds": {
+    "width": 1280,
+    "height": 720
+  },
+  "controls": [
+		{
+      "type": "worldView",
+      "name": "worldView",
+      "location": {
+        "x": 0,
+        "y": 0
+      },
+      "config": {
+        "bounds" : {
+          "width" : 1280,
+          "height" : 720
+        }
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnNewGame",
+      "location": {
+        "x": 550,
+        "y": 360
+      },
+      "config": {
+        "text": "Start Game"
+      }
+    }
+  ]
+}

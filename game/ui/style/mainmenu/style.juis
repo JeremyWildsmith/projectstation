@@ -1,0 +1,67 @@
+{
+  "defaultStyle": "frame",
+  "componentStyles": [
+    {
+      "components": [
+        "frame"
+      ],
+      "defaultStateStyle": {
+        "font" : {
+          "font" : "file:///ui/font/parpgtitle/font.juif",
+          "color" : {
+            "x" : 100,
+            "y" : 100,
+            "z" : 100
+          }
+        },
+        "frame": {
+          "bottomRight": "frame/br.jsf",
+          "topLeft": "frame/tl.jsf",
+          "right": "frame/r.jsf",
+          "bottom": "frame/b.jsf",
+          "left": "frame/l.jsf",
+          "topRight": "frame/tr.jsf",
+          "fill": "frame/f.jsf",
+          "bottomLeft": "frame/bl.jsf",
+          "top": "frame/t.jsf"
+        }
+      }
+    },
+    {
+      "components" : [
+        "button"
+      ],
+      "defaultStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/parpgtitle/font.juif",
+          "color" : {
+            "x" : 100,
+            "y" : 100,
+            "z" : 100
+          }
+        }
+      },
+      "enterStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/parpgtitle/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        }
+      },
+      "activatedStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/parpgtitle/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 20,
+            "z" : 20
+          }
+        },
+        "audioEnter" : "audio/down.wav"
+      }
+    }
+  ]
+}

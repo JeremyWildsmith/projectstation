@@ -1,0 +1,146 @@
+{
+  "scale": 1,
+  "animations": [
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 0
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 32
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 64
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 96
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 128
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "open"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 128
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 96
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 64
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 32
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 0
+          },
+          "delay": 200,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "close"
+    }
+  ],
+  "texture": "texture.png"
+}

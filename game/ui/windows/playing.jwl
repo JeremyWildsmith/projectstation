@@ -1,0 +1,23 @@
+{
+  "style": "file:///ui/style/vampire/vampire.juis",
+  "bounds": {
+    "width": 1280,
+    "height": 720
+  },
+  "controls": [
+    {
+      "type": "worldView",
+      "name": "worldView",
+      "location": {
+        "x": 0,
+        "y": 0
+      },
+      "config": {
+        "bounds" : {
+          "width" : 1280,
+          "height" : 720
+        }
+      }
+    }
+  ]
+}

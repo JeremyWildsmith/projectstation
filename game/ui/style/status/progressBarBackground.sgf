@@ -1,0 +1,4 @@
+{
+  "shader" : "shader.jsh",
+  "texture" : "progressBarFill.png"
+}

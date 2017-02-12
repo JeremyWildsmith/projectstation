@@ -1,0 +1,20 @@
+{
+  "scale" : 1.0,
+  "animations" : [ {
+    "frames" : [ {
+      "region" : {
+        "height" : 11,
+        "width" : 96,
+        "y" : 0,
+        "x" : 0
+      },
+      "delay" : 10000,
+      "anchor" : {
+        "y" : 0,
+        "x" : 0
+      }
+    } ],
+    "name" : "idle"
+  } ],
+  "texture" : "progressBarBackground.sgf"
+}

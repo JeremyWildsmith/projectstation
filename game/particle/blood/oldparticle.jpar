@@ -1,0 +1,16 @@
+{
+  "count": 7,
+  "life": 500,
+  "velocity": {
+    "x": 8,
+    "y": 8
+  },
+  "acceleration": {
+    "x": 1,
+    "y": 1
+  },
+  "variation": 1,
+  "sprites": [
+    "0.jsf"
+  ]
+}

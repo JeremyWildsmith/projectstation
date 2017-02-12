@@ -1,0 +1,21 @@
+{
+  "scale" : 1.0,
+  "defaultAnimation" : "idle",
+  "animations" : [ {
+    "frames" : [ {
+      "region" : {
+        "height" : 14,
+        "width" : 22,
+        "y" : 0,
+        "x" : 0
+      },
+      "delay" : 10000,
+      "anchor" : {
+        "y" : 0,
+        "x" : 0
+      }
+    } ],
+    "name" : "idle"
+  } ],
+  "texture" : "enter.png"
+}

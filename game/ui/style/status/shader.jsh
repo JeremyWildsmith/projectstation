@@ -1,0 +1,7 @@
+{
+  "passes": [
+    {
+      "type" : "blackAndWhite",
+      "arguments" : { }
+    }]
+}
