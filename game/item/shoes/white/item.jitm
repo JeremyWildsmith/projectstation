@@ -1,0 +1,9 @@
+{
+  "name": "White Shoes",
+  "model": "model.jmf",
+  "icon" : "icon.jsf",
+  "description": "Some white shoes.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  }
+}

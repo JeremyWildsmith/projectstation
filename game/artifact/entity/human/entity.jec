@@ -10,9 +10,10 @@
         "LeftLeg" : "file:///item/bodyparts/leftLeg/item.jitm",
         "RightLeg" : "file:///item/bodyparts/rightLeg/item.jitm",
         "Chest" : "file:///item/bodyparts/chest/item.jitm",
-        "Uniform" : "file:///item/uniform/chemist/item.jitm"
+        "Uniform" : "file:///item/uniform/chemist/item.jitm",
+        "Feet" : "file:///item/shoes/white/item.jitm"
       },
-      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform" ],
+      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform", "Feet" ],
       "attributes" : {
 	  "Action": 3.0,
     	  "Speed": 6.0,
