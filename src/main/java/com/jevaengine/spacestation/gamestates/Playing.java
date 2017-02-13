@@ -20,7 +20,7 @@ package com.jevaengine.spacestation.gamestates;
 
 import com.jevaengine.spacestation.IState;
 import com.jevaengine.spacestation.IStateContext;
-import com.jevaengine.spacestation.VampyrProjectionFactory;
+import com.jevaengine.spacestation.StationProjectionFactory;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.graphics.IRenderable;
@@ -139,7 +139,7 @@ public class Playing implements IState
 		
 		try
 		{
-			ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new VampyrProjectionFactory().create());
+			ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
 			FollowCamera camera = new FollowCamera(sceneBufferFactory);
 			
 			m_playingWindow = m_windowFactory.create(PLAYING_VIEW_WINDOW, new PlayingWindowBehaviourInjector(camera, crosshair));

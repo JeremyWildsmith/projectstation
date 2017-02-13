@@ -30,7 +30,7 @@ import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.world.IWorldFactory;
 import javax.inject.Inject;
 
-public final class VampyrGameFactory implements IGameFactory
+public final class StationGameFactory implements IGameFactory
 {
 	private final IInputSource m_inputSource;
 	private final IRenderer m_renderer;
@@ -41,7 +41,7 @@ public final class VampyrGameFactory implements IGameFactory
 	private final ISpellFactory m_spellFactory;
 	
 	@Inject
-	public VampyrGameFactory(IInputSource inputSource, IRenderer renderer, ISpriteFactory spriteFactory, IWindowFactory windowFactory, IWorldFactory worldFactory, IEngineThreadPool engineThreadPool, IAudioClipFactory audioClipFactory, ISpellFactory spellFactory)
+	public StationGameFactory(IInputSource inputSource, IRenderer renderer, ISpriteFactory spriteFactory, IWindowFactory windowFactory, IWorldFactory worldFactory, IEngineThreadPool engineThreadPool, IAudioClipFactory audioClipFactory, ISpellFactory spellFactory)
 	{
 		m_inputSource = inputSource;
 		m_renderer = renderer;
@@ -54,6 +54,6 @@ public final class VampyrGameFactory implements IGameFactory
 	
 	public IGame create()
 	{
-		return new VampyrGame(m_inputSource, m_windowFactory, m_worldFactory, m_spriteFactory, m_audioClipFactory, m_renderer.getResolution(), m_spellFactory);
+		return new StationGame(m_inputSource, m_windowFactory, m_worldFactory, m_spriteFactory, m_audioClipFactory, m_renderer.getResolution(), m_spellFactory);
 	}
 }

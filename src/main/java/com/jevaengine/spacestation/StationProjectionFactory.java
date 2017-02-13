@@ -21,11 +21,11 @@ package com.jevaengine.spacestation;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.world.scene.IOrthographicProjectionFactory;
 
-public class VampyrProjectionFactory implements IOrthographicProjectionFactory
+public class StationProjectionFactory implements IOrthographicProjectionFactory
 {
 	private final Matrix3X3 m_projectionMatrix;
 	
-	public VampyrProjectionFactory()
+	public StationProjectionFactory()
 	{
 		m_projectionMatrix = new Matrix3X3(32F, 0F, 0, 
 											0F, 32F, 0F,

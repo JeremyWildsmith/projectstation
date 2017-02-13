@@ -37,14 +37,14 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class VampyrGame extends DefaultGame implements IStateContext
+public final class StationGame extends DefaultGame implements IStateContext
 {
 	private IRenderable m_cursor;
 	private IState m_state;
 	
-	private Logger m_logger = LoggerFactory.getLogger(VampyrGame.class);
+	private Logger m_logger = LoggerFactory.getLogger(StationGame.class);
 
-	public VampyrGame(IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, Vector2D resolution, ISpellFactory spellFactory)
+	public StationGame(IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, Vector2D resolution, ISpellFactory spellFactory)
 	{
 		super(inputSource, resolution);
 	

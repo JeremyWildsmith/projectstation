@@ -25,11 +25,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
 
-public class VampyrAssetStreamFactory implements IAssetStreamFactory
+public class StationAssetStreamFactory implements IAssetStreamFactory
 {
 	private final File m_assetSource;
 	
-	public VampyrAssetStreamFactory(URI assetSource)
+	public StationAssetStreamFactory(URI assetSource)
 	{
 	  m_assetSource = new File(assetSource);
 	}

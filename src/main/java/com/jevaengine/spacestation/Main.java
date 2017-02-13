@@ -163,7 +163,7 @@ public class Main implements WindowListener
 		protected void configure()
 		{
 			bind(IInputSource.class).toInstance(FrameInputSource.create(m_frame));
-			bind(IGameFactory.class).to(VampyrGameFactory.class);
+			bind(IGameFactory.class).to(StationGameFactory.class);
 			bind(IEntityFactory.class).to(RpgEntityFactory.class).asEagerSingleton();
 			bind(IDialogueRouteFactory.class).to(ScriptedDialogueRouteFactory.class);
 			bind(IRpgCharacterFactory.class).to(UsrCharacterFactory.class);
@@ -191,7 +191,7 @@ public class Main implements WindowListener
 			bind(IAssetStreamFactory.class).toProvider(new Provider<IAssetStreamFactory>() {
 				@Override
 				public IAssetStreamFactory get() {
-					return new VampyrAssetStreamFactory(Paths.get("").toUri());
+					return new StationAssetStreamFactory(Paths.get("").toUri());
 				}
 			});
 			
