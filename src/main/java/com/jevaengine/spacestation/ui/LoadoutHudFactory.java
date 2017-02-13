@@ -124,8 +124,8 @@ public final class LoadoutHudFactory {
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
-			final LoadoutItemContainer uniform = getControl(LoadoutItemContainer.class, "uniform");
-			final LoadoutItemContainer shoes = getControl(LoadoutItemContainer.class, "shoes");
+			final SimpleItemContainer uniform = getControl(SimpleItemContainer.class, "uniform");
+			final SimpleItemContainer shoes = getControl(SimpleItemContainer.class, "shoes");
 			uniform.setSlot(m_loadout.getSlot(UsrWieldTarget.Uniform));
 			shoes.setSlot(m_loadout.getSlot(UsrWieldTarget.Feet));
 		}

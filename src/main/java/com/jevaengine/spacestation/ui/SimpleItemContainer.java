@@ -10,8 +10,8 @@ import io.github.jevaengine.graphics.IRenderable;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
-import io.github.jevaengine.rpg.entity.character.IImmutableLoadout.IImmutableLoadoutSlot;
 import io.github.jevaengine.rpg.entity.character.ILoadout.NullLoadoutSlot;
+import io.github.jevaengine.rpg.item.IImmutableItemSlot;
 import io.github.jevaengine.ui.Control;
 import java.awt.Graphics2D;
 
@@ -19,20 +19,20 @@ import java.awt.Graphics2D;
  *
  * @author Jeremy
  */
-public final class LoadoutItemContainer extends Control {
+public final class SimpleItemContainer extends Control {
 	
-	public static final String COMPONENT_NAME = "loadoutItemContainer";
+	public static final String COMPONENT_NAME = "simpleItemContainer";
 	
 	private final IImmutableGraphic m_background;
-	private IImmutableLoadoutSlot m_loadoutSlot = new NullLoadoutSlot();
+	private IImmutableItemSlot m_loadoutSlot = new NullLoadoutSlot();
 		
-	public LoadoutItemContainer(String instanceName, IImmutableGraphic background) {
+	public SimpleItemContainer(String instanceName, IImmutableGraphic background) {
 		super(COMPONENT_NAME, instanceName);
 		
 		m_background = background;
 	}
 	
-	public void setSlot(IImmutableLoadoutSlot slot) {
+	public void setSlot(IImmutableItemSlot slot) {
 		m_loadoutSlot = slot;
 	}
 
