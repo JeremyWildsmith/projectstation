@@ -23,6 +23,8 @@ import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
 import com.jevaengine.spacestation.ui.HudFactory;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
+import com.jevaengine.spacestation.ui.InventoryHudFactory;
+import com.jevaengine.spacestation.ui.InventoryHudFactory.InventoryHud;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory.LoadoutHud;
 import io.github.jevaengine.audio.IAudioClipFactory;
@@ -71,6 +73,7 @@ public class Playing implements IState {
 	private static final URI PLAYING_VIEW_WINDOW = URI.create("file:///ui/windows/playing.jwl");
 	private static final URI HUD_WINDOW = URI.create("file:///ui/windows/hud/layout.jwl");
 	private static final URI LOADOUT_WINDOW = URI.create("file:///ui/windows/loadout/layout.jwl");
+	private static final URI INVENTORY_WINDOW = URI.create("file:///ui/windows/inventory/layout.jwl");
 
 	private IStateContext m_context;
 	private final World m_world;
@@ -89,6 +92,7 @@ public class Playing implements IState {
 
 	private Hud m_hud;
 	private LoadoutHud m_loadoutHud;
+	private InventoryHud m_inventoryHud;
 
 	public Playing(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, World world) {
 		m_windowFactory = windowFactory;
@@ -137,6 +141,14 @@ public class Playing implements IState {
 			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
+			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create();
+			m_inventoryHud.setMovable(false);
+			m_inventoryHud.setTopMost(true);
+			m_inventoryHud.setVisible(false);
+			
+			m_inventoryHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x + m_loadoutHud.getBounds().width + 10,
+												  m_loadoutHud.getLocation().y));
+			
 			m_hud.getObservers().add(new HudFactory.IHudObserver() {
 				@Override
 				public void movementSpeedChanged(boolean isRunning) { }
@@ -144,6 +156,7 @@ public class Playing implements IState {
 				@Override
 				public void inventoryViewChanged(boolean isVisible) {
 					m_loadoutHud.setVisible(isVisible);
+					m_inventoryHud.setVisible(isVisible);
 				}
 			});
 		} catch (WindowConstructionException e) {

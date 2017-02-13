@@ -1,91 +1,102 @@
 {
   "controls": [
     {
-      "name": "id",
+      "name": "6",
       "location": {
         "x": 8,
         "y": 92
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "id.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "glasses",
+      "name": "0",
       "location": {
         "x": 8,
         "y": 8
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "glasses.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "head",
+      "name": "1",
       "location": {
         "x": 50,
         "y": 8
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "head.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "ears",
+      "name": "2",
       "location": {
         "x": 92,
         "y": 8
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "ears.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "uniform",
+      "name": "3",
       "location": {
         "x": 8,
         "y": 50
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "uniform.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "suit",
+      "name": "4",
       "location": {
         "x": 50,
         "y": 50
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "suit.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "gloves",
+      "name": "5",
       "location": {
         "x": 92,
         "y": 50
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "gloves.png"
+        "background": "slot.png"
       }
     },
     {
-      "name": "shoes",
+      "name": "7",
       "location": {
         "x": 50,
         "y": 92
       },
       "type": "simpleItemContainer",
       "config": {
-        "background": "shoes.png"
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "8",
+      "location": {
+        "x": 92,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
       }
     }
   ],
