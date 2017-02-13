@@ -4,7 +4,7 @@
       "name": "toggleWalkRun",
       "location": {
         "x": 158,
-        "y": 58
+        "y": 8
       },
       "type": "toggleIcon",
       "config": {
@@ -16,7 +16,7 @@
       "name": "toggleInteractionNature",
       "location": {
         "x": 116,
-        "y": 58
+        "y": 8
       },
       "type": "toggleInteractionNature",
       "config": {
@@ -30,7 +30,7 @@
       "name": "toggleHand",
       "location": {
         "x": 42,
-        "y": 58
+        "y": 8
       },
       "type": "toggleHand",
       "config": {
@@ -43,7 +43,7 @@
       "name": "toggleInventory",
       "location": {
         "x": 0,
-        "y": 58
+        "y": 8
       },
       "type": "toggleIcon",
       "config": {
@@ -54,7 +54,7 @@
   ],
   "bounds": {
     "width": 200,
-    "height": 100
+    "height": 50
   },
   "style": "style.juis"
 }

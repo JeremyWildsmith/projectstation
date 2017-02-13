@@ -23,15 +23,13 @@ import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
 import com.jevaengine.spacestation.ui.HudFactory;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
+import com.jevaengine.spacestation.ui.LoadoutHudFactory;
+import com.jevaengine.spacestation.ui.LoadoutHudFactory.LoadoutHud;
 import io.github.jevaengine.audio.IAudioClipFactory;
-import io.github.jevaengine.graphics.IRenderable;
 import io.github.jevaengine.graphics.ISpriteFactory;
-import io.github.jevaengine.graphics.ISpriteFactory.SpriteConstructionException;
-import io.github.jevaengine.graphics.NullGraphic;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputKeyEvent.KeyEventType;
 import io.github.jevaengine.joystick.InputMouseEvent;
-import io.github.jevaengine.joystick.InputMouseEvent.MouseButton;
 import io.github.jevaengine.joystick.InputMouseEvent.MouseEventType;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
@@ -39,21 +37,15 @@ import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.IMovementDirector;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter.NullRpgCharacter;
-import io.github.jevaengine.rpg.entity.character.tasks.AttackTask;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.MenuStrip;
-import io.github.jevaengine.ui.MenuStrip.IMenuStripListener;
 import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.Timer;
-import io.github.jevaengine.ui.Timer.ITimerObserver;
-import io.github.jevaengine.ui.Viewport;
 import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.ui.Window.IWindowFocusObserver;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WorldView;
 import io.github.jevaengine.ui.WorldView.IWorldViewInputObserver;
-import io.github.jevaengine.ui.style.NullUIStyle;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.IParallelWorldFactory;
 import io.github.jevaengine.world.World;
@@ -65,7 +57,6 @@ import io.github.jevaengine.world.steering.DirectionSteeringBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior.NullSteeringBehavior;
 import java.awt.event.KeyEvent;
-import java.lang.ref.WeakReference;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +70,7 @@ public class Playing implements IState {
 	private static final URI CROSSHAIR = URI.create("file:///ui/crosshair.jsf");
 	private static final URI PLAYING_VIEW_WINDOW = URI.create("file:///ui/windows/playing.jwl");
 	private static final URI HUD_WINDOW = URI.create("file:///ui/windows/hud/layout.jwl");
+	private static final URI LOADOUT_WINDOW = URI.create("file:///ui/windows/loadout/layout.jwl");
 
 	private IStateContext m_context;
 	private final World m_world;
@@ -96,6 +88,7 @@ public class Playing implements IState {
 	private IRpgCharacter m_player = new NullRpgCharacter();
 
 	private Hud m_hud;
+	private LoadoutHud m_loadoutHud;
 
 	public Playing(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, World world) {
 		m_windowFactory = windowFactory;
@@ -135,6 +128,24 @@ public class Playing implements IState {
 			m_hud.center();
 			m_hud.setLocation(new Vector2D(m_hud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height));
+			
+			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create();
+			m_loadoutHud.setMovable(false);
+			m_loadoutHud.setTopMost(true);
+			m_loadoutHud.setVisible(false);
+			m_loadoutHud.center();
+			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x,
+					m_playingWindow.getBounds().height - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
+			
+			m_hud.getObservers().add(new HudFactory.IHudObserver() {
+				@Override
+				public void movementSpeedChanged(boolean isRunning) { }
+
+				@Override
+				public void inventoryViewChanged(boolean isVisible) {
+					m_loadoutHud.setVisible(isVisible);
+				}
+			});
 		} catch (WindowConstructionException e) {
 			m_logger.error("Error occured constructing demo world or world view. Reverting to MainMenu.", e);
 			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory));

@@ -10,6 +10,8 @@ import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.ui.Control;
+import io.github.jevaengine.util.IObserverRegistry;
+import io.github.jevaengine.util.Observers;
 import java.awt.Graphics2D;
 
 /**
@@ -21,6 +23,7 @@ public final class ToggleIcon extends Control {
 	
 	private final IImmutableGraphic m_active;
 	private final IImmutableGraphic m_inactive;
+	private final Observers m_observers = new Observers();
 	
 	private boolean m_isActive;
 	
@@ -36,6 +39,11 @@ public final class ToggleIcon extends Control {
 	public boolean isActive() {
 		return m_isActive;
 	}
+	
+	public IObserverRegistry getObservers()
+	{
+		return m_observers;
+	}
 
 	@Override
 	public boolean onMouseEvent(InputMouseEvent mouseEvent) {
@@ -43,6 +51,8 @@ public final class ToggleIcon extends Control {
 			return false;
 		
 		m_isActive = !m_isActive;
+		
+		m_observers.raise(IToggleIconObserver.class).toggled();
 		
 		return true;
 	}
@@ -66,5 +76,9 @@ public final class ToggleIcon extends Control {
 			m_active.render(g, x, y, scale);
 		else
 			m_inactive.render(g, x, y, scale);
+	}
+	
+	public interface IToggleIconObserver {
+		void toggled();
 	}
 }

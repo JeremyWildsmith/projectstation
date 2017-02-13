@@ -50,6 +50,8 @@ public class StationControlFactory implements IControlFactory
 			return ToggleInteractionNature.class;
 		else if(className.equals(ToggleHand.COMPONENT_NAME))
 			return ToggleHand.class;
+		else if(className.equals(LoadoutItemContainer.COMPONENT_NAME))
+			return LoadoutItemContainer.class;
 		else
 			return m_controlFactory.lookup(className);
 	}
@@ -63,6 +65,8 @@ public class StationControlFactory implements IControlFactory
 			return ToggleInteractionNature.COMPONENT_NAME;
 		else if(controlClass.equals(ToggleHand.class))
 			return ToggleHand.COMPONENT_NAME;
+		else if(controlClass.equals(LoadoutItemContainer.class))
+			return LoadoutItemContainer.COMPONENT_NAME;
 		else
 			return m_controlFactory.lookup(controlClass);
 	}
@@ -95,6 +99,10 @@ public class StationControlFactory implements IControlFactory
 				IImmutableGraphic active = m_graphicFactory.create(config.resolve(configVar.getChild("active").getValue(String.class)));
 				
 				return (T)new ToggleHand(instanceName, left, right, active);
+			}else if(controlClass.equals(LoadoutItemContainer.class)) {
+				IImmutableGraphic background = m_graphicFactory.create(config.resolve(configVar.getChild("background").getValue(String.class)));
+	
+				return (T)new LoadoutItemContainer(instanceName, background);
 			}else
 				return m_controlFactory.create(controlClass, instanceName, config, auxConfig);
 		} catch(IConfigurationFactory.ConfigurationConstructionException | 

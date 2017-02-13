@@ -1,51 +1,97 @@
 {
   "controls": [
     {
-      "name": "Jacket",
+      "name": "id",
       "location": {
-        "x": 13,
-        "y": 25
+        "x": 8,
+        "y": 92
       },
-      "type": "itemContainer",
+      "type": "loadoutItemContainer",
       "config": {
-        "bounds": {
-          "width": 30,
-          "height": 30
-        }
+        "background": "id.png"
       }
     },
     {
-      "name": "Uniform",
+      "name": "glasses",
       "location": {
-        "x": 43,
-        "y": 25
+        "x": 8,
+        "y": 8
       },
-      "type": "itemContainer",
+      "type": "loadoutItemContainer",
       "config": {
-        "bounds": {
-          "width": 30,
-          "height": 30
-        }
+        "background": "glasses.png"
       }
     },
     {
-      "name": "Waist",
+      "name": "head",
       "location": {
-        "x": 73,
-        "y": 25
+        "x": 50,
+        "y": 8
       },
-      "type": "itemContainer",
+      "type": "loadoutItemContainer",
       "config": {
-        "bounds": {
-          "width": 30,
-          "height": 30
-        }
+        "background": "head.png"
+      }
+    },
+    {
+      "name": "ears",
+      "location": {
+        "x": 92,
+        "y": 8
+      },
+      "type": "loadoutItemContainer",
+      "config": {
+        "background": "ears.png"
+      }
+    },
+    {
+      "name": "uniform",
+      "location": {
+        "x": 8,
+        "y": 50
+      },
+      "type": "loadoutItemContainer",
+      "config": {
+        "background": "uniform.png"
+      }
+    },
+    {
+      "name": "suit",
+      "location": {
+        "x": 50,
+        "y": 50
+      },
+      "type": "loadoutItemContainer",
+      "config": {
+        "background": "suit.png"
+      }
+    },
+    {
+      "name": "gloves",
+      "location": {
+        "x": 92,
+        "y": 50
+      },
+      "type": "loadoutItemContainer",
+      "config": {
+        "background": "gloves.png"
+      }
+    },
+    {
+      "name": "shoes",
+      "location": {
+        "x": 50,
+        "y": 92
+      },
+      "type": "loadoutItemContainer",
+      "config": {
+        "background": "shoes.png"
       }
     }
   ],
   "bounds": {
-    "width": 327,
-    "height": 138
+    "width": 134,
+    "height": 132
   },
-  "style": "style.juis"
+  "style": "file:///ui/style/tech/tech.juis"
 }

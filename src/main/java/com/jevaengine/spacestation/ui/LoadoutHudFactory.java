@@ -30,36 +30,36 @@ import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
 import java.net.URI;
 
-public final class HudFactory {
+public final class LoadoutHudFactory {
 
 	private final URI m_layout;
 
 	private final WindowManager m_windowManager;
 	private final IWindowFactory m_windowFactory;
 
-	public HudFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
+	public LoadoutHudFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
 		m_windowManager = windowManager;
 		m_windowFactory = windowFactory;
 		m_layout = layout;
 	}
 
-	public Hud create() throws WindowConstructionException {
+	public LoadoutHud create() throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new HudBehaviourInjector(observers));
+		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers));
 		m_windowManager.addWindow(window);
 
 		window.center();
 
-		return new Hud(window, observers);
+		return new LoadoutHud(window, observers);
 	}
 
-	public static class Hud implements IDisposable {
+	public static class LoadoutHud implements IDisposable {
 
 		private final Window m_window;
 		private final Observers m_observers;
 
-		private Hud(Window window, Observers observers) {
+		private LoadoutHud(Window window, Observers observers) {
 			m_window = window;
 			m_observers = observers;
 		}
@@ -110,29 +110,17 @@ public final class HudFactory {
 		}
 	}
 
-	private class HudBehaviourInjector extends WindowBehaviourInjector {
+	private class LoadoutFactoryBehaviourInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
 		
-		public HudBehaviourInjector(final Observers observers) {
+		public LoadoutFactoryBehaviourInjector(final Observers observers) {
 			m_observers = observers;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
-			final ToggleIcon toggleInventory = getControl(ToggleIcon.class, "toggleInventory");
 
-			toggleInventory.getObservers().add(new ToggleIcon.IToggleIconObserver() {
-				@Override
-				public void toggled() {
-					m_observers.raise(IHudObserver.class).inventoryViewChanged(toggleInventory.isActive());
-				}
-			});
 		}
-	}
-	
-	public interface IHudObserver {
-		void movementSpeedChanged(boolean isRunning);
-		void inventoryViewChanged(boolean isVisible);
 	}
 }
