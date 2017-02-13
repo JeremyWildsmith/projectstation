@@ -57,7 +57,7 @@ public final class StationGame extends DefaultGame implements IStateContext
 			m_cursor = new NullGraphic();
 		}
 		
-		m_state = new EntryState(windowFactory, worldFactory, audioClipFactory, spriteFactory, spellFactory);
+		m_state = new EntryState(windowFactory, worldFactory, audioClipFactory, spriteFactory);
 		m_state.enter(this);
 	}
 
@@ -86,17 +86,15 @@ public final class StationGame extends DefaultGame implements IStateContext
 		private final IParallelWorldFactory m_worldFactory;
 		private final IAudioClipFactory m_audioClipFactory;
 		private final ISpriteFactory m_spriteFactory;
-		private final ISpellFactory m_spellFactory;
 		
 		private IStateContext m_context;
 
-		public EntryState(IWindowFactory windowFactory, IWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, ISpellFactory spellFactory)
+		public EntryState(IWindowFactory windowFactory, IWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory)
 		{
 			m_windowFactory = windowFactory;
 			m_worldFactory = new ThreadPooledWorldFactory(worldFactory, new DefaultEngineThreadPool());
 			m_audioClipFactory = audioClipFactory;
 			m_spriteFactory = spriteFactory;
-			m_spellFactory = spellFactory;
 		}
 		
 		@Override
@@ -111,7 +109,7 @@ public final class StationGame extends DefaultGame implements IStateContext
 		@Override
 		public void update(int deltaTime)
 		{
-			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory, m_spellFactory));
+			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory));
 		}
 	}
 }

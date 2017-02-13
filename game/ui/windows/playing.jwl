@@ -1,8 +1,8 @@
 {
   "style": "file:///ui/style/vampire/vampire.juis",
   "bounds": {
-    "width": 1280,
-    "height": 720
+    "width": 800,
+    "height": 600
   },
   "controls": [
     {
@@ -14,8 +14,8 @@
       },
       "config": {
         "bounds" : {
-          "width" : 1280,
-          "height" : 720
+          "width" : 800,
+          "height" : 600
         }
       }
     }

@@ -22,6 +22,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import com.jevaengine.spacestation.ui.StationControlFactory;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.audio.NullAudioClipFactory;
@@ -81,8 +82,8 @@ public class Main implements WindowListener
 	private static final int WINX = 800;
 	private static final int WINY = 600;
 
-	private int m_displayX = 1280;
-	private int m_displayY = 768;
+	private int m_displayX = 800;
+	private int m_displayY = 600;
 
 	private JFrame m_frame;
 	private GameDriver m_gameDriver;
@@ -178,7 +179,8 @@ public class Main implements WindowListener
 				
 				@Override
 				public IControlFactory get() {
-					return new RpgControlFactory(new DefaultControlFactory(configurationFactory), configurationFactory);
+					IControlFactory baseFactory = new RpgControlFactory(new DefaultControlFactory(configurationFactory), configurationFactory);
+					return new StationControlFactory(baseFactory, configurationFactory, graphicFactory);
 				}
 			});
 			

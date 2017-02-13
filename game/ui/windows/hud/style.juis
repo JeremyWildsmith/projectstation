@@ -1,0 +1,56 @@
+{
+  "defaultStyle": "frame",
+  "componentStyles": [
+    {
+      "components": [
+        "frame"
+      ],
+      "defaultStateStyle": {
+        "font" : {
+          "font" : "file:///ui/font/pro/large.juif",
+          "color" : {
+            "x" : 100,
+            "y" : 100,
+            "z" : 100
+          }
+        }
+      }
+    },
+    {
+      "components" : [
+        "button"
+      ],
+      "defaultStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/pro/large.juif",
+          "color" : {
+            "x" : 100,
+            "y" : 100,
+            "z" : 100
+          }
+        }
+      },
+      "enterStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/pro/large.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        }
+      },
+      "activatedStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/pro/large.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 20,
+            "z" : 20
+          }
+        },
+        "audioEnter" : "audio/down.wav"
+      }
+    }
+  ]
+}

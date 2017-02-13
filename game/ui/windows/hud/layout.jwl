@@ -1,0 +1,60 @@
+{
+  "controls": [
+    {
+      "name": "toggleWalkRun",
+      "location": {
+        "x": 158,
+        "y": 58
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "run.png",
+        "inactive": "walk.png"
+      }
+    },
+    {
+      "name": "toggleInteractionNature",
+      "location": {
+        "x": 116,
+        "y": 58
+      },
+      "type": "toggleInteractionNature",
+      "config": {
+        "help": "help.png",
+        "harm": "harm.png",
+        "disarm": "disarm.png",
+        "grab": "grab.png"
+      }
+    },
+    {
+      "name": "toggleHand",
+      "location": {
+        "x": 42,
+        "y": 58
+      },
+      "type": "toggleHand",
+      "config": {
+        "left": "leftHand.png",
+        "right": "rightHand.png",
+        "active": "activeHand.png"
+      }
+    },
+    {
+      "name": "toggleInventory",
+      "location": {
+        "x": 0,
+        "y": 58
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "inventoryActive.png",
+        "inactive": "inventoryInactive.png"
+      }
+    }
+  ],
+  "bounds": {
+    "width": 200,
+    "height": 100
+  },
+  "style": "style.juis"
+}

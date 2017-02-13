@@ -26,7 +26,6 @@ import io.github.jevaengine.NullIInitializationProgressMonitor;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.graphics.ISpriteFactory;
 import io.github.jevaengine.math.Vector3F;
-import io.github.jevaengine.rpg.spell.ISpellFactory;
 import io.github.jevaengine.ui.Button;
 import io.github.jevaengine.ui.Button.IButtonPressObserver;
 import io.github.jevaengine.ui.IWindowFactory;
@@ -59,20 +58,18 @@ public class MainMenu implements IState
 	private final IParallelWorldFactory m_worldFactory;
 	private final IAudioClipFactory m_audioClipFactory;
 	private final ISpriteFactory m_spriteFactory;
-	private final ISpellFactory m_spellFactory;
 	
 	private final Logger m_logger = LoggerFactory.getLogger(MainMenu.class);
 	
 	@Nullable
 	private World m_world = null;
 	
-	public MainMenu(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, ISpellFactory spellFactory)
+	public MainMenu(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory)
 	{
 		m_windowFactory = windowFactory;
 		m_worldFactory = worldFactory;
 		m_audioClipFactory = audioClipFactory;
 		m_spriteFactory = spriteFactory;
-		m_spellFactory = spellFactory;
 	}
 	
 	@Override
@@ -148,7 +145,7 @@ public class MainMenu implements IState
 						public void done(FutureResult<World, WorldConstructionException> world) {
 							try
 							{
-								m_context.setState(new Playing(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory, world.get(), m_spellFactory));
+								m_context.setState(new Playing(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory, world.get()));
 							} catch (WorldConstructionException e)
 							{
 								m_logger.error("Unable to enter playing state due to error in loading world", e);
