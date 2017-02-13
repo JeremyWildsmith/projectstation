@@ -50,7 +50,7 @@ public final class StationGame extends DefaultGame implements IStateContext
 	
 		try
 		{
-			m_cursor = spriteFactory.create(URI.create("file:///ui/style/parpg/cursor/cursor.jsf"));
+			m_cursor = spriteFactory.create(URI.create("file:///ui/cursor.jsf"));
 		} catch (SpriteConstructionException e)
 		{
 			m_logger.error("Unable to construct cursor sprite. Reverting to null graphic for cursor.", e);
