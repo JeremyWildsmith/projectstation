@@ -2,7 +2,7 @@
   "name": "Chemist Uniform",
   "model": "model.jmf",
   "icon" : "icon.jsf",
-  "function": "Chest Armor",
+  "function": "Uniform",
   "description": "A unifrom for chemists.",
   "attributes": {
     "Defence Bonus": 0.0

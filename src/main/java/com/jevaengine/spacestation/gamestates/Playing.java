@@ -129,7 +129,7 @@ public class Playing implements IState {
 			m_hud.setLocation(new Vector2D(m_hud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height));
 			
-			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create();
+			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create(m_player.getLoadout());
 			m_loadoutHud.setMovable(false);
 			m_loadoutHud.setTopMost(true);
 			m_loadoutHud.setVisible(false);

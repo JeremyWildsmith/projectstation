@@ -21,6 +21,8 @@ package com.jevaengine.spacestation.ui;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.rpg.entity.character.ILoadout;
+import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
@@ -43,10 +45,10 @@ public final class LoadoutHudFactory {
 		m_layout = layout;
 	}
 
-	public LoadoutHud create() throws WindowConstructionException {
+	public LoadoutHud create(ILoadout loadout) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers));
+		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers, loadout));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -113,14 +115,17 @@ public final class LoadoutHudFactory {
 	private class LoadoutFactoryBehaviourInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
+		private final ILoadout m_loadout;
 		
-		public LoadoutFactoryBehaviourInjector(final Observers observers) {
+		public LoadoutFactoryBehaviourInjector(final Observers observers, final ILoadout loadout) {
 			m_observers = observers;
+			m_loadout = loadout;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
-
+			final LoadoutItemContainer uniform = getControl(LoadoutItemContainer.class, "uniform");
+			uniform.setSlot(m_loadout.getSlot(UsrWieldTarget.Uniform));
 		}
 	}
 }
