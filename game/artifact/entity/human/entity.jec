@@ -11,9 +11,13 @@
         "RightLeg" : "file:///item/bodyparts/rightLeg/item.jitm",
         "Chest" : "file:///item/bodyparts/chest/item.jitm",
         "Uniform" : "file:///item/uniform/chemist/item.jitm",
-        "Feet" : "file:///item/shoes/white/item.jitm"
+        "Feet" : "file:///item/shoes/white/item.jitm",
+        "Hands" : "file:///item/gloves/white/item.jitm",
+        "Eyes" : "file:///item/glasses/reading/item.jitm",
+        "Ears" : "file:///item/radio/headset/item.jitm",
+        "Mask" : "file:///item/helmet/bio/item.jitm"
       },
-      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform", "Feet" ],
+      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform", "Feet", "Hands", "Eyes", "Ears", "Mask" ],
       "attributes" : {
 	  "Action": 3.0,
     	  "Speed": 6.0,

@@ -133,12 +133,24 @@ public final class LoadoutHudFactory {
 		protected void doInject() throws NoSuchControlException {
 			final SimpleItemContainer uniform = getControl(SimpleItemContainer.class, "uniform");
 			final SimpleItemContainer shoes = getControl(SimpleItemContainer.class, "shoes");
+			final SimpleItemContainer gloves = getControl(SimpleItemContainer.class, "gloves");
+			final SimpleItemContainer glasses = getControl(SimpleItemContainer.class, "glasses");
+			final SimpleItemContainer ears = getControl(SimpleItemContainer.class, "ears");
+			final SimpleItemContainer head = getControl(SimpleItemContainer.class, "head");
 			
 			uniform.setSlot(m_loadout.getSlot(UsrWieldTarget.Uniform));
 			shoes.setSlot(m_loadout.getSlot(UsrWieldTarget.Feet));
+			gloves.setSlot(m_loadout.getSlot(UsrWieldTarget.Hands));
+			glasses.setSlot(m_loadout.getSlot(UsrWieldTarget.Eyes));
+			ears.setSlot(m_loadout.getSlot(UsrWieldTarget.Ears));
+			head.setSlot(m_loadout.getSlot(UsrWieldTarget.Mask));
 		
 			uniform.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Uniform));
 			shoes.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Feet));
+			gloves.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Hands));
+			glasses.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Eyes));
+			ears.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Ears));
+			head.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Mask));
 			
 			shoes.getObservers().add(new ISimpleItemContainerObserver() {
 				@Override

@@ -1,9 +1,9 @@
 {
-  "name": "White Shoes",
+  "name": "Bio Helment",
   "model": "model.jmf",
   "icon" : "icon.jsf",
-  "function": "Shoes",
-  "description": "Some white shoes.",
+  "function": "Helmet",
+  "description": "An air-tight bio helmet.",
   "attributes": {
     "Defence Bonus": 0.0
   }
