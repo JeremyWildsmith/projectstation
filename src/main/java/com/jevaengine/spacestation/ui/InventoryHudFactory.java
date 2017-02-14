@@ -18,9 +18,16 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.rpg.entity.character.ILoadout;
+import io.github.jevaengine.rpg.item.IImmutableItemSlot;
+import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
+import io.github.jevaengine.rpg.item.IItemSlot;
+import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
@@ -43,10 +50,10 @@ public final class InventoryHudFactory {
 		m_layout = layout;
 	}
 
-	public InventoryHud create() throws WindowConstructionException {
+	public InventoryHud create(ILoadout loadout, IItemStore inventory) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new InventoryHudFactoryBehaviourInjector(observers));
+		Window window = m_windowFactory.create(m_layout, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -113,14 +120,53 @@ public final class InventoryHudFactory {
 	private class InventoryHudFactoryBehaviourInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
+		private final ILoadout m_loadout;
+		private final IItemStore m_inventory;
 		
-		public InventoryHudFactoryBehaviourInjector(final Observers observers) {
+		public InventoryHudFactoryBehaviourInjector(final Observers observers, ILoadout loadout, IItemStore inventory) {
 			m_observers = observers;
+			m_loadout = loadout;
+			m_inventory = inventory;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
+			IItemSlot slots[] = m_inventory.getSlots();
 			
+			for(int i = 0; i < slots.length && hasControl(SimpleItemContainer.class, String.valueOf(i)); i++) {
+				SimpleItemContainer container = getControl(SimpleItemContainer.class, String.valueOf(i));
+				container.setSlot(slots[i]);
+				container.getObservers().add(new MoveItemToLoadout(slots[i]));
+			}
+		}
+		
+		private class MoveItemToLoadout implements ISimpleItemContainerObserver {
+			private final IItemSlot m_slot;
+			
+			public MoveItemToLoadout(IItemSlot slot) {
+				m_slot = slot;
+			}
+			
+			@Override
+			public void selected() {
+				if(m_slot.isEmpty())
+					return;
+				
+				for(IWieldTarget t : m_slot.getItem().getFunction().getWieldTargets()) {
+					IItemSlot loadoutSlot = m_loadout.getSlot(t);
+					
+					if(loadoutSlot != null) {
+						IItem removed = loadoutSlot.setItem(m_slot.getItem());
+						
+						if(removed == null)
+							m_slot.clear();
+						else
+							m_slot.setItem(removed);
+						
+						return;
+					}
+				}
+			}
 		}
 	}
 }

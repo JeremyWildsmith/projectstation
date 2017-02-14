@@ -13,6 +13,8 @@ import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.rpg.entity.character.ILoadout.NullLoadoutSlot;
 import io.github.jevaengine.rpg.item.IImmutableItemSlot;
 import io.github.jevaengine.ui.Control;
+import io.github.jevaengine.util.IObserverRegistry;
+import io.github.jevaengine.util.Observers;
 import java.awt.Graphics2D;
 
 /**
@@ -24,12 +26,18 @@ public final class SimpleItemContainer extends Control {
 	public static final String COMPONENT_NAME = "simpleItemContainer";
 	
 	private final IImmutableGraphic m_background;
+	private final Observers m_observers = new Observers();
+	
 	private IImmutableItemSlot m_loadoutSlot = new NullLoadoutSlot();
-		
+	
 	public SimpleItemContainer(String instanceName, IImmutableGraphic background) {
 		super(COMPONENT_NAME, instanceName);
 		
 		m_background = background;
+	}
+	
+	public IObserverRegistry getObservers() {
+		return m_observers;
 	}
 	
 	public void setSlot(IImmutableItemSlot slot) {
@@ -41,7 +49,7 @@ public final class SimpleItemContainer extends Control {
 		if(mouseEvent.type != InputMouseEvent.MouseEventType.MouseClicked)
 			return false;
 
-		//Do something here...
+		m_observers.raise(ISimpleItemContainerObserver.class).selected();
 		
 		return true;
 	}
@@ -74,4 +82,7 @@ public final class SimpleItemContainer extends Control {
 		}
 	}
 	
+	public interface ISimpleItemContainerObserver {
+		void selected();
+	}
 }

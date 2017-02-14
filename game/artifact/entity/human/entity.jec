@@ -1,5 +1,5 @@
 {
-      "inventorySize" : 50,
+      "inventorySize" : 9,
       "model" : "model.jmf",
       "blood" : "file:///particle/blood/particle.jpar",
       "items" : [ ],

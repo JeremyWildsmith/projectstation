@@ -18,10 +18,15 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.ui.LoadoutHudFactory.ILoadoutHudObserver;
+import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.entity.character.ILoadout;
+import io.github.jevaengine.rpg.item.IImmutableItemSlot;
+import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
+import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
@@ -45,10 +50,10 @@ public final class LoadoutHudFactory {
 		m_layout = layout;
 	}
 
-	public LoadoutHud create(ILoadout loadout) throws WindowConstructionException {
+	public LoadoutHud create(ILoadout loadout, IItemStore inventory) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers, loadout));
+		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers, loadout, inventory));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -116,18 +121,54 @@ public final class LoadoutHudFactory {
 
 		private final Observers m_observers;
 		private final ILoadout m_loadout;
+		private final IItemStore m_inventory;
 		
-		public LoadoutFactoryBehaviourInjector(final Observers observers, final ILoadout loadout) {
+		public LoadoutFactoryBehaviourInjector(final Observers observers, final ILoadout loadout, IItemStore inventory) {
 			m_observers = observers;
 			m_loadout = loadout;
+			m_inventory = inventory;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
 			final SimpleItemContainer uniform = getControl(SimpleItemContainer.class, "uniform");
 			final SimpleItemContainer shoes = getControl(SimpleItemContainer.class, "shoes");
+			
 			uniform.setSlot(m_loadout.getSlot(UsrWieldTarget.Uniform));
 			shoes.setSlot(m_loadout.getSlot(UsrWieldTarget.Feet));
+		
+			uniform.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Uniform));
+			shoes.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Feet));
+			
+			shoes.getObservers().add(new ISimpleItemContainerObserver() {
+				@Override
+				public void selected() {
+					m_observers.raise(ILoadoutHudObserver.class).slotSelected(UsrWieldTarget.Feet);
+				}
+			});
 		}
+		
+		private class MoveToInventoryObserver implements ISimpleItemContainerObserver {
+			private final IWieldTarget m_wieldTarget;
+			
+			public MoveToInventoryObserver(IWieldTarget wieldTarget) {
+				m_wieldTarget = wieldTarget;
+			}
+			
+			@Override
+			public void selected() {
+				IImmutableItemSlot slot = m_loadout.getSlot(m_wieldTarget);
+				if(slot == null || slot.isEmpty())
+					return;
+				
+				if(m_inventory.addItem(slot.getItem())) {
+					m_loadout.unequip(m_wieldTarget);
+				}
+			}
+		}
+	}
+	
+	public interface ILoadoutHudObserver {
+		void slotSelected(IWieldTarget target);
 	}
 }

@@ -39,6 +39,7 @@ import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.IMovementDirector;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter.NullRpgCharacter;
+import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
@@ -133,7 +134,7 @@ public class Playing implements IState {
 			m_hud.setLocation(new Vector2D(m_hud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height));
 			
-			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create(m_player.getLoadout());
+			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create(m_player.getLoadout(), m_player.getInventory());
 			m_loadoutHud.setMovable(false);
 			m_loadoutHud.setTopMost(true);
 			m_loadoutHud.setVisible(false);
@@ -141,7 +142,7 @@ public class Playing implements IState {
 			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
-			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create();
+			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create(m_player.getLoadout(), m_player.getInventory());
 			m_inventoryHud.setMovable(false);
 			m_inventoryHud.setTopMost(true);
 			m_inventoryHud.setVisible(false);
@@ -159,6 +160,7 @@ public class Playing implements IState {
 					m_inventoryHud.setVisible(isVisible);
 				}
 			});
+			
 		} catch (WindowConstructionException e) {
 			m_logger.error("Error occured constructing demo world or world view. Reverting to MainMenu.", e);
 			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory));
