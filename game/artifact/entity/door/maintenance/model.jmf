@@ -1,0 +1,67 @@
+{
+  "defaultAnimation": "open",
+  "animations": [
+    {
+      "name": "open",
+      "sets": [
+        {
+          "directions": [
+            0,
+            2,
+            6,
+            7,
+            1,
+            3,
+            4,
+            5
+          ],
+          "components": [
+            {
+              "sprite": "ns/sprite.jsf",
+              "animation": "open",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "close",
+      "sets": [
+        {
+          "directions": [
+            0,
+            2,
+            6,
+            7,
+            1,
+            3,
+            4,
+            5
+          ],
+          "components": [
+            {
+              "sprite": "ns/sprite.jsf",
+              "animation": "close",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
