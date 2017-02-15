@@ -112,9 +112,6 @@ public class MainMenu implements IState
 			m_context.getWindowManager().removeWindow(m_window);
 			m_window.dispose();
 		}
-		
-		if(m_world != null)
-			m_world.dispose();
 	}
 
 	@Override
