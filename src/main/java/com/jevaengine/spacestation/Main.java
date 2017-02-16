@@ -22,6 +22,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import com.jevaengine.spacestation.entity.StationEntityFactory;
 import com.jevaengine.spacestation.ui.StationControlFactory;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.audio.IAudioClipFactory;
@@ -53,6 +54,7 @@ import io.github.jevaengine.rpg.item.usr.UsrItemFactory;
 import io.github.jevaengine.rpg.spell.ISpellFactory;
 import io.github.jevaengine.rpg.spell.usr.UsrSpellFactory;
 import io.github.jevaengine.rpg.ui.RpgControlFactory;
+import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.ui.DefaultControlFactory;
 import io.github.jevaengine.ui.IControlFactory;
 import io.github.jevaengine.world.IEffectMapFactory;
@@ -165,7 +167,32 @@ public class Main implements WindowListener
 		{
 			bind(IInputSource.class).toInstance(FrameInputSource.create(m_frame));
 			bind(IGameFactory.class).to(StationGameFactory.class);
-			bind(IEntityFactory.class).to(RpgEntityFactory.class).asEagerSingleton();
+			bind(IEntityFactory.class).toProvider(new Provider<IEntityFactory>() {
+				@Inject
+				private IScriptBuilderFactory scriptBuilderFactory;
+				
+				@Inject
+				private IAudioClipFactory audioClipFactory;
+				
+				@Inject
+				private IConfigurationFactory configurationFactory;
+				
+				@Inject
+				private IRpgCharacterFactory characterFactory;
+				
+				@Inject
+				private IParticleEmitterFactory particleEmitterFactory;
+				
+				@Inject
+				private IAnimationSceneModelFactory animationSceneModelFactory;
+				
+				@Override
+				public IEntityFactory get() {
+					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory);
+					return new StationEntityFactory(base, configurationFactory, animationSceneModelFactory);
+				}
+			});
+			
 			bind(IDialogueRouteFactory.class).to(ScriptedDialogueRouteFactory.class);
 			bind(IRpgCharacterFactory.class).to(UsrCharacterFactory.class);
 			bind(IItemFactory.class).to(UsrItemFactory.class);
