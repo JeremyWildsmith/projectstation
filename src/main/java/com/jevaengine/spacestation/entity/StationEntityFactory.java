@@ -171,6 +171,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		SolarPanel(SolarPanel.class, "solarPanel", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					SolarPanelDeclaration decl = auxConfig.getValue(SolarPanelDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+					
+					return new SolarPanel(instanceName, model, decl.productionWatts);
+				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -216,6 +229,27 @@ public class StationEntityFactory implements IEntityFactory {
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class SolarPanelDeclaration implements ISerializable {
+		public int productionWatts;
+		public String model;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("productionWatts").setValue(productionWatts);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				productionWatts = source.getChild("productionWatts").getValue(Integer.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
