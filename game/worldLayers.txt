@@ -1,0 +1,8 @@
+-2 Framework
+-1 Infrastructure
+0 Floors
+1 Walls/Entities/Objects
+2 Player
+
+Wires: Surface + 0.1
+Item Drops: Owner - 0.1

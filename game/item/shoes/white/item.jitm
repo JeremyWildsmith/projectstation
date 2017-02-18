@@ -1,7 +1,7 @@
 {
   "name": "White Shoes",
   "model": "model.jmf",
-  "icon" : "icon.jsf",
+  "icon" : "icon.png",
   "function": "Shoes",
   "description": "Some white shoes.",
   "attributes": {

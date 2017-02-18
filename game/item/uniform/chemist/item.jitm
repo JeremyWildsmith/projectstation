@@ -1,7 +1,7 @@
 {
   "name": "Chemist Uniform",
   "model": "model.jmf",
-  "icon" : "icon.jsf",
+  "icon" : "icon.png",
   "function": "Uniform",
   "description": "A unifrom for chemists.",
   "attributes": {

@@ -49,7 +49,10 @@ public final class SimpleItemContainer extends Control {
 		if(mouseEvent.type != InputMouseEvent.MouseEventType.MouseClicked)
 			return false;
 
-		m_observers.raise(ISimpleItemContainerObserver.class).selected();
+		if(mouseEvent.mouseButton == InputMouseEvent.MouseButton.Left)
+			m_observers.raise(ISimpleItemContainerObserver.class).selected();
+		else
+			m_observers.raise(ISimpleItemContainerObserver.class).alternateSelected();
 		
 		return true;
 	}
@@ -72,17 +75,23 @@ public final class SimpleItemContainer extends Control {
 		m_background.render(g, x, y, scale);
 		
 		if(!m_loadoutSlot.isEmpty()) {
+			IImmutableGraphic itemGraphic = m_loadoutSlot.getItem().getIcon();
+			
+			if(itemGraphic == null)
+				return;
+			
 			int xOff = x + m_background.getBounds().width / 2;
 			int yOff = y + m_background.getBounds().width / 2;
 			
-			IRenderable icon = m_loadoutSlot.getItem().getIcon();
+			xOff += -itemGraphic.getBounds().width / 2;
+			yOff += -itemGraphic.getBounds().width / 2;
 			
-			if(icon != null)
-				icon.render(g, xOff, yOff, scale);
+			itemGraphic.render(g, xOff, yOff, scale);
 		}
 	}
 	
 	public interface ISimpleItemContainerObserver {
 		void selected();
+		void alternateSelected();
 	}
 }

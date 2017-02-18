@@ -13,6 +13,9 @@ import io.github.jevaengine.config.ImmutableVariableOverlay;
 import io.github.jevaengine.config.NoSuchChildVariableException;
 import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
+import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.rpg.item.IItemFactory;
+import io.github.jevaengine.rpg.item.IItemFactory.ItemContructionException;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
@@ -36,14 +39,16 @@ public class StationEntityFactory implements IEntityFactory {
 
 	private final IConfigurationFactory m_configurationFactory;
 	private final IAnimationSceneModelFactory m_animationSceneModelFactory;
+	private final IItemFactory m_itemFactory;
 
 	private final IEntityFactory m_base;
 
 	@Inject
-	public StationEntityFactory(IEntityFactory base, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory) {
+	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory) {
 		m_base = base;
 		m_configurationFactory = configurationFactory;
 		m_animationSceneModelFactory = animationSceneModelFactory;
+		m_itemFactory = itemFactory;
 	}
 
 	@Override
@@ -184,6 +189,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		ItemDrop(ItemDrop.class, "itemDrop", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					ItemDropDeclaration decl = auxConfig.getValue(ItemDropDeclaration.class);
+					IItem item = entityFactory.m_itemFactory.create(context.resolve(decl.item));
+					
+					return new ItemDrop(instanceName, item);
+				} catch (ValueSerializationException | ItemContructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -229,6 +247,25 @@ public class StationEntityFactory implements IEntityFactory {
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class ItemDropDeclaration implements ISerializable {
+
+		public String item;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("item").setValue(item);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				item = source.getChild("item").getValue(String.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

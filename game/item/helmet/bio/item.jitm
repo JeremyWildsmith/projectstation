@@ -1,7 +1,7 @@
 {
   "name": "Bio Helment",
   "model": "model.jmf",
-  "icon" : "icon.jsf",
+  "icon" : "icon.png",
   "function": "Helmet",
   "description": "An air-tight bio helmet.",
   "attributes": {

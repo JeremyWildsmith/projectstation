@@ -18,12 +18,13 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.entity.ItemDrop;
 import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.entity.character.ILoadout;
-import io.github.jevaengine.rpg.item.IImmutableItemSlot;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
@@ -35,6 +36,7 @@ import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
+import io.github.jevaengine.world.entity.IEntity;
 import java.net.URI;
 
 public final class InventoryHudFactory {
@@ -50,10 +52,10 @@ public final class InventoryHudFactory {
 		m_layout = layout;
 	}
 
-	public InventoryHud create(ILoadout loadout, IItemStore inventory) throws WindowConstructionException {
+	public InventoryHud create(ILoadout loadout, IItemStore inventory, IEntity owner) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory));
+		Window window = m_windowFactory.create(m_layout, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory, owner));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -122,11 +124,13 @@ public final class InventoryHudFactory {
 		private final Observers m_observers;
 		private final ILoadout m_loadout;
 		private final IItemStore m_inventory;
+		private final IEntity m_owner;
 		
-		public InventoryHudFactoryBehaviourInjector(final Observers observers, ILoadout loadout, IItemStore inventory) {
+		public InventoryHudFactoryBehaviourInjector(final Observers observers, ILoadout loadout, IItemStore inventory, IEntity owner) {
 			m_observers = observers;
 			m_loadout = loadout;
 			m_inventory = inventory;
+			m_owner = owner;
 		}
 
 		@Override
@@ -142,6 +146,7 @@ public final class InventoryHudFactory {
 		
 		private class MoveItemToLoadout implements ISimpleItemContainerObserver {
 			private final IItemSlot m_slot;
+			private int m_itemDropCount = 0;
 			
 			public MoveItemToLoadout(IItemSlot slot) {
 				m_slot = slot;
@@ -166,6 +171,19 @@ public final class InventoryHudFactory {
 						return;
 					}
 				}
+			}
+
+			@Override
+			public void alternateSelected() {
+				if(m_slot.isEmpty() || m_owner.getWorld() == null)
+					return;
+				
+				IItem item = m_slot.clear();
+				
+				IEntity itemDrop = new ItemDrop("__itemDrop" + (m_itemDropCount++), item);
+				m_owner.getWorld().addEntity(itemDrop);
+				itemDrop.getBody().setLocation(m_owner.getBody().getLocation().add(new Vector3F(0, 0, -.01F)));
+				
 			}
 		}
 	}

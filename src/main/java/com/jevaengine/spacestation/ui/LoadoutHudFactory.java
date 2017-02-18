@@ -151,13 +151,6 @@ public final class LoadoutHudFactory {
 			glasses.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Eyes));
 			ears.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Ears));
 			head.getObservers().add(new MoveToInventoryObserver(UsrWieldTarget.Mask));
-			
-			shoes.getObservers().add(new ISimpleItemContainerObserver() {
-				@Override
-				public void selected() {
-					m_observers.raise(ILoadoutHudObserver.class).slotSelected(UsrWieldTarget.Feet);
-				}
-			});
 		}
 		
 		private class MoveToInventoryObserver implements ISimpleItemContainerObserver {
@@ -177,6 +170,9 @@ public final class LoadoutHudFactory {
 					m_loadout.unequip(m_wieldTarget);
 				}
 			}
+
+			@Override
+			public void alternateSelected() { }
 		}
 	}
 	

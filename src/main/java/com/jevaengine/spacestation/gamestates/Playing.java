@@ -142,7 +142,7 @@ public class Playing implements IState {
 			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x,
 					m_playingWindow.getBounds().height - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
-			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create(m_player.getLoadout(), m_player.getInventory());
+			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create(m_player.getLoadout(), m_player.getInventory(), m_player);
 			m_inventoryHud.setMovable(false);
 			m_inventoryHud.setTopMost(true);
 			m_inventoryHud.setVisible(false);

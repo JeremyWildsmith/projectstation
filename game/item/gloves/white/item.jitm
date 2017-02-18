@@ -1,7 +1,7 @@
 {
   "name": "White Gloves",
   "model": "model.jmf",
-  "icon" : "icon.jsf",
+  "icon" : "icon.png",
   "function": "Gloves",
   "description": "Some white gloves.",
   "attributes": {
