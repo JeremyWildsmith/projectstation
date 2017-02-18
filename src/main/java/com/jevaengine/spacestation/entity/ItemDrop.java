@@ -24,6 +24,7 @@ import io.github.jevaengine.world.scene.model.ISceneModel;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -31,6 +32,8 @@ import java.util.Map;
  */
 public final class ItemDrop implements IEntity {
 
+	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger(0);
+	
 	private final String m_name;
 	private final Observers m_observers = new Observers();
 	private final EntityBridge m_bridge;
@@ -43,6 +46,10 @@ public final class ItemDrop implements IEntity {
 	private final IItem m_item;
 	
 	private final ISceneModel m_model;
+	
+	public ItemDrop(IItem item) {
+		this(ItemDrop.class.getName() + m_unnamedEntityCount.getAndIncrement(), item);
+	}
 	
 	public ItemDrop(String name, IItem item) {
 		m_name = name;

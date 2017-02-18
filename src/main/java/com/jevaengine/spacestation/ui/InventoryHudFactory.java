@@ -146,7 +146,6 @@ public final class InventoryHudFactory {
 		
 		private class MoveItemToLoadout implements ISimpleItemContainerObserver {
 			private final IItemSlot m_slot;
-			private int m_itemDropCount = 0;
 			
 			public MoveItemToLoadout(IItemSlot slot) {
 				m_slot = slot;
@@ -180,7 +179,7 @@ public final class InventoryHudFactory {
 				
 				IItem item = m_slot.clear();
 				
-				IEntity itemDrop = new ItemDrop("__itemDrop" + (m_itemDropCount++), item);
+				IEntity itemDrop = new ItemDrop(item);
 				m_owner.getWorld().addEntity(itemDrop);
 				itemDrop.getBody().setLocation(m_owner.getBody().getLocation().add(new Vector3F(0, 0, -.01F)));
 				
