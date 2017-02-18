@@ -27,39 +27,20 @@ import com.jevaengine.spacestation.ui.InventoryHudFactory;
 import com.jevaengine.spacestation.ui.InventoryHudFactory.InventoryHud;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory.LoadoutHud;
+import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory;
+import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory.PlayingWindow;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.graphics.ISpriteFactory;
-import io.github.jevaengine.joystick.InputKeyEvent;
-import io.github.jevaengine.joystick.InputKeyEvent.KeyEventType;
-import io.github.jevaengine.joystick.InputMouseEvent;
-import io.github.jevaengine.joystick.InputMouseEvent.MouseEventType;
 import io.github.jevaengine.math.Vector2D;
-import io.github.jevaengine.math.Vector2F;
-import io.github.jevaengine.rpg.entity.Door;
-import io.github.jevaengine.rpg.entity.character.IMovementResolver.IMovementDirector;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter.NullRpgCharacter;
-import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Timer;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.Window.IWindowFocusObserver;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WorldView;
-import io.github.jevaengine.ui.WorldView.IWorldViewInputObserver;
-import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.IParallelWorldFactory;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.ISceneBufferFactory;
 import io.github.jevaengine.world.scene.TopologicalOrthographicProjectionSceneBufferFactory;
 import io.github.jevaengine.world.scene.camera.FollowCamera;
-import io.github.jevaengine.world.scene.camera.ICamera;
-import io.github.jevaengine.world.steering.DirectionSteeringBehavior;
-import io.github.jevaengine.world.steering.ISteeringBehavior;
-import io.github.jevaengine.world.steering.ISteeringBehavior.NullSteeringBehavior;
-import java.awt.event.KeyEvent;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +59,7 @@ public class Playing implements IState {
 
 	private IStateContext m_context;
 	private final World m_world;
-	private Window m_playingWindow;
+	private PlayingWindow m_playingWindow;
 
 	private final IWindowFactory m_windowFactory;
 	private final IParallelWorldFactory m_worldFactory;
@@ -86,8 +67,6 @@ public class Playing implements IState {
 	private final ISpriteFactory m_spriteFactory;
 
 	private final Logger m_logger = LoggerFactory.getLogger(Playing.class);
-
-	private final PlayerMovementDirector m_playerMovementDirector = new PlayerMovementDirector();
 
 	private IRpgCharacter m_player = new NullRpgCharacter();
 
@@ -111,10 +90,6 @@ public class Playing implements IState {
 			ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
 			FollowCamera camera = new FollowCamera(sceneBufferFactory);
 
-			m_playingWindow = m_windowFactory.create(PLAYING_VIEW_WINDOW, new PlayingWindowBehaviourInjector(camera));
-			context.getWindowManager().addWindow(m_playingWindow);
-			m_playingWindow.center();
-			m_playingWindow.focus();
 
 			IRpgCharacter playerEntityBuffer = m_world.getEntities().getByName(IRpgCharacter.class, "player");
 
@@ -127,26 +102,24 @@ public class Playing implements IState {
 			camera.attach(m_world);
 			camera.setTarget(m_player);
 
+			Vector2D resolution = context.getWindowManager().getResolution();
 			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory, HUD_WINDOW).create();
 			m_hud.setTopMost(true);
 			m_hud.setMovable(false);
 			m_hud.center();
-			m_hud.setLocation(new Vector2D(m_hud.getLocation().x,
-					m_playingWindow.getBounds().height - m_hud.getBounds().height));
+			m_hud.setLocation(new Vector2D(m_hud.getLocation().x, resolution.y - m_hud.getBounds().height));
 			
 			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create(m_player.getLoadout(), m_player.getInventory());
 			m_loadoutHud.setMovable(false);
 			m_loadoutHud.setTopMost(true);
 			m_loadoutHud.setVisible(false);
 			m_loadoutHud.center();
-			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x,
-					m_playingWindow.getBounds().height - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
+			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x, resolution.y - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
 			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create(m_player.getLoadout(), m_player.getInventory(), m_player);
 			m_inventoryHud.setMovable(false);
 			m_inventoryHud.setTopMost(true);
 			m_inventoryHud.setVisible(false);
-			
 			m_inventoryHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x + m_loadoutHud.getBounds().width + 10,
 												  m_loadoutHud.getLocation().y));
 			
@@ -161,6 +134,10 @@ public class Playing implements IState {
 				}
 			});
 			
+			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory, PLAYING_VIEW_WINDOW).create(camera, m_player);
+			m_playingWindow.center();
+			m_playingWindow.focus();
+			
 		} catch (WindowConstructionException e) {
 			m_logger.error("Error occured constructing demo world or world view. Reverting to MainMenu.", e);
 			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory));
@@ -170,7 +147,6 @@ public class Playing implements IState {
 	@Override
 	public void leave() {
 		if (m_playingWindow != null) {
-			m_context.getWindowManager().removeWindow(m_playingWindow);
 			m_playingWindow.dispose();
 		}
 	}
@@ -178,119 +154,5 @@ public class Playing implements IState {
 	@Override
 	public void update(int deltaTime) {
 		m_world.update(deltaTime);
-		m_playerMovementDirector.update(deltaTime);
-	}
-
-	private final class PlayerMovementDirector implements IMovementDirector {
-
-		private Vector2F m_movementDelta = new Vector2F();
-		private boolean m_isQueued = false;
-
-		public void setMovementDelta(Vector2F movementDelta) {
-			m_movementDelta = new Vector2F(movementDelta);
-		}
-
-		public Vector2F getMovementDelta() {
-			return new Vector2F(m_movementDelta);
-		}
-
-		@Override
-		public ISteeringBehavior getBehavior() {
-			if (m_movementDelta.isZero()) {
-				return new NullSteeringBehavior();
-			} else {
-				return new DirectionSteeringBehavior(Direction.fromVector(m_movementDelta));
-			}
-		}
-
-		@Override
-		public boolean isDone() {
-			boolean isDone = m_movementDelta.isZero();
-
-			if (isDone) {
-				m_isQueued = false;
-			}
-
-			return isDone;
-		}
-
-		public void update(int deltaTime) {
-			if (!m_movementDelta.isZero() && !m_isQueued) {
-				m_isQueued = true;
-				m_player.getMovementResolver().queueTop(this);
-			}
-		}
-	}
-
-	private class PlayingWindowBehaviourInjector extends WindowBehaviourInjector {
-
-		private final ICamera m_camera;
-
-		public PlayingWindowBehaviourInjector(ICamera camera) {
-			m_camera = camera;
-		}
-
-		@Override
-		public void doInject() throws NoSuchControlException {
-			final WorldView demoWorldView = getControl(WorldView.class, "worldView");
-			final Timer timer = new Timer();
-
-			addControl(timer);
-
-			demoWorldView.setCamera(m_camera);
-
-			demoWorldView.getObservers().add(new IWorldViewInputObserver() {
-				@Override
-				public void mouseEvent(InputMouseEvent event) {
-					if (event.type == MouseEventType.MouseClicked) {
-						final Door pickedInteraction = demoWorldView.pick(Door.class, event.location);
-
-						if (pickedInteraction == null) {
-							return;
-						}
-						if (pickedInteraction.isOpen()) {
-							pickedInteraction.close();
-						} else {
-							pickedInteraction.open();
-						}
-					}
-				}
-
-				@Override
-				public void keyEvent(InputKeyEvent event) {
-					if (event.type == KeyEventType.KeyTyped) {
-						return;
-					}
-
-					Vector2F vec = m_playerMovementDirector.getMovementDelta();
-
-					switch (event.keyCode) {
-						case KeyEvent.VK_UP:
-							vec.y = event.type == KeyEventType.KeyDown ? - 1 : 0;
-							break;
-						case KeyEvent.VK_DOWN:
-							vec.y = event.type == KeyEventType.KeyDown ? 1 : 0;
-							break;
-						case KeyEvent.VK_RIGHT:
-							vec.x = event.type == KeyEventType.KeyDown ? 1 : 0;
-							break;
-						case KeyEvent.VK_LEFT:
-							vec.x = event.type == KeyEventType.KeyDown ? -1 : 0;
-							break;
-					}
-
-					m_playerMovementDirector.setMovementDelta(vec);
-				}
-			});
-
-			getObservers().add(new IWindowFocusObserver() {
-				@Override
-				public void onFocusChanged(boolean hasFocus) {
-					if (!hasFocus) {
-						m_playerMovementDirector.setMovementDelta(new Vector2F());
-					}
-				}
-			});
-		}
 	}
 }
