@@ -13,6 +13,8 @@ import io.github.jevaengine.config.ImmutableVariableOverlay;
 import io.github.jevaengine.config.NoSuchChildVariableException;
 import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
+import io.github.jevaengine.rpg.entity.Door;
+import io.github.jevaengine.rpg.entity.RpgEntityFactory.DoorDeclaration;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemFactory;
 import io.github.jevaengine.rpg.item.IItemFactory.ItemContructionException;
@@ -22,6 +24,7 @@ import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
@@ -199,6 +202,19 @@ public class StationEntityFactory implements IEntityFactory {
 					
 					return new ItemDrop(instanceName, item);
 				} catch (ValueSerializationException | ItemContructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		Door(Door.class, "door", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					DoorDeclaration decl = auxConfig.getValue(DoorDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+					
+					return new InteractableDoor(model, instanceName, decl.isOpen);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}

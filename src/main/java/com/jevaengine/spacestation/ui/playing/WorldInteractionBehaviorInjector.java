@@ -5,9 +5,9 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
+import com.jevaengine.spacestation.entity.IInteractableEntity;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
-import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
@@ -36,7 +36,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 			@Override
 			public void mouseEvent(InputMouseEvent event) {
 				if (event.type == InputMouseEvent.MouseEventType.MouseClicked) {
-					final Door pickedInteraction = demoWorldView.pick(Door.class, event.location);
+					final IInteractableEntity pickedInteraction = demoWorldView.pick(IInteractableEntity.class, event.location);
 
 					if (pickedInteraction == null) {
 						return;
@@ -47,11 +47,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 					if(distance > m_interactionDistance)
 						return;
 					
-					if (pickedInteraction.isOpen()) {
-						pickedInteraction.close();
-					} else {
-						pickedInteraction.open();
-					}
+					pickedInteraction.interactedWith(m_character);
 				}
 			}
 

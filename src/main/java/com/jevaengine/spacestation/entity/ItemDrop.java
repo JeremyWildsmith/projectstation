@@ -6,9 +6,10 @@
 package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.scene.model.ItemSceneModel;
-import io.github.jevaengine.math.Rect3F;
-import io.github.jevaengine.math.Vector3F;
+import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.rpg.item.IItemSlot;
+import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.World;
@@ -30,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Jeremy
  */
-public final class ItemDrop implements IEntity {
+public final class ItemDrop implements IEntity, IInteractableEntity {
 
 	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger(0);
 	
@@ -159,4 +160,27 @@ public final class ItemDrop implements IEntity {
 
 	@Override
 	public void update(int delta) { }
+
+	@Override
+	public void interactedWith(IRpgCharacter subject) {
+		IItemStore inventory = subject.getInventory();
+		
+		IItemSlot emptySlot = inventory.getEmptySlot();
+		
+		if(emptySlot != null)
+		{
+			emptySlot.setItem(m_item);
+			dispose();
+		}
+	}
+
+	@Override
+	public void interactWith(IRpgCharacter subject, String interaction) {
+		interactedWith(subject);
+	}
+
+	@Override
+	public String[] getInteractions() {
+		return new String[0];
+	}
 }
