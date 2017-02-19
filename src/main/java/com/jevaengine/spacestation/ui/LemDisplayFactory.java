@@ -18,47 +18,58 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
+import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
 import io.github.jevaengine.IDisposable;
+import io.github.jevaengine.graphics.IRenderable;
+import io.github.jevaengine.joystick.InputKeyEvent;
+import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
+import io.github.jevaengine.ui.Timer;
+import io.github.jevaengine.ui.Viewport;
 import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.net.URI;
 
-public final class HudFactory {
+public final class LemDisplayFactory {
 
-	private static final URI HUD_WINDOW = URI.create("file:///ui/windows/hud/layout.jwl");
+	private final URI m_layout;
 
 	private final WindowManager m_windowManager;
 	private final IWindowFactory m_windowFactory;
 
-	public HudFactory(WindowManager windowManager, IWindowFactory windowFactory) {
+	public LemDisplayFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
 		m_windowManager = windowManager;
 		m_windowFactory = windowFactory;
+		m_layout = layout;
 	}
 
-	public Hud create() throws WindowConstructionException {
+	public LemDisplay create(DefaultScreen display, DefaultKeyboard keyboard) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(HUD_WINDOW, new HudBehaviourInjector(observers));
+		Window window = m_windowFactory.create(m_layout, new LemDisplayBehaviorInjector(observers, display, keyboard));
 		m_windowManager.addWindow(window);
 
 		window.center();
 
-		return new Hud(window, observers);
+		return new LemDisplay(window, observers);
 	}
 
-	public static class Hud implements IDisposable {
+	public static class LemDisplay implements IDisposable {
 
 		private final Window m_window;
 		private final Observers m_observers;
 
-		private Hud(Window window, Observers observers) {
+		private LemDisplay(Window window, Observers observers) {
 			m_window = window;
 			m_observers = observers;
 		}
@@ -109,23 +120,47 @@ public final class HudFactory {
 		}
 	}
 
-	private class HudBehaviourInjector extends WindowBehaviourInjector {
+	private class LemDisplayBehaviorInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
+		private final DefaultScreen m_display;
+		private final DefaultKeyboard m_keyboard;
 		
-		public HudBehaviourInjector(final Observers observers) {
+		public LemDisplayBehaviorInjector(final Observers observers, DefaultScreen display, DefaultKeyboard keyboard) {
 			m_observers = observers;
+			m_display = display;
+			m_keyboard = keyboard;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
-			final ToggleIcon toggleInventory = getControl(ToggleIcon.class, "toggleInventory");
-
-			toggleInventory.getObservers().add(new ToggleIcon.IToggleIconObserver() {
+			final Viewport displayView = getControl(Viewport.class, "displayView");
+			final Timer timer = new Timer();
+			
+			addControl(timer);
+			displayView.setView(new IRenderable() {
 				@Override
-				public void toggled() {
-					m_observers.raise(IHudObserver.class).inventoryViewChanged(toggleInventory.isActive());
+				public void render(Graphics2D g, int x, int y, float scale) {
+					BufferedImage screen = m_display.getScreenImage();
+					
+					if(screen == null) {
+						g.setColor(Color.black);
+						g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);
+					}else
+						g.drawImage(screen, x, y, displayView.getBounds().width, displayView.getBounds().height, null);
 				}
+			});
+			
+			getObservers().add(new Window.IWindowInputObserver() {
+				@Override
+				public void onKeyEvent(InputKeyEvent event) {
+					if(event.type == InputKeyEvent.KeyEventType.KeyTyped) {
+						m_keyboard.simulateKeyTyped(event.keyCode, event.keyChar);
+					}
+				}
+
+				@Override
+				public void onMouseEvent(InputMouseEvent event) { }
 			});
 		}
 	}

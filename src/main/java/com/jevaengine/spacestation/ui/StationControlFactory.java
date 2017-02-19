@@ -13,8 +13,6 @@ import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
 import io.github.jevaengine.graphics.IGraphicFactory;
 import io.github.jevaengine.graphics.IImmutableGraphic;
-import io.github.jevaengine.math.Rect2D;
-import io.github.jevaengine.rpg.ui.ItemContainer;
 import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.ui.IControlFactory;
 import io.github.jevaengine.ui.UnsupportedControlException;

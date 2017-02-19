@@ -5,12 +5,13 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import java.util.List;
+import io.github.jevaengine.world.entity.IEntity;
 
 /**
  *
  * @author Jeremy
  */
-public interface IPowerDevice extends IDevice {
-	int drawEnergy(List<IDevice> requested, int joules);
+public interface IDevice extends IEntity {
+	boolean addConnection(IDevice device);
+	void removeConnection(IDevice device);
 }

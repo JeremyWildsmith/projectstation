@@ -5,8 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import io.github.jevaengine.math.Rect2F;
-import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.World;
@@ -18,6 +16,7 @@ import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;
 import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
+import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.search.ISearchFilter;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 import java.util.ArrayList;
@@ -30,28 +29,36 @@ import java.util.Map;
  *
  * @author Jeremy
  */
-public abstract class BasicPowerDevice implements IEntity, IPowerDevice {
+public abstract class BasicDevice implements IEntity, IDevice {
 
 	private final String m_name;
 	private final Observers m_observers = new Observers();
 	private final EntityBridge m_bridge;
 	
 	private final HashMap<String, Integer> m_flags = new HashMap<>();
-	private final List<IPowerDevice> m_connections = new ArrayList<>();
+	private final List<IDevice> m_connections = new ArrayList<>();
 	
 	private World m_world;
 	private IPhysicsBody m_body;
 	
-	public BasicPowerDevice(String name) {
+	private boolean m_isTraversable;
+	
+	public BasicDevice(String name, boolean isTraversable) {
 		m_name = name;
 		
 		m_body = new NullPhysicsBody();
 		m_bridge = new EntityBridge(this);
+		m_isTraversable = isTraversable;
 	}
 
 	private void constructPhysicsBody() {
-		m_body = new NonparticipantPhysicsBody(this);
-
+		PhysicsBodyDescription physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyDescription.PhysicsBodyType.Static, getModel().getBodyShape(), 1.0F, true, false, 1.0F);
+		
+		if(m_isTraversable)
+			m_body = new NonparticipantPhysicsBody(this);
+		else
+			m_body = m_world.getPhysicsWorld().createBody(physicsBodyDescription);
+		
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 	}
 
@@ -66,7 +73,7 @@ public abstract class BasicPowerDevice implements IEntity, IPowerDevice {
 	}
 
 	@Override
-	public final void removeConnection(IPowerDevice wire) {
+	public final void removeConnection(IDevice wire) {
 		if(!m_connections.contains(wire))
 			return;
 		
@@ -76,19 +83,38 @@ public abstract class BasicPowerDevice implements IEntity, IPowerDevice {
 	}
 	
 	@Override
-	public boolean addConnection(IPowerDevice wire) {
+	public boolean addConnection(IDevice wire) {
+		if(!canConnectTo(wire))
+			return false;
+		
 		if(m_connections.contains(wire))
 			return true;
 		
 		m_connections.add(wire);
-		wire.addConnection(this);
-		connectionChanged();
+		if(!wire.addConnection(this))
+		{
+			m_connections.remove(wire);
+			return false;
+		}
 		
+		connectionChanged();
 		return true;
 	}
 	
-	protected final List<IPowerDevice> getConnections() {
+	protected final List<IDevice> getConnections() {
 		return new ArrayList<>(m_connections);
+	}
+	
+	protected final <T extends IDevice> List<T> getConnections(Class<T> device) {
+		List<T> devices = new ArrayList<>();
+		
+		for(IDevice d : m_connections)
+		{
+			if(device.isAssignableFrom(d.getClass()))
+				devices.add((T)d);
+		}
+		
+		return devices;
 	}
 	
 	private void clearConnections() {
@@ -99,10 +125,10 @@ public abstract class BasicPowerDevice implements IEntity, IPowerDevice {
 	private void updateConnections() {
 		clearConnections();
 		
-		ISearchFilter<IPowerDevice> searchFilter = new RadialSearchFilter<>(m_body.getLocation().getXy(), 1.1F);
-		IPowerDevice wires[] = m_world.getEntities().search(IPowerDevice.class, searchFilter);
+		ISearchFilter<IDevice> searchFilter = new RadialSearchFilter<>(m_body.getLocation().getXy(), 1.1F);
+		IDevice wires[] = m_world.getEntities().search(IDevice.class, searchFilter);
 	
-		for(IPowerDevice w : wires) {
+		for(IDevice w : wires) {
 			if(w != this)
 				addConnection(w);
 		}
@@ -181,6 +207,8 @@ public abstract class BasicPowerDevice implements IEntity, IPowerDevice {
 			m_world.removeEntity(this);
 		}
 	}
+	
+	protected abstract boolean canConnectTo(IDevice d);
 
 	private class MovementObserver implements IPhysicsBodyOrientationObserver {
 		@Override

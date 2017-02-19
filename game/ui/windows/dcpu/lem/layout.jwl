@@ -1,0 +1,23 @@
+{
+  "controls": [
+    {
+      "type": "viewport",
+      "name": "displayView",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "bounds": {
+          "width": 128,
+          "height": 96
+        }
+      }
+    }
+  ],
+  "bounds": {
+    "width": 148,
+    "height": 116
+  },
+  "style": "file:///ui/style/tech/tech.juis"
+}

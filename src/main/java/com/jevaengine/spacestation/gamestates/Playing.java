@@ -41,7 +41,6 @@ import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.ISceneBufferFactory;
 import io.github.jevaengine.world.scene.TopologicalOrthographicProjectionSceneBufferFactory;
 import io.github.jevaengine.world.scene.camera.FollowCamera;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +49,6 @@ import org.slf4j.LoggerFactory;
  * @author Jeremy
  */
 public class Playing implements IState {
-
-	private static final URI CROSSHAIR = URI.create("file:///ui/crosshair.jsf");
-	private static final URI PLAYING_VIEW_WINDOW = URI.create("file:///ui/windows/playing.jwl");
-	private static final URI HUD_WINDOW = URI.create("file:///ui/windows/hud/layout.jwl");
-	private static final URI LOADOUT_WINDOW = URI.create("file:///ui/windows/loadout/layout.jwl");
-	private static final URI INVENTORY_WINDOW = URI.create("file:///ui/windows/inventory/layout.jwl");
 
 	private IStateContext m_context;
 	private final World m_world;
@@ -103,20 +96,20 @@ public class Playing implements IState {
 			camera.setTarget(m_player);
 
 			Vector2D resolution = context.getWindowManager().getResolution();
-			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory, HUD_WINDOW).create();
+			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory).create();
 			m_hud.setTopMost(true);
 			m_hud.setMovable(false);
 			m_hud.center();
 			m_hud.setLocation(new Vector2D(m_hud.getLocation().x, resolution.y - m_hud.getBounds().height));
 			
-			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory, LOADOUT_WINDOW).create(m_player.getLoadout(), m_player.getInventory());
+			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory).create(m_player.getLoadout(), m_player.getInventory());
 			m_loadoutHud.setMovable(false);
 			m_loadoutHud.setTopMost(true);
 			m_loadoutHud.setVisible(false);
 			m_loadoutHud.center();
 			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x, resolution.y - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
-			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory, INVENTORY_WINDOW).create(m_player.getLoadout(), m_player.getInventory(), m_player);
+			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory).create(m_player.getLoadout(), m_player.getInventory(), m_player);
 			m_inventoryHud.setMovable(false);
 			m_inventoryHud.setTopMost(true);
 			m_inventoryHud.setVisible(false);
@@ -134,7 +127,7 @@ public class Playing implements IState {
 				}
 			});
 			
-			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory, PLAYING_VIEW_WINDOW).create(camera, m_player);
+			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory).create(camera, m_player);
 			m_playingWindow.center();
 			m_playingWindow.focus();
 			

@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public interface IPowerDevice extends IDevice {
-	int drawEnergy(List<IDevice> requested, int joules);
+public interface INetworkDevice extends IDevice {
+	<T extends INetworkDevice> List<T> getConnected(List<INetworkDevice> requested, Class<T> device);
+	boolean isConnected(List<INetworkDevice> requested, INetworkDevice device);
 }

@@ -187,12 +187,15 @@ public class Main implements WindowListener
 				private IAnimationSceneModelFactory animationSceneModelFactory;
 				
 				@Inject
+				private IAssetStreamFactory assetStreamFactory;
+				
+				@Inject
 				private IItemFactory itemFactory;
 				
 				@Override
 				public IEntityFactory get() {
 					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory);
-					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory);
+					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory);
 				}
 			});
 			

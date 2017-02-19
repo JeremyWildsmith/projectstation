@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import java.util.List;
@@ -14,14 +13,14 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public class SolarPanel extends BasicPowerDevice {
+public class SolarPanel extends BasicDevice implements IPowerDevice {
 	private final ISceneModel m_model;
 	
 	private final int m_productionWatt;
 	private int m_joules;
 	
 	public SolarPanel(String name, ISceneModel model, int productionWatt) {
-		super(name);
+		super(name, false);
 		m_model =  model;
 		m_productionWatt = productionWatt;
 		m_joules = 0;
@@ -46,12 +45,16 @@ public class SolarPanel extends BasicPowerDevice {
 	}
 
 	@Override
-	public int drawEnergy(List<IPowerDevice> requested, int joules) {
+	public int drawEnergy(List<IDevice> requested, int joules) {
 		int provided = Math.min(m_joules, joules);
 		
 		m_joules -= provided;
 		
 		return provided;
 	}
-	
+
+	@Override
+	protected boolean canConnectTo(IDevice d) {
+		return (d instanceof IPowerDevice);
+	}
 }

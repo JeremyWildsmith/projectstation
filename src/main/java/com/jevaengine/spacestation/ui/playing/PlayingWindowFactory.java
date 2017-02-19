@@ -18,6 +18,8 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
+import com.jevaengine.spacestation.ui.LemDisplayFactory;
+import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector.IInteractionHandler;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
@@ -30,33 +32,39 @@ import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.scene.camera.ICamera;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PlayingWindowFactory {
 
-	private final URI m_layout;
+	private static final URI PLAYING_VIEW_WINDOW = URI.create("file:///ui/windows/playing.jwl");
+	private static final URI LEM_DISPLAY_WINDOW = URI.create("file:///ui/windows/dcpu/lem/layout.jwl");
 
 	private final WindowManager m_windowManager;
 	private final IWindowFactory m_windowFactory;
 
-	public PlayingWindowFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
+	public PlayingWindowFactory(WindowManager windowManager, IWindowFactory windowFactory) {
 		m_windowManager = windowManager;
 		m_windowFactory = windowFactory;
-		m_layout = layout;
 	}
 
 	public PlayingWindow create(ICamera camera, IRpgCharacter character) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout);
+		Window window = m_windowFactory.create(PLAYING_VIEW_WINDOW);
 		m_windowManager.addWindow(window);
 		
+		LemDisplayFactory lemDisplayFactory = new LemDisplayFactory(m_windowManager, m_windowFactory, LEM_DISPLAY_WINDOW);
+		
+		List<IInteractionHandler> interactionHandlers = new ArrayList<>();
+		interactionHandlers.add(new ConsoleInterfaceInteractionHandler(lemDisplayFactory));
 		
 		try {
 			new PlayerMovementBehaviorInjector(character).inject(window);
-			new WorldInteractionBehaviorInjector(character).inject(window);
+			new WorldInteractionBehaviorInjector(character, interactionHandlers.toArray(new IInteractionHandler[0])).inject(window);
 			new CameraBehaviorInjector(camera).inject(window);
 		} catch (NoSuchControlException ex) {
-			throw new WindowConstructionException(m_layout, ex);
+			throw new WindowConstructionException(PLAYING_VIEW_WINDOW, ex);
 		}
 		
 

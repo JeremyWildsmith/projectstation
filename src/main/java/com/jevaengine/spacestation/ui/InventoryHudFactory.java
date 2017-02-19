@@ -40,22 +40,20 @@ import io.github.jevaengine.world.entity.IEntity;
 import java.net.URI;
 
 public final class InventoryHudFactory {
-
-	private final URI m_layout;
+	private static final URI INVENTORY_WINDOW = URI.create("file:///ui/windows/inventory/layout.jwl");
 
 	private final WindowManager m_windowManager;
 	private final IWindowFactory m_windowFactory;
 
-	public InventoryHudFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
+	public InventoryHudFactory(WindowManager windowManager, IWindowFactory windowFactory) {
 		m_windowManager = windowManager;
 		m_windowFactory = windowFactory;
-		m_layout = layout;
 	}
 
 	public InventoryHud create(ILoadout loadout, IItemStore inventory, IEntity owner) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory, owner));
+		Window window = m_windowFactory.create(INVENTORY_WINDOW, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory, owner));
 		m_windowManager.addWindow(window);
 
 		window.center();

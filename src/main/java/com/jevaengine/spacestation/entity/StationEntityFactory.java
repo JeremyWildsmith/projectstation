@@ -5,6 +5,10 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.dcpu.ConsoleInterface;
+import com.jevaengine.spacestation.entity.dcpu.Dcpu;
+import io.github.jevaengine.IAssetStreamFactory;
+import io.github.jevaengine.IAssetStreamFactory.AssetStreamConstructionException;
 import io.github.jevaengine.config.IConfigurationFactory;
 import io.github.jevaengine.config.IImmutableVariable;
 import io.github.jevaengine.config.ISerializable;
@@ -25,9 +29,13 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import javax.inject.Inject;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +48,7 @@ public class StationEntityFactory implements IEntityFactory {
 	private final Logger m_logger = LoggerFactory.getLogger(StationEntityFactory.class);
 	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger();
 
+	private final IAssetStreamFactory m_assetStreamFactory;
 	private final IConfigurationFactory m_configurationFactory;
 	private final IAnimationSceneModelFactory m_animationSceneModelFactory;
 	private final IItemFactory m_itemFactory;
@@ -47,11 +56,12 @@ public class StationEntityFactory implements IEntityFactory {
 	private final IEntityFactory m_base;
 
 	@Inject
-	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory) {
+	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory, IAssetStreamFactory assetStreamFactory) {
 		m_base = base;
 		m_configurationFactory = configurationFactory;
 		m_animationSceneModelFactory = animationSceneModelFactory;
 		m_itemFactory = itemFactory;
+		m_assetStreamFactory = assetStreamFactory;
 	}
 
 	@Override
@@ -167,15 +177,57 @@ public class StationEntityFactory implements IEntityFactory {
 	}
 
 	private enum StationEntity {
-		Wire(Wire.class, "wire", new EntityBuilder() {
+		PowerWire(Wire.class, "powerWire", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
 					WireDeclaration decl = auxConfig.getValue(WireDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
-					
-					return new Wire(instanceName, model);
+
+					return new PowerWire(instanceName, model);
 				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		NetworkWire(NetworkWire.class, "networkWire", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					WireDeclaration decl = auxConfig.getValue(WireDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new NetworkWire(instanceName, model);
+				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		ConsoleInterface(ConsoleInterface.class, "consoleInterface", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					ConsoleInterfaceDeclaration decl = auxConfig.getValue(ConsoleInterfaceDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new ConsoleInterface(instanceName, model);
+				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		Dcpu(Dcpu.class, "dcpu", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					DcpuDeclaration decl = auxConfig.getValue(DcpuDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+					
+					InputStream firmwareStream = entityFactory.m_assetStreamFactory.create(context.resolve(decl.firmware));
+					byte[] firmware = IOUtils.toByteArray(firmwareStream);
+					
+					return new Dcpu(instanceName, model, firmware, true);
+				} catch (ISceneModelFactory.SceneModelConstructionException | IOException | AssetStreamConstructionException | ValueSerializationException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
@@ -186,7 +238,7 @@ public class StationEntityFactory implements IEntityFactory {
 				try {
 					SolarPanelDeclaration decl = auxConfig.getValue(SolarPanelDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
-					
+
 					return new SolarPanel(instanceName, model, decl.productionWatts);
 				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
@@ -199,7 +251,7 @@ public class StationEntityFactory implements IEntityFactory {
 				try {
 					ItemDropDeclaration decl = auxConfig.getValue(ItemDropDeclaration.class);
 					IItem item = entityFactory.m_itemFactory.create(context.resolve(decl.item));
-					
+
 					return new ItemDrop(instanceName, item);
 				} catch (ValueSerializationException | ItemContructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
@@ -212,7 +264,7 @@ public class StationEntityFactory implements IEntityFactory {
 				try {
 					DoorDeclaration decl = auxConfig.getValue(DoorDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
-					
+
 					return new InteractableDoor(model, instanceName, decl.isOpen);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
@@ -268,7 +320,48 @@ public class StationEntityFactory implements IEntityFactory {
 			}
 		}
 	}
-	
+
+	public static final class DcpuDeclaration implements ISerializable {
+
+		public String model;
+		public String firmware;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("firmware").setValue(firmware);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				firmware = source.getChild("firmware").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+	public static final class ConsoleInterfaceDeclaration implements ISerializable {
+
+		public String model;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
 	public static final class ItemDropDeclaration implements ISerializable {
 
 		public String item;
@@ -287,8 +380,9 @@ public class StationEntityFactory implements IEntityFactory {
 			}
 		}
 	}
-	
+
 	public static final class SolarPanelDeclaration implements ISerializable {
+
 		public int productionWatts;
 		public String model;
 

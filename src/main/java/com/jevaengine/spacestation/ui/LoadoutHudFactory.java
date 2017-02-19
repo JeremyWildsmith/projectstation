@@ -39,21 +39,20 @@ import java.net.URI;
 
 public final class LoadoutHudFactory {
 
-	private final URI m_layout;
+	private static final URI LOADOUT_WINDOW = URI.create("file:///ui/windows/loadout/layout.jwl");
 
 	private final WindowManager m_windowManager;
 	private final IWindowFactory m_windowFactory;
 
-	public LoadoutHudFactory(WindowManager windowManager, IWindowFactory windowFactory, URI layout) {
+	public LoadoutHudFactory(WindowManager windowManager, IWindowFactory windowFactory) {
 		m_windowManager = windowManager;
 		m_windowFactory = windowFactory;
-		m_layout = layout;
 	}
 
 	public LoadoutHud create(ILoadout loadout, IItemStore inventory) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(m_layout, new LoadoutFactoryBehaviourInjector(observers, loadout, inventory));
+		Window window = m_windowFactory.create(LOADOUT_WINDOW, new LoadoutFactoryBehaviourInjector(observers, loadout, inventory));
 		m_windowManager.addWindow(window);
 
 		window.center();

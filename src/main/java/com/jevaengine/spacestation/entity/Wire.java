@@ -20,39 +20,15 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public class Wire extends BasicPowerDevice {
+public abstract class Wire extends BasicDevice {
 
 	private final IAnimationSceneModel m_model;
 	
 	private World m_world;
 	
 	public Wire(String name, IAnimationSceneModel model) {
-		super(name);
+		super(name, true);
 		m_model = model;
-	}
-	
-	@Override
-	public int drawEnergy(List<IPowerDevice> requested, int joules) {
-		if(requested.contains(this))
-			return 0;
-		
-		requested.add(this);
-		
-		int drawn = 0;
-		
-		List<IPowerDevice> connections = getConnections();
-		Collections.shuffle(connections);
-		
-		for(IPowerDevice w : connections) {
-			if(!requested.contains(w))
-			{
-				drawn += w.drawEnergy(requested, joules);
-				if(drawn >= joules)
-					break;
-			}
-		}
-		
-		return drawn;
 	}
 	
 	private void updateModel() {
@@ -60,7 +36,7 @@ public class Wire extends BasicPowerDevice {
 		HashSet<Direction> directions = new HashSet<>();
 		List<String> directionNames = new ArrayList<>();
 		
-		for(IPowerDevice w : getConnections()) {
+		for(IDevice w : getConnections()) {
 			Vector3F delta = w.getBody().getLocation().difference(getBody().getLocation());
 			Direction d = Direction.fromVector(delta.getXy());
 			if(d != Direction.Zero && !d.isDiagonal())
