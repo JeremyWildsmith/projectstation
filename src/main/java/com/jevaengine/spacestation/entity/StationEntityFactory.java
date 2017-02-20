@@ -25,6 +25,7 @@ import io.github.jevaengine.rpg.item.IItemFactory.ItemContructionException;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
+import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory;
@@ -54,14 +55,17 @@ public class StationEntityFactory implements IEntityFactory {
 	private final IItemFactory m_itemFactory;
 
 	private final IEntityFactory m_base;
+	
+	private final IRouteFactory m_routeFactory;
 
 	@Inject
-	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory, IAssetStreamFactory assetStreamFactory) {
+	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory, IAssetStreamFactory assetStreamFactory, IRouteFactory routeFactory) {
 		m_base = base;
 		m_configurationFactory = configurationFactory;
 		m_animationSceneModelFactory = animationSceneModelFactory;
 		m_itemFactory = itemFactory;
 		m_assetStreamFactory = assetStreamFactory;
+		m_routeFactory = routeFactory;
 	}
 
 	@Override
@@ -270,6 +274,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		AreaPowerController(AreaPowerController.class, "areaPowerController", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					AreaPowerControllerDeclaration decl = auxConfig.getValue(AreaPowerControllerDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new AreaPowerController(instanceName, model, entityFactory.m_routeFactory);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -397,6 +414,27 @@ public class StationEntityFactory implements IEntityFactory {
 			try {
 				model = source.getChild("model").getValue(String.class);
 				productionWatts = source.getChild("productionWatts").getValue(Integer.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	
+	public static final class AreaPowerControllerDeclaration implements ISerializable {
+
+		public int productionWatts;
+		public String model;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

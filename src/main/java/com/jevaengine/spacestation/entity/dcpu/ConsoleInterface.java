@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevice {
+public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevice, IPowerDevice {
 	private final IAnimationSceneModel m_model;
 	
 	private final DefaultKeyboard m_keyboard = new DefaultKeyboard(false);
@@ -84,5 +84,10 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 	@Override
 	public IDcpuHardware[] getHardware() {
 		return new IDcpuHardware[] {m_keyboard, m_screen};
+	}
+
+	@Override
+	public int drawEnergy(List<IDevice> requested, int joules) {
+		return 0;
 	}
 }

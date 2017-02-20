@@ -60,6 +60,8 @@ import io.github.jevaengine.ui.IControlFactory;
 import io.github.jevaengine.world.IEffectMapFactory;
 import io.github.jevaengine.world.TiledEffectMapFactory;
 import io.github.jevaengine.world.entity.IEntityFactory;
+import io.github.jevaengine.world.pathfinding.AStarRouteFactory;
+import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.scene.model.ExtentionMuxedAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ExtentionMuxedSceneModelFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
@@ -165,6 +167,7 @@ public class Main implements WindowListener
 		@Override
 		protected void configure()
 		{
+			bind(IRouteFactory.class).to(AStarRouteFactory.class);
 			bind(IInputSource.class).toInstance(FrameInputSource.create(m_frame));
 			bind(IGameFactory.class).to(StationGameFactory.class);
 			bind(IEntityFactory.class).toProvider(new Provider<IEntityFactory>() {
@@ -192,10 +195,13 @@ public class Main implements WindowListener
 				@Inject
 				private IItemFactory itemFactory;
 				
+				@Inject
+				private IRouteFactory rotueFactory;
+				
 				@Override
 				public IEntityFactory get() {
 					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory);
-					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory);
+					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory, rotueFactory);
 				}
 			});
 			

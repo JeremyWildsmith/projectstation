@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Jeremy
  */
-public final class Dcpu extends BasicDevice implements INetworkDevice, IInteractableEntity {
+public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDevice, IInteractableEntity {
 
 	private static final int CYCLES_PER_MS = 100;
 
@@ -220,5 +220,10 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	@Override
 	public boolean isConnected(List<INetworkDevice> requested, INetworkDevice device) {
 		return false;
+	}
+
+	@Override
+	public int drawEnergy(List<IDevice> requested, int joules) {
+		return 0;
 	}
 }
