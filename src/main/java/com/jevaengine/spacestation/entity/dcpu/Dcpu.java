@@ -35,12 +35,12 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	private final Map<IDcpuCompatibleDevice, List<IDcpuHardware>> m_hardwareConnections = new HashMap<>();
 
 	private final Emulator m_dcpu = new Emulator();
-
-	private int timeSinceStep = 0;
-
+	
 	private boolean m_isOn = false;
 	private boolean m_hasCrashed = false;
 
+	private final byte[] m_firmware;
+	
 	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
 	}
@@ -48,7 +48,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		super(name, false);
 		m_model = model;
-		m_dcpu.loadMemory(Address.ZERO, firmware);
+		m_firmware = firmware;
 		m_dcpu.addDevice(new DefaultClock());
 		
 		if (isOn) {
@@ -72,7 +72,8 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 		m_isOn = true;
 		m_model.getAnimation("on").setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
 
-		m_dcpu.reset(false);
+		m_dcpu.reset(true);
+		m_dcpu.loadMemory(Address.ZERO, m_firmware);
 	}
 
 	public void turnOff() {
