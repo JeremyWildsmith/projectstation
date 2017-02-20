@@ -35,6 +35,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	private final Map<IDcpuCompatibleDevice, List<IDcpuHardware>> m_hardwareConnections = new HashMap<>();
 
 	private final Emulator m_dcpu = new Emulator();
+	private final DefaultClock m_clock = new DefaultClock();
 	
 	private boolean m_isOn = false;
 	private boolean m_hasCrashed = false;
@@ -49,7 +50,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 		super(name, false);
 		m_model = model;
 		m_firmware = firmware;
-		m_dcpu.addDevice(new DefaultClock());
+		m_dcpu.addDevice(m_clock);
 		
 		if (isOn) {
 			turnOn();
@@ -62,6 +63,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	public void reset() {
 		turnOff();
 		turnOn();
+		m_clock.reset();
 	}
 
 	public void turnOn() {
@@ -172,7 +174,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 		if (!m_isOn) {
 			return;
 		}
-
+		m_clock.update(delta);
 		for (IDcpuCompatibleDevice d : connectedDevices) {
 			if (!m_hardwareConnections.containsKey(d)) {
 				addNewDcpuConnection(d);
