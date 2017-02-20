@@ -37,6 +37,7 @@ import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 
@@ -55,7 +56,7 @@ public final class LemDisplayFactory {
 
 	public LemDisplay create(DefaultScreen display, DefaultKeyboard keyboard) throws WindowConstructionException {
 		Observers observers = new Observers();
-		
+
 		Window window = m_windowFactory.create(m_layout, new LemDisplayBehaviorInjector(observers, display, keyboard));
 		m_windowManager.addWindow(window);
 
@@ -82,7 +83,7 @@ public final class LemDisplayFactory {
 		public Observers getObservers() {
 			return m_observers;
 		}
-		
+
 		public void setVisible(boolean isVisible) {
 			m_window.setVisible(isVisible);
 		}
@@ -94,7 +95,7 @@ public final class LemDisplayFactory {
 		public void setLocation(Vector2D location) {
 			m_window.setLocation(location);
 		}
-		
+
 		public Vector2D getLocation() {
 			return m_window.getLocation();
 		}
@@ -125,7 +126,7 @@ public final class LemDisplayFactory {
 		private final Observers m_observers;
 		private final DefaultScreen m_display;
 		private final DefaultKeyboard m_keyboard;
-		
+
 		public LemDisplayBehaviorInjector(final Observers observers, DefaultScreen display, DefaultKeyboard keyboard) {
 			m_observers = observers;
 			m_display = display;
@@ -136,37 +137,47 @@ public final class LemDisplayFactory {
 		protected void doInject() throws NoSuchControlException {
 			final Viewport displayView = getControl(Viewport.class, "displayView");
 			final Timer timer = new Timer();
-			
+
 			addControl(timer);
 			displayView.setView(new IRenderable() {
 				@Override
 				public void render(Graphics2D g, int x, int y, float scale) {
 					BufferedImage screen = m_display.getScreenImage();
-					
-					if(screen == null) {
+
+					if (screen == null) {
 						g.setColor(Color.black);
 						g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);
-					}else
+					} else {
+						RenderingHints rh = new RenderingHints(
+								RenderingHints.KEY_TEXT_ANTIALIASING,
+								RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+						RenderingHints old = g.getRenderingHints();
+						g.setRenderingHints(rh);
 						g.drawImage(screen, x, y, displayView.getBounds().width, displayView.getBounds().height, null);
+						g.setRenderingHints(old);
+					}
 				}
 			});
-			
+
 			getObservers().add(new Window.IWindowInputObserver() {
 				@Override
 				public void onKeyEvent(InputKeyEvent event) {
-					if(event.type == InputKeyEvent.KeyEventType.KeyTyped) {
+					if (event.type == InputKeyEvent.KeyEventType.KeyTyped) {
 						m_keyboard.simulateKeyTyped(event.keyCode, event.keyChar);
 					}
 				}
 
 				@Override
-				public void onMouseEvent(InputMouseEvent event) { }
+				public void onMouseEvent(InputMouseEvent event) {
+				}
 			});
 		}
 	}
-	
+
 	public interface IHudObserver {
+
 		void movementSpeedChanged(boolean isRunning);
+
 		void inventoryViewChanged(boolean isVisible);
 	}
 }

@@ -24,7 +24,7 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 	private final IAnimationSceneModel m_model;
 	
 	private final DefaultKeyboard m_keyboard = new DefaultKeyboard(false);
-	private final DefaultScreen m_screen = new DefaultScreen(true, true);
+	private final DefaultScreen m_screen = new DefaultScreen(false, false);
 	
 	public ConsoleInterface(String name, IAnimationSceneModel model) {
 		super(name, false);

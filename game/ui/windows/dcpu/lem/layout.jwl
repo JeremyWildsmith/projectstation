@@ -9,15 +9,15 @@
       },
       "config": {
         "bounds": {
-          "width": 128,
-          "height": 96
+          "width": 256,
+          "height": 192
         }
       }
     }
   ],
   "bounds": {
-    "width": 148,
-    "height": 116
+    "width": 278,
+    "height": 212
   },
   "style": "file:///ui/style/tech/tech.juis"
 }

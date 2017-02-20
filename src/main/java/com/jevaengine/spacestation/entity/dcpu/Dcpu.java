@@ -9,6 +9,7 @@ import com.jevaengine.spacestation.entity.*;
 import de.codesourcery.jasm16.Address;
 import de.codesourcery.jasm16.emulator.Emulator;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
+import de.codesourcery.jasm16.emulator.devices.impl.DefaultClock;
 import de.codesourcery.jasm16.emulator.exceptions.EmulationErrorException;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class Dcpu extends BasicDevice implements INetworkDevice, IInteractableEntity {
 
-	private static final int STEP_PERIOD = 100;
+	private static final int CYCLES_PER_MS = 100;
 
 	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger(0);
 
@@ -43,6 +44,20 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
 	}
+	
+	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
+		super(name, false);
+		m_model = model;
+		m_dcpu.loadMemory(Address.ZERO, firmware);
+		m_dcpu.addDevice(new DefaultClock());
+		
+		if (isOn) {
+			turnOn();
+		} else {
+			turnOff();
+		}
+	}
+
 
 	public void reset() {
 		turnOff();
@@ -72,19 +87,6 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 	public void crash() {
 		m_hasCrashed = true;
 		m_model.getAnimation("crash").setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
-	}
-
-	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
-		super(name, false);
-		m_model = model;
-
-		m_dcpu.loadMemory(Address.ZERO, firmware);
-
-		if (isOn) {
-			turnOn();
-		} else {
-			turnOff();
-		}
 	}
 
 	@Override
@@ -176,8 +178,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IInteract
 			}
 		}
 
-		timeSinceStep += delta;
-		for (; timeSinceStep > STEP_PERIOD; timeSinceStep -= STEP_PERIOD) {
+		for (int i = delta * CYCLES_PER_MS; i > 0; i--) {
 			if (!m_hasCrashed) {
 				try {
 					m_dcpu.executeOneInstruction();
