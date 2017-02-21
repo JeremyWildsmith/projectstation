@@ -13,11 +13,23 @@
           "height": 192
         }
       }
+    },
+    {
+      "name": "togglePower",
+      "location": {
+        "x": 253,
+        "y": 212
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "on.png",
+        "inactive": "off.png"
+      }
     }
   ],
   "bounds": {
     "width": 278,
-    "height": 212
+    "height": 242
   },
   "style": "file:///ui/style/tech/tech.juis"
 }

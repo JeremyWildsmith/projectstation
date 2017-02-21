@@ -22,7 +22,7 @@ public final class NetworkWire extends Wire implements INetworkDevice {
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
-		return (d instanceof INetworkDevice);
+		return (d instanceof WiredDevice) && (d instanceof INetworkDevice);
 	}
 
 	@Override

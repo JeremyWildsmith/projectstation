@@ -18,6 +18,7 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.entity.dcpu.ConsoleInterface;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
 import io.github.jevaengine.IDisposable;
@@ -54,10 +55,10 @@ public final class LemDisplayFactory {
 		m_layout = layout;
 	}
 
-	public LemDisplay create(DefaultScreen display, DefaultKeyboard keyboard) throws WindowConstructionException {
+	public LemDisplay create(ConsoleInterface consoleInterface) throws WindowConstructionException {
 		Observers observers = new Observers();
 
-		Window window = m_windowFactory.create(m_layout, new LemDisplayBehaviorInjector(observers, display, keyboard));
+		Window window = m_windowFactory.create(m_layout, new LemDisplayBehaviorInjector(observers, consoleInterface));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -124,27 +125,31 @@ public final class LemDisplayFactory {
 	private class LemDisplayBehaviorInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
-		private final DefaultScreen m_display;
-		private final DefaultKeyboard m_keyboard;
+		private final ConsoleInterface m_consoleInterface;
 
-		public LemDisplayBehaviorInjector(final Observers observers, DefaultScreen display, DefaultKeyboard keyboard) {
+		public LemDisplayBehaviorInjector(final Observers observers, ConsoleInterface consoleInterface) {
 			m_observers = observers;
-			m_display = display;
-			m_keyboard = keyboard;
+			m_consoleInterface = consoleInterface;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
 			final Viewport displayView = getControl(Viewport.class, "displayView");
+			final ToggleIcon togglePower = getControl(ToggleIcon.class, "togglePower");
+			
 			final Timer timer = new Timer();
 
 			addControl(timer);
+			
 			displayView.setView(new IRenderable() {
 				@Override
 				public void render(Graphics2D g, int x, int y, float scale) {
-					BufferedImage screen = m_display.getScreenImage();
+					BufferedImage screen = m_consoleInterface.getScreen();
 
-					if (screen == null) {
+					if (!m_consoleInterface.isOn()) {
+						g.setColor(Color.darkGray);
+						g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);	
+					} else if (screen == null) {
 						g.setColor(Color.black);
 						g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);
 					} else {
@@ -163,12 +168,29 @@ public final class LemDisplayFactory {
 				@Override
 				public void onKeyEvent(InputKeyEvent event) {
 					if (event.type == InputKeyEvent.KeyEventType.KeyTyped) {
-						m_keyboard.simulateKeyTyped(event.keyCode, event.keyChar);
+						m_consoleInterface.simulateKeyTyped(event.keyCode, event.keyChar);
 					}
 				}
 
 				@Override
 				public void onMouseEvent(InputMouseEvent event) {
+				}
+			});
+			
+			timer.getObservers().add(new Timer.ITimerObserver() {
+				@Override
+				public void update(int deltaTime) {
+					togglePower.setActive(m_consoleInterface.isOn());
+				}
+			});
+			
+			togglePower.getObservers().add(new ToggleIcon.IToggleIconObserver() {
+				@Override
+				public void toggled() {
+					if(togglePower.isActive())
+						m_consoleInterface.turnOn();
+					else
+						m_consoleInterface.turnOff();
 				}
 			});
 		}

@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public abstract class Wire extends BasicDevice {
+public abstract class Wire extends WiredDevice {
 
 	private final IAnimationSceneModel m_model;
 	

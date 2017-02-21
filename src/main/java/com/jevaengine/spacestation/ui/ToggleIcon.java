@@ -36,6 +36,15 @@ public final class ToggleIcon extends Control {
 		m_isActive = false;
 	}
 	
+	public void setActive(boolean isActive) {
+		boolean old = m_isActive;
+		
+		m_isActive = isActive;
+		
+		if(old != isActive)
+			m_observers.raise(IToggleIconObserver.class).toggled();
+	}
+	
 	public boolean isActive() {
 		return m_isActive;
 	}

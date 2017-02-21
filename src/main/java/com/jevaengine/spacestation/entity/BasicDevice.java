@@ -13,12 +13,9 @@ import io.github.jevaengine.world.entity.IEntityTaskModel;
 import io.github.jevaengine.world.entity.NullEntityTaskModel;
 import io.github.jevaengine.world.entity.WorldAssociationException;
 import io.github.jevaengine.world.physics.IPhysicsBody;
-import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;
 import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
-import io.github.jevaengine.world.search.ISearchFilter;
-import io.github.jevaengine.world.search.RadialSearchFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +38,7 @@ public abstract class BasicDevice implements IEntity, IDevice {
 	private World m_world;
 	private IPhysicsBody m_body;
 	
-	private boolean m_isTraversable;
+	private final boolean m_isTraversable;
 	
 	public BasicDevice(String name, boolean isTraversable) {
 		m_name = name;
@@ -82,8 +79,13 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		connectionChanged();
 	}
 	
+	public final void clearConnections() {
+		while(!m_connections.isEmpty())
+			removeConnection(m_connections.get(0));
+	}
+	
 	@Override
-	public boolean addConnection(IDevice wire) {
+	public final boolean addConnection(IDevice wire) {
 		if(!canConnectTo(wire))
 			return false;
 		
@@ -117,23 +119,6 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		return devices;
 	}
 	
-	private void clearConnections() {
-		while(!m_connections.isEmpty())
-			removeConnection(m_connections.get(0));
-	}
-	
-	private void updateConnections() {
-		clearConnections();
-		
-		ISearchFilter<IDevice> searchFilter = new RadialSearchFilter<>(m_body.getLocation().getXy(), 1.1F);
-		IDevice wires[] = m_world.getEntities().search(IDevice.class, searchFilter);
-	
-		for(IDevice w : wires) {
-			if(w != this)
-				addConnection(w);
-		}
-	}
-	
 	@Override
 	public final World getWorld() {
 		return m_world;
@@ -150,13 +135,13 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		m_observers.raise(IEntityWorldObserver.class).enterWorld();
 		
 		constructPhysicsBody();
-		updateConnections();
-		m_body.getObservers().add(new MovementObserver());
 	}
 
 	@Override
 	public final void disassociate()
 	{
+		clearConnections();
+		
 		if (m_world == null)
 			throw new WorldAssociationException("Not associated with world");
 
@@ -198,6 +183,7 @@ public abstract class BasicDevice implements IEntity, IDevice {
 	}
 	
 	protected abstract void connectionChanged();
+	protected abstract boolean canConnectTo(IDevice d);
 
 	@Override
 	public final void dispose() {
@@ -206,17 +192,5 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		if (m_world != null) {
 			m_world.removeEntity(this);
 		}
-	}
-	
-	protected abstract boolean canConnectTo(IDevice d);
-
-	private class MovementObserver implements IPhysicsBodyOrientationObserver {
-		@Override
-		public void locationSet() {
-			updateConnections();
-		}
-
-		@Override
-		public void directionSet() { }
 	}
 }

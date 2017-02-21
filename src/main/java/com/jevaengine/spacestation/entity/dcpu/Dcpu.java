@@ -27,13 +27,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDevice, IInteractableEntity {
 
 	private static final int CYCLES_PER_MS = 100;
+	private static final int POWER_USEAGE_WATTS = 250;
+	private static final int ON_POWER_USAGE_SECONDS = 1000; //1 seconds worth of power required to boot DCPU.
 
 	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger(0);
 
 	private final IAnimationSceneModel m_model;
 
 	private final Map<IDcpuCompatibleDevice, List<IDcpuHardware>> m_hardwareConnections = new HashMap<>();
-
+	
 	private final Emulator m_dcpu = new Emulator();
 	private final DefaultClock m_clock = new DefaultClock();
 	
@@ -44,6 +46,26 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 	
 	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
+	}
+	
+	private AreaPowerController getAreaPowerController() {
+		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
+		
+		return controller.isEmpty() ? null : controller.get(0);
+	}
+	
+	private boolean drawEnergy(int timeDelta) {
+		AreaPowerController c = getAreaPowerController();
+		
+		List<IDevice> requested = new ArrayList<>();
+		requested.add(this);
+		
+		if(c == null)
+			return false;
+		
+		int requiredEnergy = (int)Math.ceil((((float)timeDelta) / 1000) * POWER_USEAGE_WATTS);
+		
+		return c.drawEnergy(requested, requiredEnergy) >= requiredEnergy;
 	}
 	
 	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
@@ -59,7 +81,6 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 		}
 	}
 
-
 	public void reset() {
 		turnOff();
 		turnOn();
@@ -67,7 +88,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 	}
 
 	public void turnOn() {
-		if (m_isOn) {
+		if (m_isOn || !drawEnergy(ON_POWER_USAGE_SECONDS)) {
 			return;
 		}
 
@@ -98,7 +119,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
-		return (d instanceof INetworkDevice);
+		return true;
 	}
 
 	@Override
@@ -170,10 +191,15 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 				removeOldDcpuConnection(d);
 			}
 		}
-
-		if (!m_isOn) {
+		
+		if (!m_isOn)
+			return;
+		
+		if(!drawEnergy(delta)) {
+			turnOff();
 			return;
 		}
+		
 		m_clock.update(delta);
 		for (IDcpuCompatibleDevice d : connectedDevices) {
 			if (!m_hardwareConnections.containsKey(d)) {

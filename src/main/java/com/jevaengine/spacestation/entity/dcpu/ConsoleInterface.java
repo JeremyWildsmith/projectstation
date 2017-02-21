@@ -13,6 +13,7 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSceneModelAnimation;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,22 +22,70 @@ import java.util.List;
  * @author Jeremy
  */
 public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevice, IPowerDevice {
+	private static final int POWER_USEAGE_WATTS = 40;
+	private static final int ON_POWER_USAGE_SECONDS = 1000; //1 seconds worth of power required to boot DCPU.
+	
 	private final IAnimationSceneModel m_model;
 	
 	private final DefaultKeyboard m_keyboard = new DefaultKeyboard(false);
 	private final DefaultScreen m_screen = new DefaultScreen(false, false);
 	
+	private boolean m_isOn = false;
+	
 	public ConsoleInterface(String name, IAnimationSceneModel model) {
 		super(name, false);
 		m_model =  model;
 	}
-
-	public DefaultKeyboard getKeyboard() {
-		return m_keyboard;
+	
+		
+	private AreaPowerController getAreaPowerController() {
+		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
+		
+		return controller.isEmpty() ? null : controller.get(0);
 	}
 	
-	public DefaultScreen getScreen() {
-		return m_screen;
+	private boolean drawEnergy(int timeDelta) {
+		AreaPowerController c = getAreaPowerController();
+		
+		List<IDevice> requested = new ArrayList<>();
+		requested.add(this);
+		
+		if(c == null)
+			return false;
+		
+		int requiredEnergy = (int)Math.ceil((((float)timeDelta) / 1000) * POWER_USEAGE_WATTS);
+		
+		return c.drawEnergy(requested, requiredEnergy) >= requiredEnergy;
+	}
+
+	public boolean isOn() {
+		return m_isOn;
+	}
+	
+	public void turnOn() {
+		if (m_isOn || !drawEnergy(ON_POWER_USAGE_SECONDS)) {
+			return;
+		}
+
+		m_isOn = true;
+	}
+	
+	public void turnOff() {
+		m_isOn = false;
+	}
+	
+	public void simulateKeyTyped(int keyCode, char keyChar) {
+		if(!m_isOn)
+			return;
+		
+		m_keyboard.simulateKeyTyped(keyCode, keyChar);
+	}
+	
+	public BufferedImage getScreen() {
+		if(!m_screen.isActive())
+			return null;
+		
+		return m_screen.getScreenImage();
 	}
 	
 	@Override
@@ -58,12 +107,22 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 		
 		IAnimationSceneModelAnimation on = m_model.getAnimation("on");
 		IAnimationSceneModelAnimation off = m_model.getAnimation("off");
+		IAnimationSceneModelAnimation inactive = m_model.getAnimation("inactive");
 		
-		if(m_screen.isActive()) {
-			if(on.getState() != AnimationSceneModelAnimationState.Play)
-				m_model.getAnimation("on").setState(AnimationSceneModelAnimationState.Play);
+		if(!drawEnergy(delta))
+			turnOff();
+		
+		if(m_isOn) {
+			if(m_screen.isActive()) {
+				if(on.getState() != AnimationSceneModelAnimationState.Play)
+					on.setState(AnimationSceneModelAnimationState.Play);
+			} else {
+				inactive.setState(AnimationSceneModelAnimationState.Play);
+			}
 		} else if (off.getState() != AnimationSceneModelAnimationState.Play)
-			m_model.getAnimation("off").setState(AnimationSceneModelAnimationState.Play);
+			off.setState(AnimationSceneModelAnimationState.Play);
+		
+		
 	}
 
 	@Override

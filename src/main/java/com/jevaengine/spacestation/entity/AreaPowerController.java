@@ -6,7 +6,6 @@
 package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.pathfinding.RoomRestrictedDevicePathFinder;
-import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.pathfinding.IncompleteRouteException;
@@ -14,25 +13,24 @@ import io.github.jevaengine.world.pathfinding.Route;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.search.RadialSearchFilter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Jeremy
  */
-public class AreaPowerController extends BasicDevice implements IPowerDevice {
+public class AreaPowerController extends WiredDevice implements IPowerDevice {
 
+	private static final int MAX_WIRED_CONNECTIONS = 1;
+	
 	private static final int SEARCH_RADIUS = 1000;
 
 	private final IRouteFactory m_routeFactory;
 
 	private final ISceneModel m_model;
 
-	private boolean m_scannedForPowerDevices = false;
-
-	private final List<IPowerDevice> m_powerDevices = new ArrayList<>();
-
+	private boolean m_scanForPowerDevices = true;
+	
 	public AreaPowerController(String name, ISceneModel model, IRouteFactory routeFactory) {
 		super(name, false);
 		m_model = model;
@@ -48,6 +46,10 @@ public class AreaPowerController extends BasicDevice implements IPowerDevice {
 		return false;
 	}
 
+	public void reset() {
+		m_scanForPowerDevices = true;
+	}
+	
 	@Override
 	public IImmutableSceneModel getModel() {
 		return m_model;
@@ -65,7 +67,7 @@ public class AreaPowerController extends BasicDevice implements IPowerDevice {
 	}
 
 	public void scanForPowerDevices() {
-		m_powerDevices.clear();
+		clearConnections();
 
 		RadialSearchFilter<IPowerDevice> searchFilter = new RadialSearchFilter<>(this.getBody().getLocation().getXy(), SEARCH_RADIUS);
 		IPowerDevice[] powerDevices = this.getWorld().getEntities().search(IPowerDevice.class, searchFilter);
@@ -75,26 +77,42 @@ public class AreaPowerController extends BasicDevice implements IPowerDevice {
 				continue;
 			
 			if(canReachDevice(d))
-				m_powerDevices.add(d);
+				addConnection(d);
 		}
 
 	}
 
 	@Override
 	public void update(int delta) {
-		if (!m_scannedForPowerDevices) {
+		if (m_scanForPowerDevices) {
 			scanForPowerDevices();
-			m_scannedForPowerDevices = true;
+			m_scanForPowerDevices = false;
 		}
 	}
 
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
-		return 0;
+		requested.add(this);
+		
+		int drawn = 0;
+		
+		for(IPowerDevice d : getConnections(IPowerDevice.class)) {
+			drawn += d.drawEnergy(requested, joules);
+			
+			if(drawn >= joules)
+				break;
+		}
+		
+		return drawn;
 	}
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
+		if(d instanceof WiredDevice) {
+			if(getConnections(WiredDevice.class).size() >= MAX_WIRED_CONNECTIONS)
+				return false;
+		}
+		
 		return (d instanceof IPowerDevice);
 	}
 }
