@@ -23,7 +23,7 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 
 	private static final int MAX_WIRED_CONNECTIONS = 1;
 	
-	private static final int SEARCH_RADIUS = 1000;
+	private static final int SEARCH_RADIUS = 200;
 
 	private final IRouteFactory m_routeFactory;
 
@@ -66,7 +66,7 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 		return true;
 	}
 
-	public void scanForPowerDevices() {
+	private void scanForPowerDevices() {
 		clearConnections();
 
 		RadialSearchFilter<IPowerDevice> searchFilter = new RadialSearchFilter<>(this.getBody().getLocation().getXy(), SEARCH_RADIUS);
