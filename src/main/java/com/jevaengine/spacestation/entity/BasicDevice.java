@@ -31,18 +31,18 @@ public abstract class BasicDevice implements IEntity, IDevice {
 	private final String m_name;
 	private final Observers m_observers = new Observers();
 	private final EntityBridge m_bridge;
-	
+
 	private final HashMap<String, Integer> m_flags = new HashMap<>();
 	private final List<IDevice> m_connections = new ArrayList<>();
-	
+
 	private World m_world;
 	private IPhysicsBody m_body;
-	
+
 	private final boolean m_isTraversable;
-	
+
 	public BasicDevice(String name, boolean isTraversable) {
 		m_name = name;
-		
+
 		m_body = new NullPhysicsBody();
 		m_bridge = new EntityBridge(this);
 		m_isTraversable = isTraversable;
@@ -50,12 +50,13 @@ public abstract class BasicDevice implements IEntity, IDevice {
 
 	private void constructPhysicsBody() {
 		PhysicsBodyDescription physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyDescription.PhysicsBodyType.Static, getModel().getBodyShape(), 1.0F, true, false, 1.0F);
-		
-		if(m_isTraversable)
+
+		if (m_isTraversable) {
 			m_body = new NonparticipantPhysicsBody(this);
-		else
+		} else {
 			m_body = m_world.getPhysicsWorld().createBody(physicsBodyDescription);
-		
+		}
+
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 	}
 
@@ -71,80 +72,83 @@ public abstract class BasicDevice implements IEntity, IDevice {
 
 	@Override
 	public final void removeConnection(IDevice wire) {
-		if(!m_connections.contains(wire))
+		if (!m_connections.contains(wire)) {
 			return;
-		
+		}
+
 		m_connections.remove(wire);
 		wire.removeConnection(this);
 		connectionChanged();
 	}
-	
+
 	@Override
 	public final void clearConnections() {
-		while(!m_connections.isEmpty())
+		while (!m_connections.isEmpty()) {
 			removeConnection(m_connections.get(0));
+		}
 	}
-	
+
 	@Override
 	public final boolean addConnection(IDevice wire) {
-		if(!canConnectTo(wire))
-			return false;
-		
-		if(m_connections.contains(wire))
+		if (m_connections.contains(wire)) {
 			return true;
-		
+		}
+
+		if (!canConnectTo(wire)) {
+			return false;
+		}
+
 		m_connections.add(wire);
-		if(!wire.addConnection(this))
-		{
+		if (!wire.addConnection(this)) {
 			m_connections.remove(wire);
 			return false;
 		}
-		
+
 		connectionChanged();
 		return true;
 	}
-	
+
 	protected final List<IDevice> getConnections() {
 		return new ArrayList<>(m_connections);
 	}
-	
+
 	protected final <T extends IDevice> List<T> getConnections(Class<T> device) {
 		List<T> devices = new ArrayList<>();
-		
-		for(IDevice d : m_connections)
-		{
-			if(device.isAssignableFrom(d.getClass()))
-				devices.add((T)d);
+
+		for (IDevice d : m_connections) {
+			if (device.isAssignableFrom(d.getClass())) {
+				devices.add((T) d);
+			}
 		}
-		
+
 		return devices;
 	}
-	
+
 	@Override
 	public final World getWorld() {
 		return m_world;
 	}
 
 	@Override
-	public final void associate(World world)
-	{
-		if (m_world != null)
+	public final void associate(World world) {
+		if (m_world != null) {
 			throw new WorldAssociationException("Already associated with world");
+		}
 
 		m_world = world;
 
 		m_observers.raise(IEntityWorldObserver.class).enterWorld();
-		
+
 		constructPhysicsBody();
 	}
 
 	@Override
-	public final void disassociate()
-	{
+	public final void disassociate() {
 		clearConnections();
-		
-		if (m_world == null)
+
+		if (m_world == null) {
 			throw new WorldAssociationException("Not associated with world");
+		}
 
 		destroyPhysicsBody();
 
@@ -182,8 +186,9 @@ public abstract class BasicDevice implements IEntity, IDevice {
 	public final EntityBridge getBridge() {
 		return m_bridge;
 	}
-	
+
 	protected abstract void connectionChanged();
+
 	protected abstract boolean canConnectTo(IDevice d);
 
 	@Override
