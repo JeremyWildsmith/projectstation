@@ -54,6 +54,19 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 		return controller.isEmpty() ? null : controller.get(0);
 	}
 	
+	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
+		super(name, false);
+		m_model = model;
+		m_firmware = firmware;
+		m_dcpu.addDevice(m_clock);
+		
+		if (isOn) {
+			turnOn();
+		} else {
+			turnOff();
+		}
+	}
+	
 	private boolean drawEnergy(int timeDelta) {
 		AreaPowerController c = getAreaPowerController();
 		
@@ -68,19 +81,6 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 		return c.drawEnergy(requested, requiredEnergy) >= requiredEnergy;
 	}
 	
-	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
-		super(name, false);
-		m_model = model;
-		m_firmware = firmware;
-		m_dcpu.addDevice(m_clock);
-		
-		if (isOn) {
-			turnOn();
-		} else {
-			turnOff();
-		}
-	}
-
 	public void reset() {
 		turnOff();
 		turnOn();
