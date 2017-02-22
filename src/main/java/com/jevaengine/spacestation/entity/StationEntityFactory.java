@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -287,6 +286,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		AreaNetworkController(AreaNetworkController.class, "areaNetworkController", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					AreaNetworkControllerDeclaration decl = auxConfig.getValue(AreaNetworkControllerDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new AreaNetworkController(instanceName, model, entityFactory.m_routeFactory);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -422,8 +434,24 @@ public class StationEntityFactory implements IEntityFactory {
 	
 	
 	public static final class AreaPowerControllerDeclaration implements ISerializable {
+		public String model;
 
-		public int productionWatts;
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class AreaNetworkControllerDeclaration implements ISerializable {
 		public String model;
 
 		@Override
