@@ -66,8 +66,17 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 		return true;
 	}
 
+	private void clearUnwiredConnections() {
+		for(IDevice d : getConnections()) {
+			if(d instanceof WiredDevice)
+				continue;
+			
+			removeConnection(d);
+		}
+	}
+	
 	private void scanForPowerDevices() {
-		clearConnections();
+		clearUnwiredConnections();
 
 		RadialSearchFilter<IPowerDevice> searchFilter = new RadialSearchFilter<>(this.getBody().getLocation().getXy(), SEARCH_RADIUS);
 		IPowerDevice[] powerDevices = this.getWorld().getEntities().search(IPowerDevice.class, searchFilter);
