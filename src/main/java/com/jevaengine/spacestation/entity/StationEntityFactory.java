@@ -310,6 +310,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		ProgrammableIntervalTimer(ProgrammableIntervalTimer.class, "programmableIntervalTimer", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					ProgrammableIntervalTimerDeclaration decl = auxConfig.getValue(ProgrammableIntervalTimerDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new ProgrammableIntervalTimer(instanceName, model, decl.nodeName);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -409,6 +422,29 @@ public class StationEntityFactory implements IEntityFactory {
 	}
 	
 	public static final class NetworkInterfaceControllerDeclaration implements ISerializable {
+
+		public String nodeName;
+		public String model;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("nodeName").setValue(nodeName);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				nodeName = source.getChild("nodeName").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	
+	public static final class ProgrammableIntervalTimerDeclaration implements ISerializable {
 
 		public String nodeName;
 		public String model;
