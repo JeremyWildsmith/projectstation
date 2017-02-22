@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.dcpu.devices;
 
-import com.jevaengine.spacestation.entity.AreaNetworkController;
 import de.codesourcery.jasm16.Register;
 import de.codesourcery.jasm16.WordAddress;
 import de.codesourcery.jasm16.emulator.ICPU;
@@ -14,6 +13,7 @@ import de.codesourcery.jasm16.emulator.devices.DeviceDescriptor;
 import de.codesourcery.jasm16.emulator.devices.HardwareInterrupt;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import de.codesourcery.jasm16.emulator.memory.IMemory;
+import io.github.jevaengine.util.Nullable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -27,17 +27,13 @@ public class NetworkIoTerminal implements IDcpuHardware {
 																		0xAAA00000, 1, 0x59ACE);
 	
 	private static final int MAX_BACKLOG = 10;
-	
-	private final AreaNetworkController m_networkController;
 
 	private IEmulator m_attachedEmulator;
-
+	
+	private final Queue<NetworkPacket> m_transmitQueue = new LinkedList<>();
 	private final Queue<NetworkPacket> m_recieveQueue = new LinkedList<>();
+	
 	private int m_interruptMessage = 0;
-
-	public NetworkIoTerminal(AreaNetworkController networkController) {
-		m_networkController = networkController;
-	}
 
 	@Override
 	public void afterAddDevice(IEmulator emulator) {
@@ -48,9 +44,15 @@ public class NetworkIoTerminal implements IDcpuHardware {
 	@Override
 	public void reset() {
 		m_recieveQueue.clear();
+		m_transmitQueue.clear();
 		m_interruptMessage = 0;
 	}
 
+	@Nullable
+	public NetworkPacket pollTransmitQueue() {
+		return m_transmitQueue.poll();
+	}
+	
 	@Override
 	public boolean supportsMultipleInstances() {
 		return true;
@@ -91,7 +93,7 @@ public class NetworkIoTerminal implements IDcpuHardware {
 			packet.data[i] = memory.read(new WordAddress(memoryAddress + 5 + i));
 		}
 		
-		m_networkController.transmitMessage(packet);
+		m_transmitQueue.add(packet);
 	}
 
 	private void writePacketToMemory(NetworkPacket packet, int memoryAddress, IMemory memory) {

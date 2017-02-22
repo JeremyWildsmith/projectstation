@@ -5,10 +5,8 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.dcpu.devices.NetworkIoTerminal;
 import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
 import com.jevaengine.spacestation.pathfinding.RoomRestrictedDevicePathFinder;
-import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.pathfinding.IRouteFactory;
@@ -30,9 +28,9 @@ import java.util.Set;
  *
  * @author Jeremy
  */
-public class AreaNetworkController extends WiredDevice implements INetworkNode, INetworkDataCarrier, IDcpuCompatibleDevice {
+public class AreaNetworkController extends WiredDevice implements INetworkNode, INetworkDataCarrier {
 
-	private static final String NODE_NAME = "apc";
+	private static final String NODE_NAME = "anc";
 
 	private static final String NODE_SET_SEPERATOR = ";";
 	private static final String NODE_SEPERATOR = ",";
@@ -53,8 +51,6 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 	private final String m_netlist;
 
 	private int m_ipAddress = 0;
-	
-	private final NetworkIoTerminal m_networkIoTerminal;
 
 	public AreaNetworkController(String name, IAnimationSceneModel model, IRouteFactory routeFactory, String netlist, int ipAddress) {
 		super(name, false);
@@ -62,8 +58,6 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 		m_routeFactory = routeFactory;
 		m_netlist = netlist;
 		m_ipAddress = ipAddress;
-		
-		m_networkIoTerminal = new NetworkIoTerminal(this);
 	}
 
 	@Override
@@ -173,7 +167,12 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 			}
 
 			for (String connection : connectionSet.getValue()) {
-				INetworkNode slave = getManagedDevice(connection);
+				INetworkNode slave;
+				
+				if(connection.compareTo(NODE_NAME) == 0)
+					slave = this;
+				else
+					slave = getManagedDevice(connection);
 
 				if (slave != null) {
 					master.addConnection(slave);
@@ -285,10 +284,11 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 		if (d instanceof WiredDevice) {
 			if (getConnections(WiredDevice.class).size() < MAX_WIRED_CONNECTIONS) {
 				return (d instanceof INetworkDataCarrier);
-			}
+			} else
+				return false;
 		}
 
-		return false;
+		return (d instanceof INetworkNode);
 	}
 
 	@Override
@@ -308,6 +308,8 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 		if (!hasIp() || packet.RecieverAddress != getIp()) {
 			return;
 		}
+		
+		m_observers.raise(IAreaNetworkControllerObserver.class).recievedMessage(packet);
 	}
 
 	public void transmitMessage(NetworkPacket packet) {
@@ -328,9 +330,8 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 
 		packet.SenderAddress = getIp();
 	}
-
-	@Override
-	public IDcpuHardware[] getHardware() {
-		return new IDcpuHardware[] {m_networkIoTerminal};
+	
+	public interface IAreaNetworkControllerObserver {
+		void recievedMessage(NetworkPacket packet);
 	}
 }

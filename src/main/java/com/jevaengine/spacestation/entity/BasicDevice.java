@@ -29,7 +29,7 @@ import java.util.Map;
 public abstract class BasicDevice implements IEntity, IDevice {
 
 	private final String m_name;
-	private final Observers m_observers = new Observers();
+	protected final Observers m_observers = new Observers();
 	private final EntityBridge m_bridge;
 
 	private final HashMap<String, Integer> m_flags = new HashMap<>();
