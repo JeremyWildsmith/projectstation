@@ -5,8 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.entity.dcpu.ConsoleInterface;
-import com.jevaengine.spacestation.entity.dcpu.Dcpu;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.IAssetStreamFactory.AssetStreamConstructionException;
 import io.github.jevaengine.config.IConfigurationFactory;

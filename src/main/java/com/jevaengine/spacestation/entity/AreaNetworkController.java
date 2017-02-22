@@ -40,9 +40,9 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 
 	private boolean m_scanForNetworkDevices = true;
 
-	private String m_netlist;
+	private final List<INetworkDevice> m_managedDevices = new ArrayList<>();
 
-	private List<INetworkDevice> m_managedDevices = new ArrayList<>();
+	private final String m_netlist;
 
 	public AreaNetworkController(String name, ISceneModel model, IRouteFactory routeFactory, String netlist) {
 		super(name, false);
