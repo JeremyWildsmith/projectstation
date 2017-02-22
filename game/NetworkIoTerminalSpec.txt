@@ -1,0 +1,14 @@
+HWI
+
+A   Behavior
+0   Pops packet off queue and writes it at address y OR sets y to 0 if there is no data to be read.
+1   Writes packet at address X to send queue
+2   If x is anything other than 0, enables interrupts when messages are recieved with the message x. Otherwise, interrupts are disabled.
+3   Clears recieve message queue
+
+PACKET FORMAT
+
+[Sender Address] - Int - 4 Bytes - 2 words (Upper | Lower)
+[Reciever Address] - Int - 4 Bytes - 2 words (Upper | Lower)
+[Port] - short - 2 Bytes - 1 Words
+[Data] - 44 Words

@@ -5,7 +5,7 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
-import com.jevaengine.spacestation.entity.dcpu.ConsoleInterface;
+import com.jevaengine.spacestation.entity.ConsoleInterface;
 import com.jevaengine.spacestation.ui.LemDisplayFactory;
 import com.jevaengine.spacestation.ui.LemDisplayFactory.LemDisplay;
 import com.jevaengine.spacestation.ui.ToggleIcon;

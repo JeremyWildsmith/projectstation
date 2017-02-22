@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public final class NetworkWire extends Wire implements INetworkDevice {
+public final class NetworkWire extends Wire implements INetworkDataCarrier {
 
 	public NetworkWire(String name, IAnimationSceneModel model) {
 		super(name, model);
@@ -21,57 +22,34 @@ public final class NetworkWire extends Wire implements INetworkDevice {
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
-		return (d instanceof WiredDevice) && (d instanceof INetworkDevice);
+		return (d instanceof WiredDevice) && (d instanceof INetworkDataCarrier);
 	}
 
 	@Override
-	public <T extends INetworkDevice> List<T> getConnected(List<INetworkDevice> requested, Class<T> device) {
-		ArrayList<T> devices = new ArrayList<>();
+	public void carry(List<INetworkDataCarrier> carried, NetworkPacket packet) {
+		if(carried.contains(this))
+			return;
 		
-		if (requested.contains(this))
-			return devices;
-
-		requested.add(this);
-
-		List<INetworkDevice> connections = getConnections(INetworkDevice.class);
-
-		for (INetworkDevice w : connections) {
-			if(device.isAssignableFrom(w.getClass()))
-				devices.add((T)w);
-			
-			devices.addAll(w.getConnected(requested, device));
+		carried.add(this);
+		
+		for(INetworkDataCarrier d : getConnections(INetworkDataCarrier.class)) {
+			d.carry(carried, packet);
 		}
-
-		return devices;
 	}
 
 	@Override
-	public boolean isConnected(List<INetworkDevice> requested, INetworkDevice device) {
-		if (requested.contains(this)) {
-			return false;
-		}
-
+	public List<AreaNetworkController> getAreaNetworkControllers(List<INetworkDataCarrier> requested) {
+		if(requested.contains(this))
+			return new ArrayList<>();
+		
 		requested.add(this);
-
-		if (this == device) {
-			return true;
+		
+		List<AreaNetworkController> controllers = new ArrayList<>();
+		
+		for(INetworkDataCarrier carrier : getConnections(INetworkDataCarrier.class)) {
+			controllers.addAll(carrier.getAreaNetworkControllers(requested));
 		}
-
-		List<INetworkDevice> connections = getConnections(INetworkDevice.class);
-
-		for (INetworkDevice w : connections) {
-			if (!requested.contains(w)) {
-				if (w.isConnected(requested, device)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public String getNodeName() {
-		return null;
+		
+		return controllers;
 	}
 }

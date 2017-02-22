@@ -5,13 +5,13 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.entity.INetworkDevice;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
+import com.jevaengine.spacestation.entity.INetworkNode;
 
 /**
  *
  * @author Jeremy
  */
-public interface IDcpuCompatibleDevice extends INetworkDevice {
+public interface IDcpuCompatibleDevice extends INetworkNode {
 	IDcpuHardware[] getHardware();
 }

@@ -292,7 +292,7 @@ public class StationEntityFactory implements IEntityFactory {
 					AreaNetworkControllerDeclaration decl = auxConfig.getValue(AreaNetworkControllerDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new AreaNetworkController(instanceName, model, entityFactory.m_routeFactory, decl.netlist);
+					return new AreaNetworkController(instanceName, model, entityFactory.m_routeFactory, decl.netlist, decl.ipAddress);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -458,11 +458,13 @@ public class StationEntityFactory implements IEntityFactory {
 	public static final class AreaNetworkControllerDeclaration implements ISerializable {
 		public String model;
 		public String netlist;
+		public int ipAddress;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
 			target.addChild("netlist").setValue(netlist);
+			target.addChild("ipAddress").setValue(ipAddress);
 		}
 
 		@Override
@@ -470,6 +472,7 @@ public class StationEntityFactory implements IEntityFactory {
 			try {
 				model = source.getChild("model").getValue(String.class);
 				netlist = source.getChild("netlist").getValue(String.class);
+				ipAddress = source.getChild("ipAddress").getValue(Integer.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

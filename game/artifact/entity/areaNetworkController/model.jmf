@@ -1,21 +1,61 @@
 {
-  "defaultAnimation": "idle",
+  "defaultAnimation": "on",
   "animations": [
     {
-      "name": "idle",
+      "name": "on",
       "sets": [
         {
-          "directions": [0, 1, 2, 3, 4, 5, 6, 7],
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
           "components": [
             {
               "sprite": "sprite.jsf",
-              "animation": "idle",
+              "animation": "on",
               "bounds": {
                 "x": -0.5,
                 "y": -0.5,
-                "z": 0.0,
-                "width": 1.0,
-                "height": 1.0,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "error",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "error",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
                 "depth": 0.01
               }
             }

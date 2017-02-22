@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.entity.*;
 import de.codesourcery.jasm16.Address;
 import de.codesourcery.jasm16.emulator.Emulator;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
@@ -24,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Jeremy
  */
-public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDevice, IInteractableEntity {
+public final class Dcpu extends BasicDevice implements INetworkNode, IPowerDevice, IInteractableEntity {
 
 	private static final int CYCLES_PER_MS = 100;
 	private static final int POWER_USEAGE_WATTS = 250;
@@ -241,16 +240,6 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 	@Override
 	public String[] getInteractions() {
 		return new String[0];
-	}
-
-	@Override
-	public <T extends INetworkDevice> List<T> getConnected(List<INetworkDevice> requested, Class<T> device) {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public boolean isConnected(List<INetworkDevice> requested, INetworkDevice device) {
-		return false;
 	}
 
 	@Override

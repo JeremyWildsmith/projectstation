@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.entity.*;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
@@ -131,16 +130,6 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 	@Override
 	protected boolean canConnectTo(IDevice d) {
 		return true;
-	}
-
-	@Override
-	public <T extends INetworkDevice> List<T> getConnected(List<INetworkDevice> requested, Class<T> device) {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public boolean isConnected(List<INetworkDevice> requested, INetworkDevice device) {
-		return false;
 	}
 
 	@Override
