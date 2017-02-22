@@ -7,7 +7,6 @@ package com.jevaengine.spacestation.entity;
 
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,7 +34,6 @@ public final class NetworkWire extends Wire implements INetworkDevice {
 		requested.add(this);
 
 		List<INetworkDevice> connections = getConnections(INetworkDevice.class);
-		Collections.shuffle(connections);
 
 		for (INetworkDevice w : connections) {
 			if(device.isAssignableFrom(w.getClass()))
@@ -60,7 +58,6 @@ public final class NetworkWire extends Wire implements INetworkDevice {
 		}
 
 		List<INetworkDevice> connections = getConnections(INetworkDevice.class);
-		Collections.shuffle(connections);
 
 		for (INetworkDevice w : connections) {
 			if (!requested.contains(w)) {
