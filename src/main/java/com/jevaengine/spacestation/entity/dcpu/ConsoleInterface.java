@@ -32,9 +32,12 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 	
 	private boolean m_isOn = false;
 	
-	public ConsoleInterface(String name, IAnimationSceneModel model) {
+	public String m_nodeName;
+	
+	public ConsoleInterface(String name, IAnimationSceneModel model, String nodeName) {
 		super(name, false);
 		m_model =  model;
+		m_nodeName = nodeName;
 	}
 	
 		
@@ -148,5 +151,10 @@ public class ConsoleInterface extends BasicDevice implements IDcpuCompatibleDevi
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
+	}
+
+	@Override
+	public String getNodeName() {
+		return m_nodeName;
 	}
 }

@@ -1,0 +1,7 @@
+https://github.com/tgstation/tgstation
+
+All assets including icons and sound are under a Creative Commons 3.0 BY-SA license (http://creativecommons.org/licenses/by-sa/3.0/) unless otherwise indicated.
+
+Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use. 
+ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original. 
+No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits. 

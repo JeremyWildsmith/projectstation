@@ -213,7 +213,7 @@ public class StationEntityFactory implements IEntityFactory {
 					ConsoleInterfaceDeclaration decl = auxConfig.getValue(ConsoleInterfaceDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new ConsoleInterface(instanceName, model);
+					return new ConsoleInterface(instanceName, model, decl.nodeName);
 				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -229,7 +229,7 @@ public class StationEntityFactory implements IEntityFactory {
 					InputStream firmwareStream = entityFactory.m_assetStreamFactory.create(context.resolve(decl.firmware));
 					byte[] firmware = IOUtils.toByteArray(firmwareStream);
 					
-					return new Dcpu(instanceName, model, firmware, true);
+					return new Dcpu(instanceName, model, firmware, true, decl.nodeName);
 				} catch (ISceneModelFactory.SceneModelConstructionException | IOException | AssetStreamConstructionException | ValueSerializationException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -354,11 +354,13 @@ public class StationEntityFactory implements IEntityFactory {
 
 		public String model;
 		public String firmware;
-
+		public String nodeName;
+		
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
 			target.addChild("firmware").setValue(firmware);
+			target.addChild("nodeName").setValue(nodeName);
 		}
 
 		@Override
@@ -366,6 +368,7 @@ public class StationEntityFactory implements IEntityFactory {
 			try {
 				model = source.getChild("model").getValue(String.class);
 				firmware = source.getChild("firmware").getValue(String.class);
+				nodeName = source.getChild("nodeName").getValue(String.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -374,17 +377,20 @@ public class StationEntityFactory implements IEntityFactory {
 
 	public static final class ConsoleInterfaceDeclaration implements ISerializable {
 
+		public String nodeName;
 		public String model;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
+			target.addChild("nodeName").setValue(nodeName);
 		}
 
 		@Override
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+				nodeName = source.getChild("nodeName").getValue(String.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import io.github.jevaengine.util.Nullable;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ import java.util.List;
 public interface INetworkDevice extends IDevice {
 	<T extends INetworkDevice> List<T> getConnected(List<INetworkDevice> requested, Class<T> device);
 	boolean isConnected(List<INetworkDevice> requested, INetworkDevice device);
+	@Nullable
+	String getNodeName();
 }

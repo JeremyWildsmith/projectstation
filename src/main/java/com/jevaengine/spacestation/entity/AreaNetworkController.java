@@ -152,4 +152,9 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 
 		return false;
 	}
+
+	@Override
+	public String getNodeName() {
+		return null;
+	}
 }

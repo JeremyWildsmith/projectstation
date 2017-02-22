@@ -69,4 +69,9 @@ public final class NetworkWire extends Wire implements INetworkDevice {
 
 		return false;
 	}
+
+	@Override
+	public String getNodeName() {
+		return null;
+	}
 }

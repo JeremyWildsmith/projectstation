@@ -35,52 +35,56 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 	private final IAnimationSceneModel m_model;
 
 	private final Map<IDcpuCompatibleDevice, List<IDcpuHardware>> m_hardwareConnections = new HashMap<>();
-	
+
 	private final Emulator m_dcpu = new Emulator();
 	private final DefaultClock m_clock = new DefaultClock();
-	
+
 	private boolean m_isOn = false;
 	private boolean m_hasCrashed = false;
 
 	private final byte[] m_firmware;
 	
-	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
-		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
+	private final String m_nodeName;
+
+	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn, String nodeName) {
+		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn, nodeName);
 	}
-	
-	private AreaPowerController getAreaPowerController() {
-		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
-		
-		return controller.isEmpty() ? null : controller.get(0);
-	}
-	
-	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
+
+	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn, String nodeName) {
 		super(name, false);
 		m_model = model;
 		m_firmware = firmware;
 		m_dcpu.addDevice(m_clock);
-		
+		m_nodeName = nodeName;
+
 		if (isOn) {
 			turnOn();
 		} else {
 			turnOff();
 		}
 	}
-	
+
+	private AreaPowerController getAreaPowerController() {
+		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
+
+		return controller.isEmpty() ? null : controller.get(0);
+	}
+
 	private boolean drawEnergy(int timeDelta) {
 		AreaPowerController c = getAreaPowerController();
-		
+
 		List<IDevice> requested = new ArrayList<>();
 		requested.add(this);
-		
-		if(c == null)
+
+		if (c == null) {
 			return false;
-		
-		int requiredEnergy = (int)Math.ceil((((float)timeDelta) / 1000) * POWER_USEAGE_WATTS);
-		
+		}
+
+		int requiredEnergy = (int) Math.ceil((((float) timeDelta) / 1000) * POWER_USEAGE_WATTS);
+
 		return c.drawEnergy(requested, requiredEnergy) >= requiredEnergy;
 	}
-	
+
 	public void reset() {
 		turnOff();
 		turnOn();
@@ -161,9 +165,8 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 
 	private void clearDcpuConnections() {
 		ArrayList<IDcpuCompatibleDevice> devices = new ArrayList<>(m_hardwareConnections.keySet());
-		
-		for (IDcpuCompatibleDevice d : devices)
-		{
+
+		for (IDcpuCompatibleDevice d : devices) {
 			for (IDcpuHardware h : m_hardwareConnections.get(d)) {
 				m_dcpu.removeDevice(h);
 			}
@@ -191,15 +194,16 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 				removeOldDcpuConnection(d);
 			}
 		}
-		
-		if (!m_isOn)
+
+		if (!m_isOn) {
 			return;
-		
-		if(!drawEnergy(delta)) {
+		}
+
+		if (!drawEnergy(delta)) {
 			turnOff();
 			return;
 		}
-		
+
 		m_clock.update(delta);
 		for (IDcpuCompatibleDevice d : connectedDevices) {
 			if (!m_hardwareConnections.containsKey(d)) {
@@ -251,5 +255,10 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
+	}
+
+	@Override
+	public String getNodeName() {
+		return m_nodeName;
 	}
 }
