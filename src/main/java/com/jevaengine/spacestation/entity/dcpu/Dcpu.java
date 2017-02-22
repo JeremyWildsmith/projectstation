@@ -175,10 +175,11 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 		m_hardwareConnections.clear();
 	}
 
-	private <T extends INetworkDevice> List<T> getConnectedDevices(Class<T> clazz, List<INetworkDevice> requested) {
-		List<T> devices = new ArrayList<>();
-		for (INetworkDevice d : getConnections(INetworkDevice.class)) {
-			devices.addAll(d.getConnected(requested, clazz));
+	private List<IDcpuCompatibleDevice> getConnectedDevices() {
+		List<IDcpuCompatibleDevice> devices = new ArrayList<>();
+		
+		for (IDcpuCompatibleDevice d : getConnections(IDcpuCompatibleDevice.class)) {
+			devices.add(d);
 		}
 
 		return devices;
@@ -186,7 +187,7 @@ public final class Dcpu extends BasicDevice implements INetworkDevice, IPowerDev
 
 	@Override
 	public void update(int delta) {
-		List<IDcpuCompatibleDevice> connectedDevices = getConnectedDevices(IDcpuCompatibleDevice.class, new ArrayList<INetworkDevice>());
+		List<IDcpuCompatibleDevice> connectedDevices = getConnectedDevices();
 
 		List<IDcpuCompatibleDevice> currentConnected = new ArrayList<>(m_hardwareConnections.keySet());
 		for (IDcpuCompatibleDevice d : currentConnected) {

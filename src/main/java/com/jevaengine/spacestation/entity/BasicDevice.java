@@ -79,6 +79,7 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		connectionChanged();
 	}
 	
+	@Override
 	public final void clearConnections() {
 		while(!m_connections.isEmpty())
 			removeConnection(m_connections.get(0));

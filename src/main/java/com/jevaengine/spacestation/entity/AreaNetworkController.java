@@ -7,6 +7,7 @@ package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.pathfinding.RoomRestrictedDevicePathFinder;
 import io.github.jevaengine.math.Vector2F;
+import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.pathfinding.IncompleteRouteException;
 import io.github.jevaengine.world.pathfinding.Route;
@@ -14,14 +15,20 @@ import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author Jeremy
  */
 public class AreaNetworkController extends WiredDevice implements INetworkDevice {
+
+	private static final String NODE_SET_SEPERATOR = ";";
+	private static final String NODE_SEPERATOR = ",";
 
 	private static final int MAX_WIRED_CONNECTIONS = 1;
 
@@ -33,14 +40,84 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 
 	private boolean m_scanForNetworkDevices = true;
 
-	public AreaNetworkController(String name, ISceneModel model, IRouteFactory routeFactory) {
+	private String m_netlist;
+
+	private List<INetworkDevice> m_managedDevices = new ArrayList<>();
+
+	public AreaNetworkController(String name, ISceneModel model, IRouteFactory routeFactory, String netlist) {
 		super(name, false);
 		m_model = model;
 		m_routeFactory = routeFactory;
+		m_netlist = netlist;
 	}
 
 	@Override
 	protected void connectionChanged() {
+	}
+
+	private Map<String, Set<String>> getNodeConnectionSets() {
+		Map<String, Set<String>> nodeConnections = new HashMap<>();
+
+		for (String set : m_netlist.split(NODE_SET_SEPERATOR)) {
+			String nodes[] = set.split(NODE_SEPERATOR);
+
+			if (nodes.length == 0) {
+				continue;
+			}
+
+			Set<String> childrenConnections = new HashSet<>();
+
+			for (int i = 1; i < nodes.length; i++) {
+				if (!nodes[i].trim().isEmpty()) {
+					childrenConnections.add(nodes[i].trim());
+				}
+			}
+
+			String master = nodes[0].trim();
+
+			if (nodeConnections.containsKey(master)) {
+				nodeConnections.get(master).addAll(childrenConnections);
+			} else {
+				nodeConnections.put(master, childrenConnections);
+			}
+		}
+
+		return nodeConnections;
+	}
+
+	@Nullable
+	private INetworkDevice getManagedDevice(String nodeName) {
+		for (INetworkDevice d : m_managedDevices) {
+			if (d.getNodeName().compareTo(nodeName) == 0) {
+				return d;
+			}
+		}
+
+		return null;
+	}
+
+	private void connectManagedDevices() {
+		for (Map.Entry<String, Set<String>> connectionSet : getNodeConnectionSets().entrySet()) {
+			INetworkDevice master = getManagedDevice(connectionSet.getKey());
+			
+			if(master == null)
+				continue;
+			
+			for (String connection : connectionSet.getValue()) {
+				INetworkDevice slave = getManagedDevice(connection);
+				
+				if(slave != null)
+					master.addConnection(slave);
+			}
+		}
+	}
+
+	private void clearManagedConnections() {
+		for (INetworkDevice d : m_managedDevices) {
+			d.clearConnections();
+		}
+
+		m_managedDevices.clear();
 	}
 
 	@Override
@@ -50,6 +127,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 
 	public void reset() {
 		m_scanForNetworkDevices = true;
+		clearManagedConnections();
 	}
 
 	@Override
@@ -80,7 +158,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 			}
 
 			if (canReachDevice(d)) {
-				addConnection(d);
+				m_managedDevices.add(d);
 			}
 		}
 
@@ -90,6 +168,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 	public void update(int delta) {
 		if (m_scanForNetworkDevices) {
 			scanForNetworkDevices();
+			connectManagedDevices();
 			m_scanForNetworkDevices = false;
 		}
 	}
@@ -98,11 +177,11 @@ public class AreaNetworkController extends WiredDevice implements INetworkDevice
 	protected boolean canConnectTo(IDevice d) {
 		if (d instanceof WiredDevice) {
 			if (getConnections(WiredDevice.class).size() >= MAX_WIRED_CONNECTIONS) {
-				return false;
+				return (d instanceof INetworkDevice);
 			}
 		}
 
-		return (d instanceof INetworkDevice);
+		return false;
 	}
 
 	@Override

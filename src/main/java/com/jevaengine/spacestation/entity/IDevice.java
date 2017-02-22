@@ -14,4 +14,5 @@ import io.github.jevaengine.world.entity.IEntity;
 public interface IDevice extends IEntity {
 	boolean addConnection(IDevice device);
 	void removeConnection(IDevice device);
+	void clearConnections();
 }
