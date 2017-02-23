@@ -58,7 +58,7 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 	private boolean canReachDevice(IPowerDevice d) {
 		Vector2F start = this.getBody().getLocation().getXy().add(new Vector2F(0, 1));
 		try {
-			Route route = m_routeFactory.create(new RoomRestrictedDevicePathFinder(), this.getWorld(), start, d.getBody().getLocation().getXy(), 0.2F);
+			Route route = m_routeFactory.create(new RoomRestrictedDevicePathFinder(), this.getWorld(), start, d.getBody().getLocation().getXy(), 1.0F);
 		} catch (IncompleteRouteException ex) {
 			return false;
 		}
@@ -101,6 +101,8 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
+		return joules;/*
+		
 		requested.add(this);
 		
 		int drawn = 0;
@@ -112,7 +114,7 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 				break;
 		}
 		
-		return drawn;
+		return drawn;*/
 	}
 
 	@Override

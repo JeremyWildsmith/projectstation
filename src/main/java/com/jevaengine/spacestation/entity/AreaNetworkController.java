@@ -216,7 +216,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 	private boolean canReachDevice(INetworkNode d) {
 		Vector2F start = this.getBody().getLocation().getXy().add(new Vector2F(0, 1));
 		try {
-			Route route = m_routeFactory.create(new RoomRestrictedDevicePathFinder(), this.getWorld(), start, d.getBody().getLocation().getXy(), 0.2F);
+			Route route = m_routeFactory.create(new RoomRestrictedDevicePathFinder(), this.getWorld(), start, d.getBody().getLocation().getXy(), 1.0F);
 		} catch (IncompleteRouteException ex) {
 			return false;
 		}
