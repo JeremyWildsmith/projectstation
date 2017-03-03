@@ -24,7 +24,7 @@ import java.util.Queue;
 public class NetworkIoTerminal implements IDcpuHardware {
 
 	private static final DeviceDescriptor DESC = new DeviceDescriptor("NetworkIoTerminal", "Can transmit network packets over a netowrk", 
-																		0xAAA00000, 1, 0x59ACE);
+																		0xAAAA1111, 1, 0x59ACE);
 	
 	private static final int MAX_BACKLOG = 10;
 
@@ -81,16 +81,14 @@ public class NetworkIoTerminal implements IDcpuHardware {
 	private void transmitMessage(int memoryAddress, IMemory memory) {
 		NetworkPacket packet = new NetworkPacket();
 
-		packet.SenderAddress = memory.read(new WordAddress(memoryAddress)) << 16;
-		packet.SenderAddress |= memory.read(new WordAddress(memoryAddress + 1));
+		packet.SenderAddress = memory.read(new WordAddress(memoryAddress));
 
-		packet.RecieverAddress = memory.read(new WordAddress(memoryAddress + 2)) << 16;
-		packet.RecieverAddress |= memory.read(new WordAddress(memoryAddress + 3));
+		packet.RecieverAddress = memory.read(new WordAddress(memoryAddress + 1));
 
-		packet.Port = memory.read(new WordAddress(memoryAddress + 4));
+		packet.Port = memory.read(new WordAddress(memoryAddress + 2));
 
 		for (int i = 0; i < packet.data.length; i++) {
-			packet.data[i] = memory.read(new WordAddress(memoryAddress + 5 + i));
+			packet.data[i] = memory.read(new WordAddress(memoryAddress + 3 + i));
 		}
 		
 		m_transmitQueue.add(packet);
