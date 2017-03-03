@@ -199,7 +199,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 	}
 
 	public boolean hasIp() {
-		return m_ipAddress == 0;
+		return m_ipAddress != 0;
 	}
 
 	public void reset() {
@@ -272,7 +272,7 @@ public class AreaNetworkController extends WiredDevice implements INetworkNode, 
 		IAnimationSceneModelAnimation error = m_model.getAnimation("error");
 		IAnimationSceneModelAnimation on = m_model.getAnimation("on");
 
-		if (hasIp()) {
+		if (!hasIp()) {
 			error.setState(AnimationSceneModelAnimationState.Play);
 		} else {
 			on.setState(AnimationSceneModelAnimationState.Play);
