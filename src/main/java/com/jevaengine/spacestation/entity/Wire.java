@@ -7,7 +7,6 @@ package com.jevaengine.spacestation.entity;
 
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
-import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
@@ -23,8 +22,6 @@ import java.util.List;
 public abstract class Wire extends WiredDevice {
 
 	private final IAnimationSceneModel m_model;
-	
-	private World m_world;
 	
 	public Wire(String name, IAnimationSceneModel model) {
 		super(name, true);
