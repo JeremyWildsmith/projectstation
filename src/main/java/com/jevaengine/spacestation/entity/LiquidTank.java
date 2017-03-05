@@ -83,7 +83,7 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 	@Override
 	public void update(int delta) {
 		ILiquidCarrier connection = getConnection();
-		System.out.println(this.toString() + " Volume: " + getLiquidVolume());
+		
 		if(connection == null)
 			return;
 		
