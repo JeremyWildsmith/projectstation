@@ -349,6 +349,32 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		LiquidPipe(LiquidPipe.class, "liquidPipe", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					LiquidPipeDeclaration decl = auxConfig.getValue(LiquidPipeDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new LiquidPipe(instanceName, model, decl.radius);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		LiquidTank(LiquidTank.class, "liquidTank", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					LiquidTankDeclaration decl = auxConfig.getValue(LiquidTankDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new LiquidTank(instanceName, model, decl.radius, decl.height);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -617,6 +643,51 @@ public class StationEntityFactory implements IEntityFactory {
 				model = source.getChild("model").getValue(String.class);
 				netlist = source.getChild("netlist").getValue(String.class);
 				ipAddress = source.getChild("ipAddress").getValue(Integer.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class LiquidPipeDeclaration implements ISerializable {
+		public String model;
+		public float radius;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("radius").setValue(radius);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				radius = source.getChild("radius").getValue(Double.class).floatValue();
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class LiquidTankDeclaration implements ISerializable {
+		public String model;
+		public float radius;
+		public float height;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("radius").setValue(radius);
+			target.addChild("height").setValue(height);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				radius = source.getChild("radius").getValue(Double.class).floatValue();
+				height = source.getChild("height").getValue(Double.class).floatValue();
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

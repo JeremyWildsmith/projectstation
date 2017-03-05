@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;
 import io.github.jevaengine.world.search.ISearchFilter;

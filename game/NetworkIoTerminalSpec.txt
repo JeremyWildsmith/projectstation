@@ -8,7 +8,7 @@ A   Behavior
 
 PACKET FORMAT
 
-[Sender Address] - Int - 4 Bytes - 2 words (Upper | Lower)
-[Reciever Address] - Int - 4 Bytes - 2 words (Upper | Lower)
+[Sender Address] - Int - 4 Bytes - 1 words
+[Reciever Address] - Int - 4 Bytes - 1 words
 [Port] - short - 2 Bytes - 1 Words
-[Data] - 44 Words
+[Data] - 45 Words

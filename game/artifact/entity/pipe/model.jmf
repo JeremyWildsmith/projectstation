@@ -1,0 +1,501 @@
+{
+  "defaultAnimation": "idle",
+  "animations": [
+    {
+      "name": "idle",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "idle",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "n",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "s",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "s",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "n,s",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n,s",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,n",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,n",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,s",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,s",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,n,s",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,n,s",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "n,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "s,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "s,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "n,s,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n,s,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,n,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,n,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,s,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,s,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "e,n,s,w",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e,n,s,w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

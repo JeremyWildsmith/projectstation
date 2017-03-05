@@ -3,14 +3,16 @@
   "metersPerUnit" : 1.0,
   "worldHeight" : 2000,
   "entities" : [ {
-    "auxConfig" : null,
+    "auxConfig" : {
+      "nodeName" : "Security1"
+    },
     "name" : "Unnamed1",
     "location" : {
       "x" : 47.0,
       "y" : 137.0,
       "z" : 1.0
     },
-    "type" : "door",
+    "type" : "networkDoor",
     "config" : "/artifact/entity/door/security/entity.jec",
     "direction" : 8
   }, {
@@ -25,7 +27,9 @@
     "config" : "/artifact/entity/human/entity.jec",
     "direction" : 8
   }, {
-    "auxConfig" : null,
+    "auxConfig" : {
+      "nodeName" : "Security2"
+    },
     "name" : "Unnamed0",
     "location" : {
       "x" : 50.0,
@@ -34,17 +38,6 @@
     },
     "type" : "door",
     "config" : "/artifact/entity/door/security/entity.jec",
-    "direction" : 8
-  }, {
-    "auxConfig" : null,
-    "name" : "Unnamed2",
-    "location" : {
-      "x" : 56.0,
-      "y" : 137.0,
-      "z" : 0.10000000149011612
-    },
-    "type" : "door",
-    "config" : "/artifact/entity/door/maintenance/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -63,17 +56,6 @@
     "location" : {
       "x" : 45.0,
       "y" : 128.0,
-      "z" : 1.0
-    },
-    "type" : "door",
-    "config" : "/artifact/entity/door/maintenance/entity.jec",
-    "direction" : 8
-  }, {
-    "auxConfig" : null,
-    "name" : "Unnamed5",
-    "location" : {
-      "x" : 48.0,
-      "y" : 130.0,
       "z" : 1.0
     },
     "type" : "door",
@@ -180,17 +162,6 @@
     "direction" : 8
   }, {
     "auxConfig" : null,
-    "name" : "Unnamed15",
-    "location" : {
-      "x" : 55.0,
-      "y" : 142.0,
-      "z" : 0.10000000149011612
-    },
-    "type" : "door",
-    "config" : "/artifact/entity/door/maintenance/entity.jec",
-    "direction" : 8
-  }, {
-    "auxConfig" : null,
     "name" : "Unnamed16",
     "location" : {
       "x" : 38.0,
@@ -250,7 +221,7 @@
     },
     "name" : "Unnamed20",
     "location" : {
-      "x" : 31.0,
+      "x" : 38.0,
       "y" : 138.0,
       "z" : 1.0
     },
@@ -283,7 +254,7 @@
     "direction" : 1
   }, {
     "auxConfig" : {
-      "netlist" : "testDCPU,testConsoleInterface, testNic,testPic;testNic,anc",
+      "netlist" : "testDCPU,testConsoleInterface,testNic,testPic;testNic,anc",
       "ipAddress" : 2
     },
     "name" : "Unnamed25",
@@ -310,7 +281,7 @@
     "direction" : 8
   }, {
     "auxConfig" : {
-      "netlist" : "testDCPU,testConsoleInterface",
+      "netlist" : "doorController,Security1;doorController,anc",
       "ipAddress" : 1
     },
     "name" : "Unnamed23",
@@ -491,28 +462,124 @@
     "type" : "programmableIntervalTimer",
     "config" : "/artifact/entity/programmableIntervalTimer/entity.jec",
     "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed42",
+    "location" : {
+      "x" : 45.0,
+      "y" : 133.0,
+      "z" : 1.100000023841858
+    },
+    "type" : "doorController",
+    "config" : "/artifact/entity/doorController/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed43",
+    "location" : {
+      "x" : 46.0,
+      "y" : 133.0,
+      "z" : 1.100000023841858
+    },
+    "type" : "areaPowerController",
+    "config" : "/artifact/entity/areaPowerController/entity.jec",
+    "direction" : 1
+  }, {
+    "auxConfig" : {
+      "nodeName" : "Security2"
+    },
+    "name" : "Unnamed2",
+    "location" : {
+      "x" : 54.0,
+      "y" : 138.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/tank/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed5",
+    "location" : {
+      "x" : 54.0,
+      "y" : 139.0,
+      "z" : 0.10000000149011612
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed15",
+    "location" : {
+      "x" : 54.0,
+      "y" : 140.0,
+      "z" : 0.10000000149011612
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed44",
+    "location" : {
+      "x" : 54.0,
+      "y" : 141.0,
+      "z" : 0.10000000149011612
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed45",
+    "location" : {
+      "x" : 53.0,
+      "y" : 141.0,
+      "z" : 0.10000000149011612
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : {
+      "nodeName" : "Security2"
+    },
+    "name" : "Unnamed46",
+    "location" : {
+      "x" : 52.0,
+      "y" : 141.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/tank/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed47",
+    "location" : {
+      "x" : 55.0,
+      "y" : 141.0,
+      "z" : 0.10000000149011612
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : {
+      "nodeName" : "Security2"
+    },
+    "name" : "Unnamed48",
+    "location" : {
+      "x" : 56.0,
+      "y" : 141.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/tank/entity.jec",
+    "direction" : 8
   } ],
   "artifactImports" : [ {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 31.0,
-      "y" : 127.0,
-      "z" : 1.0
-    } ],
-    "direction" : 7
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 36.0,
-      "y" : 135.0,
-      "z" : 1.0
-    } ],
-    "direction" : 6
-  }, {
     "isTraversable" : true,
     "isStatic" : false,
     "model" : "/artifact/scene/common/floor/model.jmf",
@@ -1293,182 +1360,6 @@
   }, {
     "isTraversable" : false,
     "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 29.0,
-      "y" : 137.0,
-      "z" : 1.0
-    }, {
-      "x" : 57.0,
-      "y" : 141.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 133.0,
-      "z" : 1.0
-    }, {
-      "x" : 45.0,
-      "y" : 123.0,
-      "z" : 1.0
-    }, {
-      "x" : 29.0,
-      "y" : 127.0,
-      "z" : 1.0
-    }, {
-      "x" : 52.0,
-      "y" : 146.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 137.0,
-      "z" : 1.0
-    }, {
-      "x" : 54.0,
-      "y" : 152.0,
-      "z" : 1.0
-    }, {
-      "x" : 36.0,
-      "y" : 137.0,
-      "z" : 1.0
-    }, {
-      "x" : 28.0,
-      "y" : 139.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 127.0,
-      "z" : 1.0
-    }, {
-      "x" : 28.0,
-      "y" : 124.0,
-      "z" : 1.0
-    }, {
-      "x" : 31.0,
-      "y" : 137.0,
-      "z" : 1.0
-    } ],
-    "direction" : 1
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 36.0,
-      "y" : 127.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 152.0,
-      "z" : 1.0
-    } ],
-    "direction" : 4
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 40.0,
-      "y" : 150.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 119.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 152.0,
-      "z" : 1.0
-    }, {
-      "x" : 34.0,
-      "y" : 146.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 142.0,
-      "z" : 1.0
-    }, {
-      "x" : 36.0,
-      "y" : 120.0,
-      "z" : 1.0
-    }, {
-      "x" : 46.0,
-      "y" : 137.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 144.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 140.0,
-      "z" : 1.0
-    }, {
-      "x" : 54.0,
-      "y" : 142.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 148.0,
-      "z" : 1.0
-    } ],
-    "direction" : 0
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 31.0,
-      "y" : 140.0,
-      "z" : 1.0
-    }, {
-      "x" : 42.0,
-      "y" : 152.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 148.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 150.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 119.0,
-      "z" : 1.0
-    }, {
-      "x" : 48.0,
-      "y" : 137.0,
-      "z" : 1.0
-    }, {
-      "x" : 30.0,
-      "y" : 152.0,
-      "z" : 1.0
-    }, {
-      "x" : 53.0,
-      "y" : 142.0,
-      "z" : 1.0
-    }, {
-      "x" : 31.0,
-      "y" : 120.0,
-      "z" : 1.0
-    }, {
-      "x" : 32.0,
-      "y" : 146.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 142.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 144.0,
-      "z" : 1.0
-    } ],
-    "direction" : 2
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
     "model" : "/artifact/scene/common/wall/model.jmf",
     "locations" : [ {
       "x" : 53.0,
@@ -2191,166 +2082,6 @@
   }, {
     "isTraversable" : false,
     "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/edge/model.jmf",
-    "locations" : [ {
-      "x" : 31.0,
-      "y" : 125.0,
-      "z" : 1.0
-    }, {
-      "x" : 45.0,
-      "y" : 120.0,
-      "z" : 1.0
-    }, {
-      "x" : 29.0,
-      "y" : 125.0,
-      "z" : 1.0
-    }, {
-      "x" : 52.0,
-      "y" : 143.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 135.0,
-      "z" : 1.0
-    }, {
-      "x" : 54.0,
-      "y" : 151.0,
-      "z" : 1.0
-    }, {
-      "x" : 28.0,
-      "y" : 138.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 129.0,
-      "z" : 1.0
-    }, {
-      "x" : 28.0,
-      "y" : 123.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 125.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 143.0,
-      "z" : 1.0
-    }, {
-      "x" : 29.0,
-      "y" : 135.0,
-      "z" : 1.0
-    }, {
-      "x" : 57.0,
-      "y" : 140.0,
-      "z" : 1.0
-    }, {
-      "x" : 36.0,
-      "y" : 125.0,
-      "z" : 1.0
-    } ],
-    "direction" : 3
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
-    "model" : "/artifact/scene/common/glass/fill/model.jmf",
-    "locations" : [ {
-      "x" : 36.0,
-      "y" : 126.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 146.0,
-      "z" : 1.0
-    }, {
-      "x" : 31.0,
-      "y" : 126.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 147.0,
-      "z" : 1.0
-    }, {
-      "x" : 45.0,
-      "y" : 121.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 148.0,
-      "z" : 1.0
-    }, {
-      "x" : 45.0,
-      "y" : 122.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 149.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 150.0,
-      "z" : 1.0
-    }, {
-      "x" : 52.0,
-      "y" : 144.0,
-      "z" : 1.0
-    }, {
-      "x" : 29.0,
-      "y" : 126.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 151.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 136.0,
-      "z" : 1.0
-    }, {
-      "x" : 52.0,
-      "y" : 145.0,
-      "z" : 1.0
-    }, {
-      "x" : 36.0,
-      "y" : 136.0,
-      "z" : 1.0
-    }, {
-      "x" : 38.0,
-      "y" : 126.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 130.0,
-      "z" : 1.0
-    }, {
-      "x" : 31.0,
-      "y" : 136.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 144.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 131.0,
-      "z" : 1.0
-    }, {
-      "x" : 29.0,
-      "y" : 136.0,
-      "z" : 1.0
-    }, {
-      "x" : 40.0,
-      "y" : 132.0,
-      "z" : 1.0
-    }, {
-      "x" : 43.0,
-      "y" : 145.0,
-      "z" : 1.0
-    } ],
-    "direction" : 3
-  }, {
-    "isTraversable" : false,
-    "isStatic" : false,
     "model" : "/artifact/scene/common/glass/fill/model.jmf",
     "locations" : [ {
       "x" : 37.0,
@@ -2490,6 +2221,188 @@
       "z" : 1.0
     } ],
     "direction" : 0
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 36.0,
+      "y" : 135.0,
+      "z" : 1.0
+    } ],
+    "direction" : 6
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 29.0,
+      "y" : 137.0,
+      "z" : 1.0
+    }, {
+      "x" : 57.0,
+      "y" : 141.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 133.0,
+      "z" : 1.0
+    }, {
+      "x" : 45.0,
+      "y" : 123.0,
+      "z" : 1.0
+    }, {
+      "x" : 29.0,
+      "y" : 127.0,
+      "z" : 1.0
+    }, {
+      "x" : 52.0,
+      "y" : 146.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 137.0,
+      "z" : 1.0
+    }, {
+      "x" : 54.0,
+      "y" : 152.0,
+      "z" : 1.0
+    }, {
+      "x" : 36.0,
+      "y" : 137.0,
+      "z" : 1.0
+    }, {
+      "x" : 28.0,
+      "y" : 139.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 127.0,
+      "z" : 1.0
+    }, {
+      "x" : 28.0,
+      "y" : 124.0,
+      "z" : 1.0
+    }, {
+      "x" : 31.0,
+      "y" : 137.0,
+      "z" : 1.0
+    } ],
+    "direction" : 1
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 31.0,
+      "y" : 140.0,
+      "z" : 1.0
+    }, {
+      "x" : 42.0,
+      "y" : 152.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 148.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 150.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 119.0,
+      "z" : 1.0
+    }, {
+      "x" : 48.0,
+      "y" : 137.0,
+      "z" : 1.0
+    }, {
+      "x" : 30.0,
+      "y" : 152.0,
+      "z" : 1.0
+    }, {
+      "x" : 53.0,
+      "y" : 142.0,
+      "z" : 1.0
+    }, {
+      "x" : 31.0,
+      "y" : 120.0,
+      "z" : 1.0
+    }, {
+      "x" : 32.0,
+      "y" : 146.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 142.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 144.0,
+      "z" : 1.0
+    } ],
+    "direction" : 2
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 40.0,
+      "y" : 150.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 119.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 152.0,
+      "z" : 1.0
+    }, {
+      "x" : 34.0,
+      "y" : 146.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 142.0,
+      "z" : 1.0
+    }, {
+      "x" : 36.0,
+      "y" : 120.0,
+      "z" : 1.0
+    }, {
+      "x" : 46.0,
+      "y" : 137.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 144.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 140.0,
+      "z" : 1.0
+    }, {
+      "x" : 54.0,
+      "y" : 142.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 148.0,
+      "z" : 1.0
+    } ],
+    "direction" : 0
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 31.0,
+      "y" : 127.0,
+      "z" : 1.0
+    } ],
+    "direction" : 7
   }, {
     "isTraversable" : true,
     "isStatic" : false,
@@ -2972,6 +2885,180 @@
       "z" : 0.0
     } ],
     "direction" : 6
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 36.0,
+      "y" : 127.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 152.0,
+      "z" : 1.0
+    } ],
+    "direction" : 4
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/fill/model.jmf",
+    "locations" : [ {
+      "x" : 36.0,
+      "y" : 126.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 146.0,
+      "z" : 1.0
+    }, {
+      "x" : 31.0,
+      "y" : 126.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 147.0,
+      "z" : 1.0
+    }, {
+      "x" : 45.0,
+      "y" : 121.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 148.0,
+      "z" : 1.0
+    }, {
+      "x" : 45.0,
+      "y" : 122.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 149.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 150.0,
+      "z" : 1.0
+    }, {
+      "x" : 52.0,
+      "y" : 144.0,
+      "z" : 1.0
+    }, {
+      "x" : 29.0,
+      "y" : 126.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 151.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 136.0,
+      "z" : 1.0
+    }, {
+      "x" : 52.0,
+      "y" : 145.0,
+      "z" : 1.0
+    }, {
+      "x" : 36.0,
+      "y" : 136.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 126.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 130.0,
+      "z" : 1.0
+    }, {
+      "x" : 31.0,
+      "y" : 136.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 144.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 131.0,
+      "z" : 1.0
+    }, {
+      "x" : 29.0,
+      "y" : 136.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 132.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 145.0,
+      "z" : 1.0
+    } ],
+    "direction" : 3
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/common/glass/edge/model.jmf",
+    "locations" : [ {
+      "x" : 31.0,
+      "y" : 125.0,
+      "z" : 1.0
+    }, {
+      "x" : 45.0,
+      "y" : 120.0,
+      "z" : 1.0
+    }, {
+      "x" : 29.0,
+      "y" : 125.0,
+      "z" : 1.0
+    }, {
+      "x" : 52.0,
+      "y" : 143.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 135.0,
+      "z" : 1.0
+    }, {
+      "x" : 54.0,
+      "y" : 151.0,
+      "z" : 1.0
+    }, {
+      "x" : 28.0,
+      "y" : 138.0,
+      "z" : 1.0
+    }, {
+      "x" : 40.0,
+      "y" : 129.0,
+      "z" : 1.0
+    }, {
+      "x" : 28.0,
+      "y" : 123.0,
+      "z" : 1.0
+    }, {
+      "x" : 38.0,
+      "y" : 125.0,
+      "z" : 1.0
+    }, {
+      "x" : 43.0,
+      "y" : 143.0,
+      "z" : 1.0
+    }, {
+      "x" : 29.0,
+      "y" : 135.0,
+      "z" : 1.0
+    }, {
+      "x" : 57.0,
+      "y" : 140.0,
+      "z" : 1.0
+    }, {
+      "x" : 36.0,
+      "y" : 125.0,
+      "z" : 1.0
+    } ],
+    "direction" : 3
   }, {
     "isTraversable" : false,
     "isStatic" : false,

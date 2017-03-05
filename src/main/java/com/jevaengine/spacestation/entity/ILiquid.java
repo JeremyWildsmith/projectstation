@@ -10,6 +10,8 @@ package com.jevaengine.spacestation.entity;
  * @author Jeremy
  */
 public interface ILiquid {
-	//Units are Liters / Second
-	int getRateOfFlow();
+	//Ration between 0 and 1. What percentage of a difference flows.
+	//Transfer rate per second
+	//I.e. difference of 50, if flow rate is .5, than 25 is transfered per second
+	float getRateOfFlow();
 }
