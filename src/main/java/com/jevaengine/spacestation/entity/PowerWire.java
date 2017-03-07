@@ -45,6 +45,9 @@ public final class PowerWire extends Wire implements IPowerDevice {
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
+		if(!super.canConnectTo(d))
+			return false;
+		
 		return (d instanceof WiredDevice) && (d instanceof IPowerDevice);
 	}
 }

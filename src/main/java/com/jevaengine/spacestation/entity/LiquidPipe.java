@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.liquid.ILiquid;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;

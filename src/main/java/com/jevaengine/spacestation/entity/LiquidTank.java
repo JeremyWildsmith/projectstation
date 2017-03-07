@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.liquid.ILiquid;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import java.util.ArrayList;
 import java.util.HashMap;

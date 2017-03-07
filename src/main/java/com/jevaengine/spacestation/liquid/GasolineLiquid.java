@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jevaengine.spacestation.entity;
+package com.jevaengine.spacestation.liquid;
 
 /**
  *
  * @author Jeremy
  */
-public class WaterLiquid implements ILiquid {
+public final class GasolineLiquid implements ILiquid {
 
 	@Override
 	public float getRateOfFlow() {
-		return .75F;
+		return 0.5F;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj.getClass() == this.getClass();

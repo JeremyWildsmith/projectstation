@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.liquid.ILiquid;
 import java.util.List;
 import java.util.Map;
 

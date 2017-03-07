@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;
 import io.github.jevaengine.world.search.ISearchFilter;
@@ -15,9 +16,18 @@ import io.github.jevaengine.world.search.RadialSearchFilter;
  * @author Jeremy
  */
 public abstract class WiredDevice extends BasicDevice {
+	private final float CONNECTION_DISTANCE = 1.1F;
+	
 	public WiredDevice(String name, boolean isTraversable) {
 		super(name, isTraversable);
 		getObservers().add(new MovementObserver());
+	}
+	
+	@Override
+	protected boolean canConnectTo(IDevice d) {
+		Vector2F delta = d.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
+		
+		return delta.getLength() <= CONNECTION_DISTANCE;
 	}
 	
 	private void updateConnections() {
