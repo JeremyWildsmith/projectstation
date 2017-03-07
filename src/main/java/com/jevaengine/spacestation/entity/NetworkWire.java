@@ -22,6 +22,9 @@ public final class NetworkWire extends Wire implements INetworkDataCarrier {
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
+		if(!super.canConnectTo(d))
+			return false;
+		
 		return (d instanceof WiredDevice) && (d instanceof INetworkDataCarrier);
 	}
 
