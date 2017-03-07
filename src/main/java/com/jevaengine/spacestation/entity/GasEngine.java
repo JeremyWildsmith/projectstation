@@ -128,7 +128,7 @@ public final class GasEngine extends WiredDevice implements IMechanicalDevice {
 			
 		if (d instanceof IMechanicalDevice) {
 
-			if (dir == Direction.XMinus || dir == Direction.XYPlus) {
+			if (dir == Direction.XMinus || dir == Direction.XPlus) {
 				if (getStarter() == null)
 					return true;
 			} else if (dir == Direction.YPlus) {
