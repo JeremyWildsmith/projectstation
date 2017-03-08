@@ -7,6 +7,7 @@ package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.pathfinding.RoomRestrictedDevicePathFinder;
 import io.github.jevaengine.math.Vector2F;
+import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.pathfinding.IncompleteRouteException;
 import io.github.jevaengine.world.pathfinding.Route;
@@ -122,6 +123,11 @@ public class AreaPowerController extends WiredDevice implements IPowerDevice {
 		if(d instanceof WiredDevice) {
 			if(getConnections(WiredDevice.class).size() >= MAX_WIRED_CONNECTIONS)
 				return false;
+			
+			Vector2F delta = d.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
+			Direction dir = Direction.fromVector(delta);
+			
+			return dir == Direction.YPlus;
 		}
 		
 		return (d instanceof IPowerDevice);
