@@ -1,0 +1,7 @@
+{
+    "model": "model.jmf",
+    "startupTime": 10000,
+    "starterRpm": 3600,
+    "outputRpm": 18000,
+    "gasConsumption": 0.015
+}

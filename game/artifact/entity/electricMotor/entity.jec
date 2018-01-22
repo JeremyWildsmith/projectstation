@@ -1,0 +1,5 @@
+{
+    "model": "model.jmf",
+    "rpm": 3600,
+    "powerConsumptionWatts": 1000
+}

@@ -1,24 +1,24 @@
 {
-  "defaultAnimation": "open",
+  "defaultAnimation": "off",
   "animations": [
     {
-      "name": "open",
+      "name": "off",
       "sets": [
         {
           "directions": [
             0,
-            2,
-            6,
-            7,
             1,
+            2,
             3,
             4,
-            5
+            5,
+            6,
+            7
           ],
           "components": [
             {
-              "sprite": "ns/sprite.jsf",
-              "animation": "open",
+              "sprite": "sprite.jsf",
+              "animation": "off",
               "bounds": {
                 "x": -0.5,
                 "y": -0.5,
@@ -33,23 +33,54 @@
       ]
     },
     {
-      "name": "close",
+      "name": "on",
       "sets": [
         {
           "directions": [
             0,
-            2,
-            6,
-            7,
             1,
+            2,
             3,
             4,
-            5
+            5,
+            6,
+            7
           ],
           "components": [
             {
-              "sprite": "ns/sprite.jsf",
-              "animation": "close",
+              "sprite": "sprite.jsf",
+              "animation": "on",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "starting",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "starting",
               "bounds": {
                 "x": -0.5,
                 "y": -0.5,
