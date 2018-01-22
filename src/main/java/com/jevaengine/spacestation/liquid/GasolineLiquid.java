@@ -13,7 +13,7 @@ public final class GasolineLiquid implements ILiquid {
 
 	@Override
 	public float getRateOfFlow() {
-		return 0.5F;
+		return 0.25F;
 	}
 	
 	@Override
