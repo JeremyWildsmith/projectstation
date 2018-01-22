@@ -468,6 +468,32 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
+		}),
+		Capacitor(Capacitor.class, "capacitor", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					CapacitorDeclaration decl = auxConfig.getValue(CapacitorDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new Capacitor(instanceName, model, decl.charge);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		Alternator(Alternator.class, "alternator", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					AlternatorDeclaration decl = auxConfig.getValue(AlternatorDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new Alternator(instanceName, model, decl.wattPerRpm);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -929,6 +955,48 @@ public class StationEntityFactory implements IEntityFactory {
 			try {
 				model = source.getChild("model").getValue(String.class);
 				isForward = source.getChild("isForward").getValue(Boolean.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class CapacitorDeclaration implements ISerializable {
+		public String model;
+		public int charge;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("charge").setValue(charge);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				charge = source.getChild("charge").getValue(Integer.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+	
+	public static final class AlternatorDeclaration implements ISerializable {
+		public String model;
+		public int wattPerRpm;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("wattPerRpm").setValue(wattPerRpm);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				wattPerRpm = source.getChild("wattPerRpm").getValue(Integer.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
