@@ -110,9 +110,4 @@ public class NetworkPowerSwitch extends WiredDevice implements IPowerDevice, INe
 	public void carry(List<INetworkDataCarrier> carried, NetworkPacket packet) {
 
 	}
-
-	@Override
-	public List<AreaNetworkController> getAreaNetworkControllers(List<INetworkDataCarrier> requested) {
-		return null;
-	}
 }

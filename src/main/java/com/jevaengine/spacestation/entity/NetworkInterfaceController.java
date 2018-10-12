@@ -7,7 +7,6 @@ package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.dcpu.devices.NetworkIoTerminal;
 import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
-import com.jevaengine.spacestation.entity.AreaNetworkController.IAreaNetworkControllerObserver;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -21,43 +20,31 @@ import java.util.List;
  *
  * @author Jeremy
  */
-public class NetworkInterfaceController extends BasicDevice implements IDcpuCompatibleDevice, IPowerDevice, INetworkNode, IInteractableEntity {
+public class NetworkInterfaceController extends NetworkDevice implements IDcpuCompatibleDevice, IPowerDevice, IInteractableEntity {
 	private static final int POWER_USEAGE_WATTS = 50;
 	private static final int ON_POWER_USAGE_SECONDS = 1000; //1 seconds worth of power required to boot DCPU.
 	
 	private final IAnimationSceneModel m_model;
 	private final NetworkIoTerminal m_networkTerminal = new NetworkIoTerminal();
-	private AreaNetworkController m_lastAreaNetworkController;
-	private final MessageObserver m_messageObserver = new MessageObserver();
 	
 	private boolean m_isOn = false;
 	
-	public String m_nodeName;
-	
-	public NetworkInterfaceController(String name, IAnimationSceneModel model, String nodeName) {
-		super(name, false);
+	public NetworkInterfaceController(String name, IAnimationSceneModel model, int ipAddress) {
+		super(name, ipAddress);
 		m_model =  model;
-		m_nodeName = nodeName;
-	}
-		
-	private AreaPowerController getAreaPowerController() {
-		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
-		
-		return controller.isEmpty() ? null : controller.get(0);
 	}
 	
 	private boolean drawEnergy(int timeDelta) {
-		AreaPowerController c = getAreaPowerController();
-		
+		List<IPowerDevice> connections = getConnections(IPowerDevice.class);
+		if(connections.isEmpty())
+			return false;
+
 		List<IDevice> requested = new ArrayList<>();
 		requested.add(this);
-		
-		if(c == null)
-			return false;
-		
+
 		int requiredEnergy = (int)Math.ceil((((float)timeDelta) / 1000) * POWER_USEAGE_WATTS);
 		
-		return c.drawEnergy(requested, requiredEnergy) >= requiredEnergy;
+		return connections.get(0).drawEnergy(requested, requiredEnergy) >= requiredEnergy;
 	}
 
 	public boolean isOn() {
@@ -80,16 +67,6 @@ public class NetworkInterfaceController extends BasicDevice implements IDcpuComp
 	
 	@Override
 	protected void connectionChanged() {
-		if(m_lastAreaNetworkController != null) {
-			m_lastAreaNetworkController.getObservers().remove(m_messageObserver);
-		}
-		
-		m_lastAreaNetworkController = null;
-		
-		List<AreaNetworkController> ancs = getConnections(AreaNetworkController.class);
-		
-		if(!ancs.isEmpty())
-			m_lastAreaNetworkController = ancs.get(0);
 	}
 	
 	@Override
@@ -116,18 +93,26 @@ public class NetworkInterfaceController extends BasicDevice implements IDcpuComp
 			on.setState(AnimationSceneModelAnimationState.Play);
 		} else if (off.getState() != AnimationSceneModelAnimationState.Play)
 			off.setState(AnimationSceneModelAnimationState.Play);
-		
-		if(m_isOn && m_lastAreaNetworkController != null) {
+
+		if(m_isOn) {
 			NetworkPacket p;
 			while((p = m_networkTerminal.pollTransmitQueue()) != null) {
-				m_lastAreaNetworkController.transmitMessage(p);
+				transmitMessage(p);
 			}
 		}
 	}
 	
 	@Override
 	protected boolean canConnectTo(IDevice d) {
-		return true;
+		if(!super.canConnectTo(d))
+			return false;
+
+		if(d instanceof IPowerDevice)
+			return getConnections(IPowerDevice.class).isEmpty();
+		else if(d instanceof INetworkDataCarrier)
+			return getConnections(INetworkDataCarrier.class).isEmpty();
+
+		return false;
 	}
 
 	@Override
@@ -138,11 +123,6 @@ public class NetworkInterfaceController extends BasicDevice implements IDcpuComp
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
-	}
-
-	@Override
-	public String getNodeName() {
-		return m_nodeName;
 	}
 
 	@Override
@@ -162,12 +142,10 @@ public class NetworkInterfaceController extends BasicDevice implements IDcpuComp
 	public String[] getInteractions() { 
 		return new String[0];
 	}
-	
-	private class MessageObserver implements IAreaNetworkControllerObserver {
-		@Override
-		public void recievedMessage(NetworkPacket packet) {
-			if(m_isOn)
-				m_networkTerminal.recievedMessage(packet);
-		}
+
+	@Override
+	public void recievePacket(NetworkPacket packet) {
+		if(m_isOn)
+			m_networkTerminal.recievedMessage(packet);
 	}
 }

@@ -39,20 +39,4 @@ public final class NetworkWire extends Wire implements INetworkDataCarrier {
 			d.carry(carried, packet);
 		}
 	}
-
-	@Override
-	public List<AreaNetworkController> getAreaNetworkControllers(List<INetworkDataCarrier> requested) {
-		if(requested.contains(this))
-			return new ArrayList<>();
-		
-		requested.add(this);
-		
-		List<AreaNetworkController> controllers = new ArrayList<>();
-		
-		for(INetworkDataCarrier carrier : getConnections(INetworkDataCarrier.class)) {
-			controllers.addAll(carrier.getAreaNetworkControllers(requested));
-		}
-		
-		return controllers;
-	}
 }

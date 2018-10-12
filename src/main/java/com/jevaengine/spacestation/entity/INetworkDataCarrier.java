@@ -14,5 +14,4 @@ import java.util.List;
  */
 public interface INetworkDataCarrier extends IDevice {
 	void carry(List<INetworkDataCarrier> carried, NetworkPacket packet);
-	List<AreaNetworkController> getAreaNetworkControllers(List<INetworkDataCarrier> requested);
 }

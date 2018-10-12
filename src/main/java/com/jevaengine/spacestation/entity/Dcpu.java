@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Jeremy
  */
-public final class Dcpu extends BasicDevice implements INetworkNode, IPowerDevice, IInteractableEntity {
+public final class Dcpu extends BasicDevice implements IPowerDevice, IInteractableEntity {
 
 	private static final int CYCLES_PER_MS = 100;
 	private static final int POWER_USEAGE_WATTS = 250;
@@ -41,18 +41,15 @@ public final class Dcpu extends BasicDevice implements INetworkNode, IPowerDevic
 	private boolean m_hasCrashed = false;
 
 	private final byte[] m_firmware;
-	
-	private final String m_nodeName;
 
-	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn, String nodeName) {
-		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn, nodeName);
+	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
+		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
 	}
 
-	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn, String nodeName) {
+	public Dcpu(String name, IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		super(name, false);
 		m_model = model;
 		m_firmware = firmware;
-		m_nodeName = nodeName;
 
 		if (isOn) {
 			turnOn();
@@ -61,21 +58,20 @@ public final class Dcpu extends BasicDevice implements INetworkNode, IPowerDevic
 		}
 	}
 
-	private AreaPowerController getAreaPowerController() {
-		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
+	private IPowerDevice getAreaPowerSource() {
+		List<IPowerDevice> sources = getConnections(IPowerDevice.class);
 
-		return controller.isEmpty() ? null : controller.get(0);
+		return sources.isEmpty() ? null : sources.get(0);
 	}
 
 	private boolean drawEnergy(int timeDelta) {
-		AreaPowerController c = getAreaPowerController();
+		IPowerDevice c = getAreaPowerSource();
+
+		if (c == null)
+			return false;
 
 		List<IDevice> requested = new ArrayList<>();
 		requested.add(this);
-
-		if (c == null) {
-			return false;
-		}
 
 		int requiredEnergy = (int) Math.ceil((((float) timeDelta) / 1000) * POWER_USEAGE_WATTS);
 
@@ -241,10 +237,5 @@ public final class Dcpu extends BasicDevice implements INetworkNode, IPowerDevic
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
-	}
-
-	@Override
-	public String getNodeName() {
-		return m_nodeName;
 	}
 }

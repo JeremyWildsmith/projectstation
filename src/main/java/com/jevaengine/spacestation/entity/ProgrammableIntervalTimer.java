@@ -25,22 +25,19 @@ public class ProgrammableIntervalTimer extends BasicDevice implements IDcpuCompa
 
 	private boolean m_isOn = false;
 
-	public String m_nodeName;
-
-	public ProgrammableIntervalTimer(String name, IAnimationSceneModel model, String nodeName) {
+	public ProgrammableIntervalTimer(String name, IAnimationSceneModel model) {
 		super(name, false);
 		m_model = model;
-		m_nodeName = nodeName;
 	}
 
-	private AreaPowerController getAreaPowerController() {
-		List<AreaPowerController> controller = getConnections(AreaPowerController.class);
+	private IPowerDevice getAreaPowerSource() {
+		List<IPowerDevice> controller = getConnections(IPowerDevice.class);
 
 		return controller.isEmpty() ? null : controller.get(0);
 	}
 
 	private boolean drawEnergy(int timeDelta) {
-		AreaPowerController c = getAreaPowerController();
+		IPowerDevice c = getAreaPowerSource();
 
 		List<IDevice> requested = new ArrayList<>();
 		requested.add(this);
@@ -122,11 +119,6 @@ public class ProgrammableIntervalTimer extends BasicDevice implements IDcpuCompa
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
-	}
-
-	@Override
-	public String getNodeName() {
-		return m_nodeName;
 	}
 
 	@Override
