@@ -1,0 +1,38 @@
+{
+  "name": "Metal Sheet",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A metal sheet.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "lattice",
+			"depth": -1,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/plating/entity.jec"
+		},
+		{
+			"above": "plating",
+			"depth": 0,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/steelFloor/entity.jec"
+		},
+		{
+			"above": "plating",
+			"with": "file:///item/metalRod/item.jitm",
+			"depth": 0.5,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/girder/entity.jec"
+		},
+		{
+			"above": "girder",
+			"replace": true,
+			"depth": 1,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/wall/entity.jec"
+		}
+	]
+  }
+}

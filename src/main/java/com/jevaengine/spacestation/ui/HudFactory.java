@@ -18,9 +18,17 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.entity.ItemDrop;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.math.Vector3F;
+import io.github.jevaengine.rpg.entity.character.ILoadout;
+import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
+import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.rpg.item.IItemSlot;
+import io.github.jevaengine.rpg.item.IItemStore;
+import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
@@ -28,6 +36,8 @@ import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
+import io.github.jevaengine.world.entity.IEntity;
+
 import java.net.URI;
 
 public final class HudFactory {
@@ -42,10 +52,10 @@ public final class HudFactory {
 		m_windowFactory = windowFactory;
 	}
 
-	public Hud create() throws WindowConstructionException {
+	public Hud create(IRpgCharacter owner, IItemStore invetory, ILoadout loadout) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(HUD_WINDOW, new HudBehaviourInjector(observers));
+		Window window = m_windowFactory.create(HUD_WINDOW, new HudBehaviourInjector(observers, loadout, invetory, owner));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -111,16 +121,28 @@ public final class HudFactory {
 
 	private class HudBehaviourInjector extends WindowBehaviourInjector {
 
+		private final ILoadout m_loadout;
+		private final IItemStore m_inventory;
+		private final IRpgCharacter m_owner;
+
 		private final Observers m_observers;
 		
-		public HudBehaviourInjector(final Observers observers) {
+		public HudBehaviourInjector(final Observers observers, final ILoadout loadout, final IItemStore inventory, final IRpgCharacter owner) {
 			m_observers = observers;
+			m_inventory = inventory;
+			m_loadout = loadout;
+			m_owner = owner;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
 			final ToggleIcon toggleInventory = getControl(ToggleIcon.class, "toggleInventory");
 
+			final SimpleItemContainer hand = getControl(SimpleItemContainer.class, "toggleHand");
+
+			IItemSlot handSlot = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+			hand.setSlot(handSlot);
+			hand.getObservers().add(new HandUse(handSlot));
 			toggleInventory.getObservers().add(new ToggleIcon.IToggleIconObserver() {
 				@Override
 				public void toggled() {
@@ -128,8 +150,47 @@ public final class HudFactory {
 				}
 			});
 		}
+
+
+		private class HandUse implements SimpleItemContainer.ISimpleItemContainerObserver {
+			private final IItemSlot m_slot;
+
+			public HandUse(IItemSlot slot) {
+				m_slot = slot;
+			}
+
+			private void tryUseItem() {
+				IItem item = m_slot.getItem();
+				IItem.ItemUseAbilityTestResults result = item.getFunction().testUseAbility(m_owner, m_owner, item.getAttributes());
+
+				if(result.isUseable()) {
+					item.getFunction().use(m_owner, null, item.getAttributes(), item);
+				}
+			}
+
+
+			@Override
+			public void selected() {
+				if(m_slot.isEmpty())
+					return;
+
+				tryUseItem();
+			}
+
+			@Override
+			public void alternateSelected() {
+				if(m_slot.isEmpty() || m_owner.getWorld() == null || m_inventory.isFull())
+					return;
+
+				IItem item = m_slot.clear();
+
+				m_inventory.addItem(item);
+			}
+		}
 	}
-	
+
+
+
 	public interface IHudObserver {
 		void movementSpeedChanged(boolean isRunning);
 		void inventoryViewChanged(boolean isVisible);

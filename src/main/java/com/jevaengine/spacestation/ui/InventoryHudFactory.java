@@ -21,22 +21,24 @@ package com.jevaengine.spacestation.ui;
 import com.jevaengine.spacestation.entity.ItemDrop;
 import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
+import io.github.jevaengine.joystick.InputKeyEvent;
+import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.entity.character.ILoadout;
+import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItemStore;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.entity.IEntity;
+
+import java.awt.event.KeyEvent;
 import java.net.URI;
 
 public final class InventoryHudFactory {
@@ -50,7 +52,7 @@ public final class InventoryHudFactory {
 		m_windowFactory = windowFactory;
 	}
 
-	public InventoryHud create(ILoadout loadout, IItemStore inventory, IEntity owner) throws WindowConstructionException {
+	public InventoryHud create(ILoadout loadout, IItemStore inventory, IRpgCharacter owner) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
 		Window window = m_windowFactory.create(INVENTORY_WINDOW, new InventoryHudFactoryBehaviourInjector(observers, loadout, inventory, owner));
@@ -119,12 +121,13 @@ public final class InventoryHudFactory {
 
 	private class InventoryHudFactoryBehaviourInjector extends WindowBehaviourInjector {
 
+		private final MenuStrip m_menuStrip = new MenuStrip();
 		private final Observers m_observers;
 		private final ILoadout m_loadout;
 		private final IItemStore m_inventory;
-		private final IEntity m_owner;
+		private final IRpgCharacter m_owner;
 		
-		public InventoryHudFactoryBehaviourInjector(final Observers observers, ILoadout loadout, IItemStore inventory, IEntity owner) {
+		public InventoryHudFactoryBehaviourInjector(final Observers observers, ILoadout loadout, IItemStore inventory, IRpgCharacter owner) {
 			m_observers = observers;
 			m_loadout = loadout;
 			m_inventory = inventory;
@@ -133,40 +136,100 @@ public final class InventoryHudFactory {
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
+			addControl(m_menuStrip);
 			IItemSlot slots[] = m_inventory.getSlots();
 			
 			for(int i = 0; i < slots.length && hasControl(SimpleItemContainer.class, String.valueOf(i)); i++) {
 				SimpleItemContainer container = getControl(SimpleItemContainer.class, String.valueOf(i));
 				container.setSlot(slots[i]);
-				container.getObservers().add(new MoveItemToLoadout(slots[i]));
+				Rect2D bounds = container.getBounds();
+				Vector2D menuLocation = container.getLocation().add(new Vector2D(bounds.width / 2, bounds.height / 2));
+				container.getObservers().add(new MoveItemToLoadout(slots[i], menuLocation));
 			}
+
+			getObservers().add(new Window.IWindowInputObserver() {
+				@Override
+				public void onKeyEvent(InputKeyEvent event) {
+
+				}
+
+				@Override
+				public void onMouseEvent(InputMouseEvent event) {
+					if(event.type != InputMouseEvent.MouseEventType.MouseClicked)
+						return;
+
+					Rect2D bounds = m_menuStrip.getBounds().add(m_menuStrip.getAbsoluteLocation());
+
+					if(!bounds.contains(event.location))
+						m_menuStrip.setVisible(false);
+				}
+			});
 		}
 		
 		private class MoveItemToLoadout implements ISimpleItemContainerObserver {
 			private final IItemSlot m_slot;
+			private final Vector2D m_slotLocation;
 			
-			public MoveItemToLoadout(IItemSlot slot) {
+			public MoveItemToLoadout(IItemSlot slot, Vector2D slotLocation) {
 				m_slot = slot;
+				m_slotLocation = slotLocation;
 			}
-			
-			@Override
-			public void selected() {
-				if(m_slot.isEmpty())
-					return;
-				
+
+			private void tryWieldItem() {
 				for(IWieldTarget t : m_slot.getItem().getFunction().getWieldTargets()) {
 					IItemSlot loadoutSlot = m_loadout.getSlot(t);
-					
+
 					if(loadoutSlot != null) {
 						IItem removed = loadoutSlot.setItem(m_slot.getItem());
-						
+
 						if(removed == null)
 							m_slot.clear();
 						else
 							m_slot.setItem(removed);
-						
-						return;
+
+						break;
 					}
+				}
+			}
+
+			private void tryUseWithHandsItem() {
+				IItemSlot inHands = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+
+				if(inHands.isEmpty())
+					return;
+
+				if(inHands.getItem().getFunction().testUseAbility(m_owner, m_slot.getItem(), inHands.getItem().getAttributes()).isUseable()) {
+					inHands.getItem().getFunction().use(m_owner, m_slot.getItem(), inHands.getItem().getAttributes(), inHands.getItem());
+				}
+			}
+
+			@Override
+			public void selected() {
+				IItemSlot inHands = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+
+				if(m_slot.isEmpty()) {
+					if(!inHands.isEmpty())
+						m_slot.setItem(inHands.clear());
+				} else if(!inHands.isEmpty() && inHands.getItem().getFunction().testUseAbility(m_owner, m_slot.getItem(), inHands.getItem().getAttributes()).isUseable()) {
+					IWieldTarget[] itemWieldTargets = m_slot.getItem().getFunction().getWieldTargets();
+
+					if(itemWieldTargets.length == 0)
+						tryUseWithHandsItem();
+					else {
+						m_menuStrip.setLocation(m_slotLocation);
+						IItem handsItem = inHands.getItem();
+						m_menuStrip.setContext(new String[] {"Wield Item", "Use with " + handsItem.getName()}, (String command) -> {
+							if(command.compareTo("Wield Item") == 0) {
+								tryWieldItem();
+							} else
+								tryUseWithHandsItem();
+						});
+					}
+				} else {
+					IWieldTarget[] itemWieldTargets = m_slot.getItem().getFunction().getWieldTargets();
+
+					if(itemWieldTargets.length != 0)
+						tryWieldItem();
 				}
 			}
 

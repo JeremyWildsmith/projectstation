@@ -1,0 +1,6 @@
+{
+      "model" : "model.jmf",
+	  "blocking": false,
+	  "type": ["plating", "steel"],
+	  "isAirTight": true
+}

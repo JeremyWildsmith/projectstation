@@ -302,7 +302,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -313,7 +313,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -324,7 +324,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -335,7 +335,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -346,7 +346,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -357,7 +357,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -368,7 +368,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -379,7 +379,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -390,7 +390,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -401,7 +401,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -412,7 +412,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -423,7 +423,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -434,7 +434,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "networkWire",
-    "config" : "/artifact/entity/networkWire/entity.jec",
+    "config" : "/artifact/entity/blueWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : {
@@ -831,7 +831,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -842,7 +842,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -877,7 +877,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -888,7 +888,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -899,7 +899,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -921,7 +921,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -932,7 +932,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -943,7 +943,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -965,7 +965,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -987,7 +987,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1009,7 +1009,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1020,7 +1020,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1031,7 +1031,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1042,7 +1042,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1053,7 +1053,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1075,7 +1075,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -1086,7 +1086,7 @@
       "z" : 0.10000000149011612
     },
     "type" : "powerWire",
-    "config" : "/artifact/entity/powerWire/entity.jec",
+    "config" : "/artifact/entity/redWire/entity.jec",
     "direction" : 8
   } ],
   "artifactImports" : [ {
@@ -6230,5 +6230,5 @@
   } ],
   "logicPerUnit" : 1.0,
   "zones" : [ ],
-  "friction" : 6.0
+  "friction" : 3.0
 }

@@ -1,17 +1,6 @@
 {
   "controls": [
     {
-      "name": "6",
-      "location": {
-        "x": 8,
-        "y": 92
-      },
-      "type": "simpleItemContainer",
-      "config": {
-        "background": "slot.png"
-      }
-    },
-    {
       "name": "0",
       "location": {
         "x": 8,
@@ -47,8 +36,8 @@
     {
       "name": "3",
       "location": {
-        "x": 8,
-        "y": 50
+        "x": 134,
+        "y": 8
       },
       "type": "simpleItemContainer",
       "config": {
@@ -58,8 +47,8 @@
     {
       "name": "4",
       "location": {
-        "x": 50,
-        "y": 50
+        "x": 176,
+        "y": 8
       },
       "type": "simpleItemContainer",
       "config": {
@@ -69,7 +58,18 @@
     {
       "name": "5",
       "location": {
-        "x": 92,
+        "x": 218,
+        "y": 8
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+	{
+      "name": "6",
+      "location": {
+        "x": 8,
         "y": 50
       },
       "type": "simpleItemContainer",
@@ -81,7 +81,7 @@
       "name": "7",
       "location": {
         "x": 50,
-        "y": 92
+        "y": 50
       },
       "type": "simpleItemContainer",
       "config": {
@@ -92,6 +92,105 @@
       "name": "8",
       "location": {
         "x": 92,
+        "y": 50
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "9",
+      "location": {
+        "x": 134,
+        "y": 50
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "10",
+      "location": {
+        "x": 176,
+        "y": 50
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "11",
+      "location": {
+        "x": 218,
+        "y": 50
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+	{
+      "name": "12",
+      "location": {
+        "x": 8,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "13",
+      "location": {
+        "x": 50,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "14",
+      "location": {
+        "x": 92,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "15",
+      "location": {
+        "x": 134,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "16",
+      "location": {
+        "x": 176,
+        "y": 92
+      },
+      "type": "simpleItemContainer",
+      "config": {
+        "background": "slot.png"
+      }
+    },
+    {
+      "name": "17",
+      "location": {
+        "x": 218,
         "y": 92
       },
       "type": "simpleItemContainer",
@@ -101,7 +200,7 @@
     }
   ],
   "bounds": {
-    "width": 134,
+    "width": 268,
     "height": 132
   },
   "style": "file:///ui/style/tech/tech.juis"

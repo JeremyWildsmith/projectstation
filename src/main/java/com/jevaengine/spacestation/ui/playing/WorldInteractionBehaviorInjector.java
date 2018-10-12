@@ -9,12 +9,22 @@ import com.jevaengine.spacestation.entity.IInteractableEntity;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.joystick.InputMouseEvent.MouseButton;
+import io.github.jevaengine.math.Rect2F;
+import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
+import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.rpg.item.IItemSlot;
+import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.Timer;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WorldView;
+import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.entity.IEntity;
+import io.github.jevaengine.world.search.RadialSearchFilter;
+import io.github.jevaengine.world.search.RectangleSearchFilter;
+
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -29,7 +39,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 	public <T extends IEntity> WorldInteractionBehaviorInjector(IRpgCharacter character, IInteractionHandler... interactionHandlers) {
 		m_character = character;
-		m_interactionDistance = character.getBody().getBoundingCircle().radius * 2.1F;
+		m_interactionDistance = character.getBody().getBoundingCircle().radius * 3.0F;
 		m_handlers = interactionHandlers;
 	}
 
@@ -97,7 +107,38 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 			@Override
 			public void keyEvent(InputKeyEvent event) {
+				if (event.type != InputKeyEvent.KeyEventType.KeyTyped) {
+					return;
+				}
+
+				if(event.keyCode == KeyEvent.VK_E) {
+					Direction playerDirection = m_character.getModel().getDirection();
+					Vector2F playerPos = m_character.getBody().getLocation().getXy();
+					IInteractableEntity[] interactable = m_character.getWorld().getEntities().search(IInteractableEntity.class,
+							new RadialSearchFilter<IInteractableEntity>(playerPos, m_interactionDistance));
+
+					for (IInteractableEntity e : interactable) {
+						if (Direction.fromVector(e.getBody().getLocation().getXy().difference(playerPos)) == playerDirection) {
+							e.interactedWith(m_character);
+						}
+					}
+				} else if(event.keyCode == KeyEvent.VK_R) {
+					IItemSlot slot = m_character.getLoadout().getSlot(UsrWieldTarget.LeftHand);
+
+					if(slot.isEmpty())
+						return;
+
+					IItem item = slot.getItem();
+
+					IItem.ItemUseAbilityTestResults result = item.getFunction().testUseAbility(m_character, null, item.getAttributes());
+
+					if(result.isUseable()) {
+						item.getFunction().use(m_character, m_character, item.getAttributes(), item);
+					}
+				}
+
 			}
+
 		});
 	}
 

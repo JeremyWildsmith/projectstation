@@ -18,13 +18,9 @@
  */
 package com.jevaengine.spacestation.item;
 
-import io.github.jevaengine.config.IConfigurationFactory;
+import com.google.inject.Provider;
+import io.github.jevaengine.config.*;
 import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
-import io.github.jevaengine.config.IImmutableVariable;
-import io.github.jevaengine.config.ISerializable;
-import io.github.jevaengine.config.IVariable;
-import io.github.jevaengine.config.NoSuchChildVariableException;
-import io.github.jevaengine.config.ValueSerializationException;
 import io.github.jevaengine.graphics.IGraphicFactory;
 import io.github.jevaengine.graphics.IGraphicFactory.GraphicConstructionException;
 import io.github.jevaengine.graphics.IImmutableGraphic;
@@ -42,12 +38,14 @@ import io.github.jevaengine.rpg.item.usr.UsrArmorItemFunction.UsrArmorItemAttrib
 import io.github.jevaengine.rpg.item.usr.UsrWeaponItemFunction;
 import io.github.jevaengine.rpg.item.usr.UsrWeaponItemFunction.UsrWeaponAttribute;
 import io.github.jevaengine.util.Nullable;
+import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.NullAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 
@@ -56,12 +54,16 @@ public final class StationItemFactory implements IItemFactory {
 	private final IConfigurationFactory m_configurationFactory;
 	private final IGraphicFactory m_graphicFactory;
 	private final IAnimationSceneModelFactory m_modelFactory;
+	private final Provider<IEntityFactory> m_entityFactory;
+	private final IItemFactory m_itemFactory;
 
 	@Inject
-	public StationItemFactory(IConfigurationFactory configurationFactory, IGraphicFactory graphicFactory, IAnimationSceneModelFactory modelFactory) {
+	public StationItemFactory(IConfigurationFactory configurationFactory, IGraphicFactory graphicFactory, IAnimationSceneModelFactory modelFactory, Provider<IEntityFactory> entityFactory, IItemFactory itemFactory) {
 		m_configurationFactory = configurationFactory;
 		m_graphicFactory = graphicFactory;
 		m_modelFactory = modelFactory;
+		m_entityFactory = entityFactory;
+		m_itemFactory = itemFactory;
 	}
 
 	@Override
@@ -72,7 +74,26 @@ public final class StationItemFactory implements IItemFactory {
 			IImmutableGraphic icon = itemDecl.icon == null ? new NullGraphic() : m_graphicFactory.create(name.resolve(new URI(itemDecl.icon)));
 			IAnimationSceneModel model = itemDecl.model == null ? new NullAnimationSceneModel() : m_modelFactory.create(name.resolve(new URI(itemDecl.model)));
 
-			return new DefaultItem(itemDecl.name, itemDecl.description, itemDecl.function, itemDecl.attributes, icon, model);
+			IItemFunction function = new NullItemFunction();
+
+			if (itemDecl.function != null) {
+				String functionName = itemDecl.function;
+				for (IItemFunction functions[] : new IItemFunction[][]{UsrWeaponItemFunction.values(), UsrArmorItemFunction.values()}) {
+					for (IItemFunction f : functions) {
+						if (f.getName().equals(functionName)) {
+							function = f;
+						}
+					}
+				}
+
+				for (StationItemFunctionFactory f : StationItemFunctionFactory.values()) {
+					if (f.getName().equals(functionName)) {
+						function = f.create(m_itemFactory, m_entityFactory.get(), itemDecl.parameters);
+					}
+				}
+			}
+
+			return new DefaultItem(itemDecl.name, itemDecl.description, function, itemDecl.attributes, icon, model);
 		} catch (ConfigurationConstructionException | GraphicConstructionException | ValueSerializationException | SceneModelConstructionException | URISyntaxException e) {
 			throw new ItemContructionException(name, e);
 		}
@@ -88,9 +109,11 @@ public final class StationItemFactory implements IItemFactory {
 		@Nullable
 		public String model;
 
-		public IItemFunction function;
+		public String function;
 		public String description;
 		public AttributeSet attributes;
+
+		IImmutableVariable parameters = new NullVariable();
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
@@ -104,7 +127,7 @@ public final class StationItemFactory implements IItemFactory {
 				target.addChild("model").setValue(model);
 			}
 
-			target.addChild("function").setValue(function.getName());
+			target.addChild("function").setValue(function);
 			target.addChild("description").setValue(description);
 
 			IVariable attributesVariable = target.addChild("attributes");
@@ -142,20 +165,12 @@ public final class StationItemFactory implements IItemFactory {
 					}
 				}
 
-				function = new NullItemFunction();
-
-				if (source.childExists("function")) {
-
-					String functionName = source.getChild("function").getValue(String.class);
-
-					for (IItemFunction functions[] : new IItemFunction[][]{UsrWeaponItemFunction.values(), UsrArmorItemFunction.values()}) {
-						for (IItemFunction f : functions) {
-							if (f.getName().equals(functionName)) {
-								function = f;
-							}
-						}
-					}
+				if(source.childExists("parameters")) {
+					parameters = source.getChild("parameters");
 				}
+
+				function = source.childExists("function") ? source.getChild("function").getValue(String.class) : null;
+
 			} catch (NoSuchChildVariableException e) {
 				throw new ValueSerializationException(e);
 			}

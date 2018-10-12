@@ -1,8 +1,12 @@
 {
-      "inventorySize" : 9,
+      "inventorySize" : 18,
       "model" : "model.jmf",
       "blood" : "file:///particle/blood/particle.jpar",
-      "items" : [ ],
+      "items" : [
+		"file:///item/metalRod/item.jitm","file:///item/metalRod/item.jitm","file:///item/metalRod/item.jitm",
+		"file:///item/metalSheet/item.jitm","file:///item/metalSheet/item.jitm", "file:///item/powerWire/red/item.jitm",
+		"file:///item/powerWire/green/item.jitm", "file:///item/powerWire/blue/item.jitm", "file:///item/powerWire/blue/item.jitm"
+	  ],
       "loadout" : { 
         "Head" : "file:///item/bodyparts/head/item.jitm",
         "LeftArm" : "file:///item/bodyparts/leftArm/item.jitm",
@@ -15,9 +19,10 @@
         "Hands" : "file:///item/gloves/white/item.jitm",
         "Eyes" : "file:///item/glasses/reading/item.jitm",
         "Ears" : "file:///item/radio/headset/item.jitm",
-        "Mask" : "file:///item/helmet/bio/item.jitm"
+        "Mask" : "file:///item/helmet/bio/item.jitm",
+		"LeftHand": "file:///item/wrench/item.jitm"
       },
-      "wieldTargets" : [ "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform", "Feet", "Hands", "Eyes", "Ears", "Mask" ],
+      "wieldTargets" : [ "LeftHand", "LeftArm", "RightArm", "Chest", "Head", "LeftLeg", "RightLeg", "Waist", "Uniform", "Feet", "Hands", "Eyes", "Ears", "Mask" ],
       "attributes" : {
 	  "Action": 3.0,
     	  "Speed": 6.0,

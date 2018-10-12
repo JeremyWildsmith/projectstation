@@ -1,0 +1,32 @@
+{
+  "worldWidth" : 5,
+  "metersPerUnit" : 1.0,
+  "worldHeight" : 5,
+  "entities" : [ {
+    "auxConfig" : null,
+    "name" : "player",
+    "location" : {
+      "x" : 0.0,
+      "y" : 0.0,
+      "z" : 0.0
+    },
+    "type" : "characterz",
+    "config" : "/artifact/entity/human/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed",
+    "location" : {
+      "x" : 1.0,
+      "y" : 1.0,
+      "z" : 0.0
+    },
+    "type" : "door",
+    "config" : "/artifact/entity/door/security/entity.jec",
+    "direction" : 8
+  } ],
+  "artifactImports" : [ ],
+  "logicPerUnit" : 1.0,
+  "zones" : [ ],
+  "friction" : 1.0
+}

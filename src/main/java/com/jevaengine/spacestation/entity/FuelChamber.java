@@ -102,8 +102,8 @@ public final class FuelChamber extends WiredDevice implements ILiquidCarrier {
 	}
 
 	@Override
-	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested) {
-		return 0;
+	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested, float sourceWeight) {
+		return sourceWeight;
 	}
 
 	@Override

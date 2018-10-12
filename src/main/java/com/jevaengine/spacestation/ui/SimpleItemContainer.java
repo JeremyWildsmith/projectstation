@@ -24,7 +24,7 @@ import java.awt.Graphics2D;
 public final class SimpleItemContainer extends Control {
 	
 	public static final String COMPONENT_NAME = "simpleItemContainer";
-	
+
 	private final IImmutableGraphic m_background;
 	private final Observers m_observers = new Observers();
 	

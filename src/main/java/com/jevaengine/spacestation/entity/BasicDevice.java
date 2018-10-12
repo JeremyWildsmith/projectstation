@@ -164,7 +164,7 @@ public abstract class BasicDevice implements IEntity, IDevice {
 
 	@Override
 	public final Map<String, Integer> getFlags() {
-		return Collections.unmodifiableMap(m_flags);
+		return m_flags;
 	}
 
 	@Override

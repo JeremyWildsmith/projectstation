@@ -1,0 +1,5357 @@
+{
+  "worldWidth" : 400,
+  "metersPerUnit" : 1.0,
+  "worldHeight" : 400,
+  "entities" : [ {
+    "auxConfig" : null,
+    "name" : "player",
+    "location" : {
+      "x" : 17.0,
+      "y" : 26.0,
+      "z" : 2.0
+    },
+    "type" : "character",
+    "config" : "/artifact/entity/human/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed0",
+    "location" : {
+      "x" : 8.0,
+      "y" : 8.0,
+      "z" : 1.0
+    },
+    "type" : "gasVent",
+    "config" : "/artifact/entity/gasVent/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed1",
+    "location" : {
+      "x" : 13.0,
+      "y" : 7.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/airTank/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed2",
+    "location" : {
+      "x" : 12.0,
+      "y" : 10.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed3",
+    "location" : {
+      "x" : 13.0,
+      "y" : 10.0,
+      "z" : 1.0
+    },
+    "type" : "gasVent",
+    "config" : "/artifact/entity/gasVent/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed4",
+    "location" : {
+      "x" : 13.0,
+      "y" : 10.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed14",
+    "location" : {
+      "x" : 8.0,
+      "y" : 8.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed5",
+    "location" : {
+      "x" : 11.0,
+      "y" : 9.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed6",
+    "location" : {
+      "x" : 10.0,
+      "y" : 8.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed7",
+    "location" : {
+      "x" : 9.0,
+      "y" : 8.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed8",
+    "location" : {
+      "x" : 11.0,
+      "y" : 8.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed9",
+    "location" : {
+      "x" : 11.0,
+      "y" : 10.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed10",
+    "location" : {
+      "x" : 13.0,
+      "y" : 8.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPump",
+    "config" : "/artifact/entity/liquidPump/entity.jec",
+    "direction" : 1
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed11",
+    "location" : {
+      "x" : 13.0,
+      "y" : 9.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed12",
+    "location" : {
+      "x" : 15.0,
+      "y" : 27.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/gasTank/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed13",
+    "location" : {
+      "x" : 14.0,
+      "y" : 27.0,
+      "z" : 1.0
+    },
+    "type" : "liquidTank",
+    "config" : "/artifact/entity/airTank/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed15",
+    "location" : {
+      "x" : 15.0,
+      "y" : 29.0,
+      "z" : 1.0
+    },
+    "type" : "fuelChamber",
+    "config" : "/artifact/entity/fuelChamber/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed16",
+    "location" : {
+      "x" : 15.0,
+      "y" : 30.0,
+      "z" : 1.0
+    },
+    "type" : "gasEngine",
+    "config" : "/artifact/entity/gasEngine/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed17",
+    "location" : {
+      "x" : 16.0,
+      "y" : 30.0,
+      "z" : 1.0
+    },
+    "type" : "electricMotor",
+    "config" : "/artifact/entity/electricMotor/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed18",
+    "location" : {
+      "x" : 15.0,
+      "y" : 31.0,
+      "z" : 1.0
+    },
+    "type" : "alternator",
+    "config" : "/artifact/entity/alternator/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed23",
+    "location" : {
+      "x" : 15.0,
+      "y" : 28.0,
+      "z" : -0.7100000381469727
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/red/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed27",
+    "location" : {
+      "x" : 17.0,
+      "y" : 32.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed29",
+    "location" : {
+      "x" : 15.0,
+      "y" : 32.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed24",
+    "location" : {
+      "x" : 17.0,
+      "y" : 30.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed25",
+    "location" : {
+      "x" : 17.0,
+      "y" : 31.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerSwitch",
+    "config" : "/artifact/entity/powerSwitch/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed30",
+    "location" : {
+      "x" : 16.0,
+      "y" : 33.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "capacitor",
+    "config" : "/artifact/entity/capacitor/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed32",
+    "location" : {
+      "x" : 14.0,
+      "y" : 28.0,
+      "z" : -0.7200000286102295
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/green/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed33",
+    "location" : {
+      "x" : 19.0,
+      "y" : 29.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "diode",
+    "config" : "/artifact/entity/diode/entity.jec",
+    "direction" : 3
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed28",
+    "location" : {
+      "x" : 18.0,
+      "y" : 32.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed31",
+    "location" : {
+      "x" : 19.0,
+      "y" : 32.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed35",
+    "location" : {
+      "x" : 19.0,
+      "y" : 31.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed36",
+    "location" : {
+      "x" : 19.0,
+      "y" : 30.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed37",
+    "location" : {
+      "x" : 19.0,
+      "y" : 28.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed34",
+    "location" : {
+      "x" : 19.0,
+      "y" : 27.0,
+      "z" : 1.0
+    },
+    "type" : "door",
+    "config" : "/artifact/entity/door/external/entity.jec",
+    "direction" : 1
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed38",
+    "location" : {
+      "x" : 17.0,
+      "y" : 25.0,
+      "z" : 1.0
+    },
+    "type" : "door",
+    "config" : "/artifact/entity/door/external/entity.jec",
+    "direction" : 1
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed39",
+    "location" : {
+      "x" : 16.0,
+      "y" : 32.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed19",
+    "location" : {
+      "x" : 14.0,
+      "y" : 29.0,
+      "z" : -0.7200000286102295
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/green/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed20",
+    "location" : {
+      "x" : 14.0,
+      "y" : 30.0,
+      "z" : -0.7200000286102295
+    },
+    "type" : "liquidPipe",
+    "config" : "/artifact/entity/pipe/green/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed21",
+    "location" : {
+      "x" : 19.0,
+      "y" : 27.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed22",
+    "location" : {
+      "x" : 19.0,
+      "y" : 26.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed26",
+    "location" : {
+      "x" : 18.0,
+      "y" : 26.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed40",
+    "location" : {
+      "x" : 17.0,
+      "y" : 26.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed41",
+    "location" : {
+      "x" : 17.0,
+      "y" : 25.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed42",
+    "location" : {
+      "x" : 17.0,
+      "y" : 24.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed43",
+    "location" : {
+      "x" : 17.0,
+      "y" : 23.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed44",
+    "location" : {
+      "x" : 17.0,
+      "y" : 22.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed45",
+    "location" : {
+      "x" : 17.0,
+      "y" : 21.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed46",
+    "location" : {
+      "x" : 17.0,
+      "y" : 20.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed47",
+    "location" : {
+      "x" : 17.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed48",
+    "location" : {
+      "x" : 18.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed49",
+    "location" : {
+      "x" : 19.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed50",
+    "location" : {
+      "x" : 20.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed51",
+    "location" : {
+      "x" : 21.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed52",
+    "location" : {
+      "x" : 22.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed53",
+    "location" : {
+      "x" : 23.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed54",
+    "location" : {
+      "x" : 24.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed55",
+    "location" : {
+      "x" : 25.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed56",
+    "location" : {
+      "x" : 26.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed57",
+    "location" : {
+      "x" : 27.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed58",
+    "location" : {
+      "x" : 28.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed59",
+    "location" : {
+      "x" : 29.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed60",
+    "location" : {
+      "x" : 30.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed61",
+    "location" : {
+      "x" : 31.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed62",
+    "location" : {
+      "x" : 32.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed63",
+    "location" : {
+      "x" : 33.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed64",
+    "location" : {
+      "x" : 34.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed65",
+    "location" : {
+      "x" : 35.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed66",
+    "location" : {
+      "x" : 35.0,
+      "y" : 20.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed67",
+    "location" : {
+      "x" : 35.0,
+      "y" : 21.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed68",
+    "location" : {
+      "x" : 35.0,
+      "y" : 22.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed69",
+    "location" : {
+      "x" : 35.0,
+      "y" : 23.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed70",
+    "location" : {
+      "x" : 16.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed71",
+    "location" : {
+      "x" : 15.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed72",
+    "location" : {
+      "x" : 14.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed73",
+    "location" : {
+      "x" : 13.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed74",
+    "location" : {
+      "x" : 12.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed75",
+    "location" : {
+      "x" : 11.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed76",
+    "location" : {
+      "x" : 10.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed77",
+    "location" : {
+      "x" : 9.0,
+      "y" : 19.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed78",
+    "location" : {
+      "x" : 9.0,
+      "y" : 18.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed79",
+    "location" : {
+      "x" : 9.0,
+      "y" : 17.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed80",
+    "location" : {
+      "x" : 9.0,
+      "y" : 16.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed81",
+    "location" : {
+      "x" : 9.0,
+      "y" : 15.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed82",
+    "location" : {
+      "x" : 9.0,
+      "y" : 14.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed83",
+    "location" : {
+      "x" : 9.0,
+      "y" : 14.0,
+      "z" : -0.9100000262260437
+    },
+    "type" : "powerWire",
+    "config" : "/artifact/entity/redWire/entity.jec",
+    "direction" : 8
+  } ],
+  "artifactImports" : [ {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/infrastructure/lattice/model.jmf",
+    "locations" : [ {
+      "x" : 35.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 35.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 23.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 36.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 25.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 25.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 29.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 29.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 24.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 16.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 24.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 17.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 35.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 16.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 26.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 21.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 36.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 17.0,
+      "z" : -2.0
+    }, {
+      "x" : 26.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 21.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 5.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 25.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 20.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 25.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 21.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 42.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 16.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 35.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 22.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 16.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 27.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 22.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 17.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 23.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 27.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 17.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 22.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 10.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 6.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 26.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 20.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 26.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 21.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 28.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 21.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 16.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 22.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 28.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 35.0,
+      "z" : -2.0
+    }, {
+      "x" : 23.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 21.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 17.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 23.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 23.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 11.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 7.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 20.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 27.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 18.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 20.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 21.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 22.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 27.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 38.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 21.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 23.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 29.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 22.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 3.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 22.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 23.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 29.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 35.0,
+      "z" : -2.0
+    }, {
+      "x" : 24.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 22.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 4.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 13.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 24.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 36.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 11.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 5.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 20.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 25.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 12.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 8.0,
+      "y" : 12.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 30.0,
+      "z" : -2.0
+    }, {
+      "x" : 24.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 41.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 13.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 21.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 6.0,
+      "z" : -2.0
+    }, {
+      "x" : 20.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 33.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 19.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 22.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 14.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 33.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 7.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 26.0,
+      "z" : -2.0
+    }, {
+      "x" : 15.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 28.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 31.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 39.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 35.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 14.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 34.0,
+      "y" : 15.0,
+      "z" : -2.0
+    }, {
+      "x" : 37.0,
+      "y" : 28.0,
+      "z" : -2.0
+    }, {
+      "x" : 17.0,
+      "y" : 23.0,
+      "z" : -2.0
+    }, {
+      "x" : 30.0,
+      "y" : 8.0,
+      "z" : -2.0
+    }, {
+      "x" : 16.0,
+      "y" : 29.0,
+      "z" : -2.0
+    }, {
+      "x" : 9.0,
+      "y" : 9.0,
+      "z" : -2.0
+    }, {
+      "x" : 32.0,
+      "y" : 27.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 34.0,
+      "z" : -2.0
+    }, {
+      "x" : 31.0,
+      "y" : 32.0,
+      "z" : -2.0
+    }, {
+      "x" : 28.0,
+      "y" : 19.0,
+      "z" : -2.0
+    }, {
+      "x" : 23.0,
+      "y" : 18.0,
+      "z" : -2.0
+    }, {
+      "x" : 40.0,
+      "y" : 10.0,
+      "z" : -2.0
+    }, {
+      "x" : 36.0,
+      "y" : 3.0,
+      "z" : -2.0
+    } ],
+    "direction" : 0
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/infrastructure/wall/model.jmf",
+    "locations" : [ {
+      "x" : 14.0,
+      "y" : 11.0,
+      "z" : 1.0
+    }, {
+      "x" : 9.0,
+      "y" : 10.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 17.0,
+      "y" : 27.0,
+      "z" : 1.0
+    }, {
+      "x" : 9.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 7.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 26.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 8.0,
+      "z" : 1.0
+    }, {
+      "x" : 16.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 27.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 9.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 28.0,
+      "z" : 1.0
+    }, {
+      "x" : 18.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 10.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 29.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 30.0,
+      "z" : 1.0
+    }, {
+      "x" : 11.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 10.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 13.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 31.0,
+      "z" : 1.0
+    }, {
+      "x" : 18.0,
+      "y" : 27.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 32.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 33.0,
+      "z" : 1.0
+    }, {
+      "x" : 17.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 7.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 8.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 9.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 10.0,
+      "z" : 1.0
+    }, {
+      "x" : 19.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 11.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 11.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 7.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 6.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 18.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 13.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 7.0,
+      "y" : 10.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 15.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 12.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 26.0,
+      "z" : 1.0
+    }, {
+      "x" : 13.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 8.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 7.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 27.0,
+      "z" : 1.0
+    }, {
+      "x" : 19.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 28.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 29.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 30.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 31.0,
+      "z" : 1.0
+    }, {
+      "x" : 13.0,
+      "y" : 11.0,
+      "z" : 1.0
+    }, {
+      "x" : 8.0,
+      "y" : 10.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 32.0,
+      "z" : 1.0
+    }, {
+      "x" : 13.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 16.0,
+      "y" : 25.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 7.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 33.0,
+      "z" : 1.0
+    }, {
+      "x" : 16.0,
+      "y" : 26.0,
+      "z" : 1.0
+    }, {
+      "x" : 9.0,
+      "y" : 6.0,
+      "z" : 1.0
+    }, {
+      "x" : 8.0,
+      "y" : 12.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 8.0,
+      "z" : 1.0
+    }, {
+      "x" : 20.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 16.0,
+      "y" : 27.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 9.0,
+      "z" : 1.0
+    }, {
+      "x" : 15.0,
+      "y" : 34.0,
+      "z" : 1.0
+    }, {
+      "x" : 14.0,
+      "y" : 10.0,
+      "z" : 1.0
+    } ],
+    "direction" : 0
+  }, {
+    "isTraversable" : false,
+    "isStatic" : false,
+    "model" : "/artifact/scene/infrastructure/catwalk/model.jmf",
+    "locations" : [ {
+      "x" : 18.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 23.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 29.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 29.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 24.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 24.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 16.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 17.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 16.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 17.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 25.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 20.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 25.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 21.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 16.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 22.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 16.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 17.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 23.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 17.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 26.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 20.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 26.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 21.0,
+      "z" : -1.0
+    }, {
+      "x" : 21.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 16.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 22.0,
+      "z" : -1.0
+    }, {
+      "x" : 21.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 17.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 23.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 20.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 27.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 20.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 21.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 22.0,
+      "z" : -1.0
+    }, {
+      "x" : 27.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 21.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 23.0,
+      "z" : -1.0
+    }, {
+      "x" : 22.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 22.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 23.0,
+      "z" : -1.0
+    }, {
+      "x" : 22.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 20.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 21.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 22.0,
+      "z" : -1.0
+    }, {
+      "x" : 28.0,
+      "y" : 18.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 23.0,
+      "z" : -1.0
+    }, {
+      "x" : 28.0,
+      "y" : 19.0,
+      "z" : -1.0
+    }, {
+      "x" : 23.0,
+      "y" : 18.0,
+      "z" : -1.0
+    } ],
+    "direction" : 0
+  }, {
+    "isTraversable" : true,
+    "isStatic" : false,
+    "model" : "/artifact/scene/infrastructure/plating/model.jmf",
+    "locations" : [ {
+      "x" : 35.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 36.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 35.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 10.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 5.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 17.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 42.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 11.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 6.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 18.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 12.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 7.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 19.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 33.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 38.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 3.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 35.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 4.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 24.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 13.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 11.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 5.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 25.0,
+      "z" : -1.0
+    }, {
+      "x" : 41.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 8.0,
+      "y" : 12.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 20.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 6.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 13.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 30.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 27.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 14.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 33.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 7.0,
+      "z" : -1.0
+    }, {
+      "x" : 32.0,
+      "y" : 26.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 15.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 31.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 39.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 35.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 14.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 34.0,
+      "y" : 15.0,
+      "z" : -1.0
+    }, {
+      "x" : 30.0,
+      "y" : 8.0,
+      "z" : -1.0
+    }, {
+      "x" : 37.0,
+      "y" : 28.0,
+      "z" : -1.0
+    }, {
+      "x" : 16.0,
+      "y" : 29.0,
+      "z" : -1.0
+    }, {
+      "x" : 9.0,
+      "y" : 9.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 34.0,
+      "z" : -1.0
+    }, {
+      "x" : 31.0,
+      "y" : 32.0,
+      "z" : -1.0
+    }, {
+      "x" : 40.0,
+      "y" : 10.0,
+      "z" : -1.0
+    }, {
+      "x" : 36.0,
+      "y" : 3.0,
+      "z" : -1.0
+    } ],
+    "direction" : 0
+  } ],
+  "logicPerUnit" : 1.0,
+  "zones" : [ ],
+  "friction" : 3.0
+}

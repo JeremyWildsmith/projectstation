@@ -1,0 +1,18 @@
+{
+  "name": "Blue Power Wire",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A green power wire.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "plating",
+			"depth": -0.93,
+			"entity": "powerWire",
+			"config": "file:///artifact/entity/blueWire/entity.jec"
+		}
+	]
+  }
+}

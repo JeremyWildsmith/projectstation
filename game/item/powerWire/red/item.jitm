@@ -1,0 +1,18 @@
+{
+  "name": "Red Power Wire",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A red power wire.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "plating",
+			"depth": -0.91,
+			"entity": "powerWire",
+			"config": "file:///artifact/entity/redWire/entity.jec"
+		}
+	]
+  }
+}

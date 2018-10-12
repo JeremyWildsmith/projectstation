@@ -6,6 +6,8 @@
 package com.jevaengine.spacestation.entity;
 
 import com.jevaengine.spacestation.liquid.ILiquid;
+import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
@@ -25,18 +27,17 @@ import java.util.Map;
 public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	private final int MAX_CONNECTIONS = 4;
-	private final float PIPE_WIDTH_METRES = 1;
 
 	private final IAnimationSceneModel m_model;
 
-	private final float m_radius;
+	private final float m_capacity;
 
 	private final HashMap<ILiquid, Float> m_containedLiquids = new HashMap<>();
 
-	public LiquidPipe(String name, IAnimationSceneModel model, float radius) {
+	public LiquidPipe(String name, IAnimationSceneModel model, float capacity) {
 		super(name, true);
 		m_model = model;
-		m_radius = radius;
+        m_capacity = capacity;
 	}
 
 	private void updateModel() {
@@ -77,44 +78,160 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		return m_model;
 	}
 
-	@Override
-	public void update(int delta) {
-		ILiquidCarrier heaviest = getHeaviestConnection();
-		
-		if(heaviest == null)
-			return;
-		
-		Map<ILiquidCarrier, Float> differences = new HashMap<>();
+	public Map<ILiquidCarrier, Float> getDistributionRatios(List<ILiquidCarrier> heaviest, List<ILiquidCarrier> ignore) {
 		float totalDifference = 0;
-
+		Map<ILiquidCarrier, Float> relativeDifference = new HashMap<>();
 		List<ILiquidCarrier> requested = new ArrayList<>();
-		requested.add(this);
-		
-		float sourceVolume = heaviest.getSourcedLiquidVolume(requested) + getLiquidVolume();
-				
-		for (ILiquidCarrier c : this.getConnections(ILiquidCarrier.class)) {
-			if(c == heaviest)
+
+		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+			if(heaviest.contains(c) || ignore.contains(c)) //We won't ever distribute to heaviest
 				continue;
-			
+
+			float totalWeight = getLiquidVolume();
+			for(ILiquidCarrier subject : getConnections(ILiquidCarrier.class)) {
+				if (subject == c || ignore.contains(subject))
+					continue;
+
+				requested.clear();
+				requested.add(this);
+				totalWeight += subject.getSourcedLiquidVolume(requested, 0);
+			}
+
 			requested.clear();
-			requested.add(this);
-			
-			float volumeDifference = sourceVolume - c.getSourcedLiquidVolume(requested);
-			differences.put(c, volumeDifference);
-			totalDifference += volumeDifference;
+			requested.add(c);
+			float difference = Math.abs(totalWeight - c.getSourcedLiquidVolume(requested, 0));
+
+			totalDifference += difference;
+
+			relativeDifference.put(c, difference);
 		}
 
-		float amountFlow = calculateFlowRate() * (delta / 1000.0F);
+		if(totalDifference == 0)
+			return new HashMap<>();
 
+		Map<ILiquidCarrier, Float> diffRatios = new HashMap<>();
+
+		for(Map.Entry<ILiquidCarrier, Float> e : relativeDifference.entrySet()) {
+			diffRatios.put(e.getKey(), e.getValue() / totalDifference);
+		}
+
+		return diffRatios;
+	}
+
+
+	public Map<ILiquidCarrier, Float> getSuckRatios(List<ILiquidCarrier> ignore) {
+        List<ILiquidCarrier> lessThan = new ArrayList<>();
+        for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+            if(c.getLiquidVolume() < getLiquidVolume())
+                lessThan.add(c);
+        }
+
+        lessThan.addAll(ignore);
+
+        float totalDifference = 0;
+        Map<ILiquidCarrier, Float> relativeDifference = new HashMap<>();
+        List<ILiquidCarrier> requested = new ArrayList<>();
+
+        for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+            if(lessThan.contains(c))
+                continue;
+
+            requested.clear();
+            requested.add(this);
+            float totalWeight = c.getSourcedLiquidVolume(requested, 0);
+
+            totalDifference += totalWeight;
+
+            relativeDifference.put(c, totalWeight);
+        }
+
+        if(totalDifference == 0)
+            return new HashMap<>();
+
+        Map<ILiquidCarrier, Float> diffRatios = new HashMap<>();
+
+        for(Map.Entry<ILiquidCarrier, Float> e : relativeDifference.entrySet()) {
+            diffRatios.put(e.getKey(), e.getValue() / totalDifference);
+        }
+
+        return diffRatios;
+
+	}
+
+	private float doSuckCycle(List<ILiquidCarrier> ignore, float amount) {
+		float amountSucked = 0;
+		float maxSuckable = amount;
+		boolean accepted = true;
+		List<ILiquidCarrier> refused = new ArrayList<>();
+
+		refused.addAll(ignore);
+		while(accepted && maxSuckable > Vector2F.TOLERANCE) {
+			accepted = false;
+			float consumedInCycle = 0;
+			for (Map.Entry<ILiquidCarrier, Float> e : getSuckRatios(refused).entrySet()) {
+				float quantityPull = Math.min(e.getKey().getLiquidVolume(), e.getValue() * maxSuckable);
+
+				List<ILiquidCarrier> cause = new ArrayList<>();
+				cause.add(this);
+				Map<ILiquid, Float> sucked = e.getKey().remove(cause, quantityPull);
+
+				cause.remove(this);
+				cause.addAll(getConnections(ILiquidCarrier.class));
+				add(cause, sucked);
+
+				float acceptedAmount = 0;
+				for(Map.Entry<ILiquid, Float> suck : sucked.entrySet()) {
+					acceptedAmount += suck.getValue();
+				}
+
+				if(acceptedAmount > Vector2F.TOLERANCE) {
+					accepted = true;
+					consumedInCycle += acceptedAmount;
+				} else
+					refused.add(e.getKey());
+			}
+			maxSuckable -= consumedInCycle;
+			amountSucked += consumedInCycle;
+		}
+
+		return amountSucked;
+	}
+
+    private float doPushCycle(List<ILiquidCarrier> heaviest) {
+        return doPushCycle(heaviest,-1);
+    }
+
+    private float doPushCycle(ILiquidCarrier heaviest, int delta) {
+        List<ILiquidCarrier> h = new ArrayList<>();
+        h.add(heaviest);
+        return doPushCycle(h);
+    }
+
+    private float doPushCycle(List<ILiquidCarrier> heaviest, int delta) {
 		float amountRemoved = 0;
-		for (Map.Entry<ILiquidCarrier, Float> c : differences.entrySet()) {
-			float quantityPush = (c.getValue() / totalDifference) * amountFlow * Math.min(getCapacityVolume(), c.getValue());
+		float maxDistributable = delta < 0 ? getLiquidVolume() : Math.min(getLiquidVolume(), getLiquidVolume() * calculateFlowRate() * (delta / 1000.0F));
+		boolean accepted = true;
+		List<ILiquidCarrier> refused = new ArrayList<>();
 
-			Map<ILiquid, Float> sample = getSample(quantityPush);
+		while(accepted && maxDistributable > Vector2F.TOLERANCE) {
+			accepted = false;
+			float consumedInCycle = 0;
+			for (Map.Entry<ILiquidCarrier, Float> e : getDistributionRatios(heaviest, refused).entrySet()) {
+				float quantityPush = Math.min(e.getKey().getCapacityVolume(), e.getValue() * maxDistributable);
 
-			List<ILiquidCarrier> cause = new ArrayList<>();
-			cause.add(this);
-			amountRemoved += c.getKey().add(cause, sample);
+				Map<ILiquid, Float> sample = getSample(quantityPush);
+
+				List<ILiquidCarrier> cause = new ArrayList<>();
+				cause.add(this);
+				float acceptedAmount = e.getKey().add(cause, sample);
+				if(acceptedAmount > maxDistributable * 0.01) {
+					accepted = true;
+					consumedInCycle += acceptedAmount;
+				} else
+					refused.add(e.getKey());
+			}
+			maxDistributable -= consumedInCycle;
+			amountRemoved += consumedInCycle;
 		}
 
 		Map<ILiquid, Float> removeSample = getSample(amountRemoved);
@@ -124,14 +241,18 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 			m_containedLiquids.put(e.getKey(), current - e.getValue());
 		}
 
-		List<ILiquidCarrier> cause = new ArrayList<>();
-		cause.add(this);
-		
-		Map<ILiquid, Float> sucked = heaviest.remove(cause, amountRemoved);
-		
-		cause.remove(this);
-		add(cause, sucked);
-		
+		return amountRemoved;
+	}
+
+	@Override
+	public void update(int delta) {
+		ILiquidCarrier heaviest = getHeaviestConnection();
+
+		if(heaviest == null)
+			return;
+
+		float left = doPushCycle(heaviest, delta);
+		doSuckCycle(new ArrayList<>(), left);
 	}
 
 	@Override
@@ -146,11 +267,17 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		
 		if(!(d instanceof ILiquidCarrier))
 			return false;
+
+		if(d instanceof LiquidPipe) {
+			boolean sameDepth = Math.abs(this.getBody().getLocation().z - d.getBody().getLocation().z) < Vector2F.TOLERANCE;
+			if(!sameDepth)
+				return false;
+		}
 		
 		Vector3F delta = d.getBody().getLocation().difference(getBody().getLocation());
 		Direction dir = Direction.fromVector(delta.getXy());
 		
-		if(dir == Direction.Zero || dir.isDiagonal())
+		if(dir.isDiagonal())
 			return false;
 			
 		return true;
@@ -169,11 +296,7 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	@Override
 	public float getCapacityVolume() {
-		float half = (float) Math.PI * m_radius * m_radius * PIPE_WIDTH_METRES * 1000 / 2; //1000 from cubic metres to litres.
-		
-		int numConnections = getConnections().size();
-		
-		return numConnections * half;
+	    return m_capacity;
 	}
 	
 	private ILiquidCarrier getHeaviestConnection() {
@@ -183,8 +306,8 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		ILiquidCarrier heaviestCarrier = null;
 		float lastCarrierWeight = Float.MIN_VALUE;
 		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
-			float weight = c.getSourcedLiquidVolume(carrier);
-			if(weight > lastCarrierWeight) {
+			float weight = c.getSourcedLiquidVolume(carrier, 0);
+			if(weight >= lastCarrierWeight) {
 				lastCarrierWeight = weight;
 				heaviestCarrier = c;
 			}
@@ -195,6 +318,10 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	private float calculateFlowRate() {
 		float totalLiquid = getLiquidVolume();
+
+		if(totalLiquid == 0)
+			return 0;
+
 		float flowRate = 0;
 
 		for (Map.Entry<ILiquid, Float> liquid : m_containedLiquids.entrySet()) {
@@ -209,6 +336,9 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 	}
 
 	private Map<ILiquid, Float> getSample(Map<ILiquid, Float> pool, float quantity) {
+		if(quantity <= 0)
+			return new HashMap<>();
+
 		float poolVolume = 0;
 		
 		for(Map.Entry<ILiquid, Float> e : pool.entrySet())
@@ -229,76 +359,21 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		return sample;
 	}
 
-	private float createRoom(List<ILiquidCarrier> cause, float volumeNeeded) {
+	private float createRoom(ILiquidCarrier source, float volumeNeeded) {
+        float initial = getLiquidVolume();
+        List<ILiquidCarrier> cause = new ArrayList<>();
+        cause.add(source);
 
-		List<ILiquidCarrier> available = new ArrayList<>();
-		List<ILiquidCarrier> accepted = new ArrayList<>();
+        ILiquidCarrier heaviest = getHeaviestConnection();
+        if(!cause.contains(heaviest) && getConnections(ILiquidCarrier.class).size() > 2)
+            cause.add(heaviest);
 
-		accepted.addAll(getConnections(ILiquidCarrier.class));
-
-		float volumeAcquired = 0;
-
-		while (!accepted.isEmpty()) {
-			available.clear();
-			available.addAll(accepted);
-			accepted.clear();
-
-			Map<ILiquid, Float> sample = getSample((volumeNeeded - volumeAcquired) / available.size());
-			for (ILiquidCarrier c : available) {
-				
-				float amountAccepted = c.add(new ArrayList<>(cause), sample);
-
-				volumeAcquired += amountAccepted;
-				if (amountAccepted > 0.000001F) {
-					accepted.add(c);
-				}
-				
-				for(Map.Entry<ILiquid, Float> e : sample.entrySet()) {
-					float current = m_containedLiquids.get(e.getKey());
-					m_containedLiquids.put(e.getKey(), current - amountAccepted);
-				}
-			}
-		}
-
-		return volumeAcquired;
+	    doPushCycle(cause);
+	    return initial - getLiquidVolume();
 	}
 
 	private float suckLiquid(List<ILiquidCarrier> cause, float volumeNeeded) {
-
-		List<ILiquidCarrier> available = new ArrayList<>();
-		List<ILiquidCarrier> accepted = new ArrayList<>();
-
-		accepted.addAll(getConnections(ILiquidCarrier.class));
-
-		float volumeAcquired = 0;
-
-		while (!accepted.isEmpty() && (volumeNeeded - volumeAcquired) > 0.000001F) {
-			available.clear();
-			available.addAll(accepted);
-			accepted.clear();
-
-			for (ILiquidCarrier c : available) {
-				float amountTaken = 0;
-
-				Map<ILiquid, Float> sample = c.remove(new ArrayList<>(cause), (volumeNeeded - volumeAcquired) / available.size());
-
-				for(Map.Entry<ILiquid, Float> e : sample.entrySet())
-					amountTaken += e.getValue();
-
-				volumeAcquired += amountTaken;
-				
-				if (amountTaken > 0.000001F) {
-					accepted.add(c);
-				}
-				
-				for(Map.Entry<ILiquid, Float> e : sample.entrySet()) {
-					float current = m_containedLiquids.containsKey(e.getKey()) ? m_containedLiquids.get(e.getKey()) : 0;
-					m_containedLiquids.put(e.getKey(), current + amountTaken);
-				}
-			}
-		}
-
-		return volumeAcquired;
+		 return doSuckCycle(cause, volumeNeeded);
 	}
 
 	@Override
@@ -306,6 +381,17 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		if (cause.contains(this)) {
 			return 0;
 		}
+
+		ILiquidCarrier source = null;
+		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+            if (cause.indexOf(c) >= 0) {
+                source = c;
+                break;
+            }
+        }
+
+        if(source == null)
+            throw new IllegalArgumentException();
 
 		cause.add(this);
 
@@ -318,7 +404,7 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		float room = getCapacityVolume() - getLiquidVolume();
 
 		if (room < pushVolume) {
-			pushVolume = createRoom(cause, pushVolume - room) + room;
+			pushVolume = createRoom(source, pushVolume - room) + room;
 		}
 
 		Map<ILiquid, Float> pushSample = getSample(liquid, pushVolume);
@@ -338,6 +424,7 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	@Override
 	public Map<ILiquid, Float> remove(List<ILiquidCarrier> cause, float quantity) {
+
 		Map<ILiquid, Float> totalRemoved = new HashMap<>();
 		float totalVolumeRemoved = 0;
 		
@@ -390,15 +477,15 @@ public final class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 	}
 
 	@Override
-	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested) {
+	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested, float sourceWeight) {
 		if(requested.contains(this))
-			return 0;
+			return sourceWeight;
 		
 		requested.add(this);
 		
-		float volume = getLiquidVolume();
+		float volume = getLiquidVolume() + sourceWeight;
 		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
-			volume += c.getSourcedLiquidVolume(requested);
+			volume = c.getSourcedLiquidVolume(requested, volume);
 		}
 		
 		return volume;

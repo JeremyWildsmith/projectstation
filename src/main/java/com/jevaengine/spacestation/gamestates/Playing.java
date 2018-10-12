@@ -96,7 +96,7 @@ public class Playing implements IState {
 			camera.setTarget(m_player);
 
 			Vector2D resolution = context.getWindowManager().getResolution();
-			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory).create();
+			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory).create(m_player, m_player.getInventory(), m_player.getLoadout());
 			m_hud.setTopMost(true);
 			m_hud.setMovable(false);
 			m_hud.center();

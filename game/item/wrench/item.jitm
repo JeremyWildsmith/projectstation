@@ -1,0 +1,19 @@
+{
+  "name": "Wrench",
+  "model": "model.jmf",
+  "icon" : "icon.png",
+  "function": "Tool",
+  "description": "A handy tool.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "steel",
+			"destroy": true,
+			"give": "file:///item/metalSheet/item.jitm"
+		}
+	]
+  }
+}

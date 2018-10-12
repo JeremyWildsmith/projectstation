@@ -16,21 +16,19 @@ import java.util.Map;
  *
  * @author Jeremy
  */
-public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
+public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 	private final int MAX_CONNECTIONS = 1;
 	
 	private final IImmutableSceneModel m_model;
 	
-	private final Map<ILiquid, Float> m_contents = new HashMap<>();
+	protected final Map<ILiquid, Float> m_contents = new HashMap<>();
 	
-	private final float m_radius;
-	private final float m_height;
-	
-	public LiquidTank(String name, IImmutableSceneModel model, float radius, float height) {
+	private final float m_capacity;
+
+	public LiquidTank(String name, IImmutableSceneModel model, float capacity) {
 		super(name, false);
 		m_model = model;
-		m_radius = radius;
-		m_height = height;
+		m_capacity = capacity;
 	}
 	
 	private ILiquidCarrier getConnection() {
@@ -42,7 +40,7 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 		return connections.get(0);
 	}
 	
-	private Map<ILiquid, Float> getSample(Map<ILiquid, Float> pool, float quantity) {
+	protected Map<ILiquid, Float> getSample(Map<ILiquid, Float> pool, float quantity) {
 		float poolVolume = 0;
 		
 		for(Map.Entry<ILiquid, Float> e : pool.entrySet())
@@ -68,7 +66,7 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
-		return d instanceof LiquidPipe && getConnections().size() < MAX_CONNECTIONS;
+		return (d instanceof LiquidPipe || d instanceof LiquidPump) && getConnections().size() < MAX_CONNECTIONS;
 	}
 
 	@Override
@@ -104,7 +102,7 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 		}
 	}
 	
-	private float calculateFlowRate() {
+	protected float calculateFlowRate() {
 		float totalLiquid = getLiquidVolume();
 		float flowRate = 0;
 
@@ -127,7 +125,7 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 
 	@Override
 	public float getCapacityVolume() {
-		return m_height * m_radius * m_radius * (float)Math.PI * 1000; //1000 from cubic metres to litres.
+		return m_capacity;
 	}
 
 	@Override
@@ -164,8 +162,8 @@ public final class LiquidTank extends WiredDevice implements ILiquidCarrier {
 	}
 
 	@Override
-	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested) {
-		return getLiquidVolume();
+	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested, float sourceWeight) {
+		return sourceWeight + getLiquidVolume();
 	}
 	
 }

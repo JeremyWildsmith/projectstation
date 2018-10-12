@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface ILiquidCarrier extends IDevice {
 	public float getLiquidVolume();
-	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested);
+	public float getSourcedLiquidVolume(List<ILiquidCarrier> requested, float sourceWeight);
 	public float getCapacityVolume();
 	
 	public float add(List<ILiquidCarrier> cause, Map<ILiquid, Float> liquid);

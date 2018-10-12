@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 public class MainMenu implements IState
 {
-	private static final URI ENTRY_MAP = URI.create("file:///world/derpstation.jmp");
+	private static final URI ENTRY_MAP = URI.create("file:///world/firstStation.jmp");
 	
 	private IStateContext m_context;
 	private Window m_window;

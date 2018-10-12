@@ -32,11 +32,9 @@
         "x": 42,
         "y": 8
       },
-      "type": "toggleHand",
+      "type": "simpleItemContainer",
       "config": {
-        "left": "leftHand.png",
-        "right": "rightHand.png",
-        "active": "activeHand.png"
+        "background": "leftHand.png"
       }
     },
     {

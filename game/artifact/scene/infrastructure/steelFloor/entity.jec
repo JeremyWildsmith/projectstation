@@ -1,0 +1,6 @@
+{
+      "model" : "model.jmf",
+	  "blocking": false,
+	  "type": ["floor", "steel"],
+	  "isAirTight": true
+}

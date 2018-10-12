@@ -1,0 +1,6 @@
+{
+      "model" : "model.jmf",
+	  "blocking": true,
+	  "type": ["wall"],
+	  "isAirTight": true
+}

@@ -23,6 +23,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.jevaengine.spacestation.entity.StationEntityFactory;
+import com.jevaengine.spacestation.entity.character.SpaceCharacterFactory;
+import com.jevaengine.spacestation.item.StationItemFactory;
 import com.jevaengine.spacestation.ui.StationControlFactory;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.audio.IAudioClipFactory;
@@ -47,6 +49,7 @@ import io.github.jevaengine.joystick.IInputSource;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.dialogue.ScriptedDialogueRouteFactory;
 import io.github.jevaengine.rpg.entity.RpgEntityFactory;
+import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
 import io.github.jevaengine.rpg.entity.character.usr.UsrCharacterFactory;
 import io.github.jevaengine.rpg.item.IItemFactory;
@@ -58,10 +61,14 @@ import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.ui.DefaultControlFactory;
 import io.github.jevaengine.ui.IControlFactory;
 import io.github.jevaengine.world.IEffectMapFactory;
+import io.github.jevaengine.world.IWorldFactory;
 import io.github.jevaengine.world.TiledEffectMapFactory;
+import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.pathfinding.AStarRouteFactory;
 import io.github.jevaengine.world.pathfinding.IRouteFactory;
+import io.github.jevaengine.world.scene.ISceneBufferFactory;
+import io.github.jevaengine.world.scene.UnsortedOrthographicProjectionSceneBufferFactory;
 import io.github.jevaengine.world.scene.model.ExtentionMuxedAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ExtentionMuxedSceneModelFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
@@ -80,14 +87,15 @@ import javax.inject.Inject;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.text.html.parser.Entity;
 
 public class Main implements WindowListener
 {
-	private static final int WINX = 800;
-	private static final int WINY = 600;
+	private static final int WINX = 1024;
+	private static final int WINY = 800;
 
-	private int m_displayX = 800;
-	private int m_displayY = 600;
+	private int m_displayX = WINX;
+	private int m_displayY = WINY;
 
 	private JFrame m_frame;
 	private GameDriver m_gameDriver;
@@ -161,7 +169,7 @@ public class Main implements WindowListener
 	{
 		m_gameDriver.stop();
 	}
-	
+
 	private final class EngineModule extends AbstractModule
 	{
 		@Override
@@ -170,44 +178,49 @@ public class Main implements WindowListener
 			bind(IRouteFactory.class).to(AStarRouteFactory.class);
 			bind(IInputSource.class).toInstance(FrameInputSource.create(m_frame));
 			bind(IGameFactory.class).to(StationGameFactory.class);
+			bind(IRpgCharacterFactory.class).to(SpaceCharacterFactory.class);
 			bind(IEntityFactory.class).toProvider(new Provider<IEntityFactory>() {
 				@Inject
 				private IScriptBuilderFactory scriptBuilderFactory;
-				
+
 				@Inject
 				private IAudioClipFactory audioClipFactory;
-				
+
 				@Inject
 				private IConfigurationFactory configurationFactory;
-				
+
 				@Inject
 				private IRpgCharacterFactory characterFactory;
-				
+
 				@Inject
 				private IParticleEmitterFactory particleEmitterFactory;
-				
+
 				@Inject
 				private IAnimationSceneModelFactory animationSceneModelFactory;
-				
+
 				@Inject
 				private IAssetStreamFactory assetStreamFactory;
-				
+
 				@Inject
 				private IItemFactory itemFactory;
-				
+
 				@Inject
 				private IRouteFactory rotueFactory;
-				
+
+				@Inject
+				private ISceneModelFactory modelFactory;
+
 				@Override
 				public IEntityFactory get() {
-					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory);
+					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory, modelFactory);
 					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory, rotueFactory);
 				}
 			});
-			
+
+			bind(IWorldFactory.class).to(SpaceStationFactory.class);
+
 			bind(IDialogueRouteFactory.class).to(ScriptedDialogueRouteFactory.class);
-			bind(IRpgCharacterFactory.class).to(UsrCharacterFactory.class);
-			bind(IItemFactory.class).to(UsrItemFactory.class);
+			bind(IItemFactory.class).to(StationItemFactory.class);
 			
 			bind(IControlFactory.class).toProvider(new Provider<IControlFactory>() {
 				@Inject

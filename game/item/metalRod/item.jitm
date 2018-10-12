@@ -1,0 +1,24 @@
+{
+  "name": "Metal Rod",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A steel rod.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  },
+  "parameters": {
+	"rules": [
+		{
+			"depth": -2,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/lattice/entity.jec"
+		},
+		{
+			"above": "lattice",
+			"depth": -1,
+			"entity": "infrastructure",
+			"config": "file:///artifact/scene/infrastructure/catwalk/entity.jec"
+		}
+	]
+  }
+}

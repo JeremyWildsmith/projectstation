@@ -1,0 +1,7 @@
+{
+      "model"  : "model.jmf",
+	  "defaultLiquid": "Gasoline",
+	  "isGas": false,
+	  "defaultVolume": 1000,
+	  "capacity": 1000
+}

@@ -5,7 +5,7 @@
       "name": "idle",
       "sets": [
         {
-          "directions": [0, 1, 2, 3, 4, 5, 6, 7],
+          "directions": [0, 1, 2, 3, 4, 5, 6, 7, 8],
           "components": [
             {
               "sprite": "sprite.jsf",

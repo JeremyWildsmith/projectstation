@@ -6,10 +6,13 @@
 package com.jevaengine.spacestation.entity;
 
 import io.github.jevaengine.math.Vector2F;
+import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
+
 import java.util.List;
 
 /**
@@ -17,55 +20,41 @@ import java.util.List;
  * @author Jeremy
  */
 public class Diode extends WiredDevice implements IPowerDevice {
+	private static final int MAX_CONNECTIONS = 2;
 
 	private final ISceneModel m_model;
 
-	//Is top to down OR left to right. If false, it is opposite.
-	private final boolean m_isForward;
-		
-	public Diode(String name, IAnimationSceneModel model, boolean isForward) {
+	public Diode(String name, IAnimationSceneModel model) {
 		super(name, true);
 		
 		m_model = model;
-		m_isForward = isForward;
 	}
 
-	private IPowerDevice getDevice(boolean getFrom) {
-		List<IPowerDevice> devices = getConnections(IPowerDevice.class);
-		
-		for(IPowerDevice d : devices) {
-			Vector2F delta = d.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
-			Direction dir = Direction.fromVector(delta);
-			
-			boolean findForward = m_isForward ? getFrom : !getFrom;
-			
-			if(findForward) {
-				if(dir == Direction.XMinus || dir == Direction.YMinus)
-					return d;
-			} else {
-				if(dir == Direction.XPlus || dir == Direction.YPlus)
-					return d;
-			}
+
+	private IPowerDevice getSource() {
+		for(IPowerDevice c : getConnections(IPowerDevice.class)) {
+			Vector2F delta = c.getBody().getLocation().difference(getBody().getLocation()).getXy();
+
+			if(Direction.fromVector(delta) != getBody().getDirection())
+				return c;
 		}
-		
+
+		return null;
+	}
+
+	private IPowerDevice getDestination() {
+		for(IPowerDevice c : getConnections(IPowerDevice.class)) {
+			Vector2F delta = c.getBody().getLocation().difference(getBody().getLocation()).getXy();
+
+			if(Direction.fromVector(delta) == getBody().getDirection())
+				return c;
+		}
+
 		return null;
 	}
 	
 	@Override
-	protected void connectionChanged() { 
-		IPowerDevice d = getDevice(true) == null ? getDevice(false) : getDevice(true);
-		
-		if(d == null)
-			return;
-		
-		Vector2F delta = d.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
-		Direction dir = Direction.fromVector(delta);
-		
-		if(dir == Direction.YMinus || dir == Direction.YPlus) {
-			m_model.setDirection(m_isForward ? Direction.YPlus : Direction.YMinus);
-		} else if(dir == Direction.XMinus || dir == Direction.XPlus) {
-			m_model.setDirection(m_isForward ? Direction.XPlus : Direction.XMinus);
-		}
+	protected void connectionChanged() {
 	}
 
 	@Override
@@ -85,33 +74,21 @@ public class Diode extends WiredDevice implements IPowerDevice {
 		
 		if(!(d instanceof IPowerDevice))
 			return false;
-		
-		Vector2F delta = d.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
-		Direction connecteeDir = Direction.fromVector(delta);
-		
-		if(getDevice(true) == null) {
-			IPowerDevice to = getDevice(false);
-			
-			if(to == null)
-				return true;
-			
-			Vector2F toDelta = to.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
-			toDelta = toDelta.negative();
-			
-			return Direction.fromVector(toDelta) == connecteeDir;
-		} else if(getDevice(false) == null) {
-			IPowerDevice from = getDevice(true);
-			
-			if(from == null)
-				return true;
-			
-			Vector2F fromDelta = from.getBody().getLocation().getXy().difference(getBody().getLocation().getXy());
-			fromDelta = fromDelta.negative();
-			
-			return Direction.fromVector(fromDelta) == connecteeDir;
-		}
-		
-		return false;
+		Direction thisDir = getBody().getDirection();
+
+		if(thisDir.isDiagonal() || thisDir == Direction.Zero)
+			return false;
+
+		if(getConnections().size() >= MAX_CONNECTIONS)
+			return false;
+
+		Vector3F delta = d.getBody().getLocation().difference(getBody().getLocation());
+		Direction dir = Direction.fromVector(delta.getXy());
+
+		if(Direction.fromVector(new Vector2F(thisDir.getDirectionVector().add(dir.getDirectionVector()))).isDiagonal())
+			return false;
+
+		return true;
 	}
 	
 	@Override
@@ -119,7 +96,9 @@ public class Diode extends WiredDevice implements IPowerDevice {
 
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
-		if(getDevice(true) == null || getDevice(false) == null)
+		IPowerDevice source = getSource();
+		IPowerDevice dest = getDestination();
+		if(source == null || dest == null)
 			return 0;
 		
 		if(requested.contains(this))
@@ -127,9 +106,9 @@ public class Diode extends WiredDevice implements IPowerDevice {
 		
 		requested.add(this);
 		
-		if(requested.contains(getDevice(true)))
+		if(requested.contains(dest))
 			return 0;
 		
-		return getDevice(true).drawEnergy(requested, joules);
+		return source.drawEnergy(requested, joules);
 	}
 }
