@@ -2,355 +2,620 @@ package com.jevaengine.spacestation.gas;
 
 import io.github.jevaengine.math.*;
 import io.github.jevaengine.world.Direction;
+import org.apache.commons.math3.linear.*;
 
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class GasSimulation {
+public class GasSimulation implements IGasSimulation {
 
-    private static final int NORMALIZE_INTERVAL = 100;
+    public static final int NORMALIZE_INTERVAL = 100;
 
-    private static final float ACTIVE_THRESHOLD = 0.1F;
+    private static final float ACTIVE_THRESHOLD = 0.001F;
+
+    private static final float HEAT_CONDUCTIVITY_THRESHOLD = 0.01F;
+    private static final float ACTIVE_GAS_GIVE_THRESHOLD = 0.00001F;
+    private static final float ACTIVE_HEAT_NORMALIZE_THRESHOLD = 0.01F;
 
     private static final int ACTIVE_TIMEOUT = 10000;
 
-    private static final int MAP_CACHE_DUMP_INTERVAL = 1000;
+    private static final float HEAT_FLOW_RATE = 0.4F;
 
-    private static final int SCALER = 1;
+    private static final float GAS_CONSTANT = 8.31F;
 
-    private WorldMapReader m_world;
+    private WorldMapReader world;
 
-    public HashMap<Vector2D, Float> gasMappings = new HashMap<>();
-
-    private HashMap<String, Integer> m_flags = new HashMap<>();
+    private HashMap<Vector2D, GasMetaData> gasMappings = new HashMap<>();
+    private HashMap<Vector2D, GasSimulation> simulationLinks = new HashMap<>();
 
     private int sinceLastTick = 0;
-    private int sinceMapCacheDump = 0;
-
 
     private HashMap<Vector2D, Integer> activeLastPass = new HashMap<>();
     private Set<Vector2D> processedLastPass = new HashSet<>();
 
-    private HashMap<Vector2D, Boolean> isAirTightMap = new HashMap<>();
-    private HashMap<Vector2D, Boolean> isBlockingMap = new HashMap<>();
-
     private Set<Vector2D> queueDeactivate = new HashSet<>();
     private Set<Vector2D> queueActivate = new HashSet<>();
+    private Set<Vector2D> queueAsyncActivate = new HashSet<>();
 
-    private List<HashSet<Vector2D>> groups = new ArrayList<>();
+    private final float defaultTemperature;
 
-    private final int flowRate;
-
-    public GasSimulation(WorldMapReader world, float flowRateRatio) {
-        flowRate = Math.round(NORMALIZE_INTERVAL * flowRateRatio);
-        m_world = world;
+    public GasSimulation(GasSimulation sim) {
+        this.defaultTemperature = sim.defaultTemperature;
+        this.gasMappings = new HashMap<>(sim.gasMappings);
+        this.simulationLinks = new HashMap<>(simulationLinks);
+        this.world = sim.world.duplicate();
     }
 
-    public HashSet<Vector2D> getGroup(Vector2D member) {
-        for(HashSet<Vector2D> e : groups)
-        {
-            if(e.contains(member))
-                return e;
-        }
-
-        HashSet<Vector2D> g = new HashSet<>();
-        g.add(member);
-        groups.add(g);
-
-        return g;
+    public GasSimulation(WorldMapReader world, float defaultTemperature) {
+        this.world = world;
+        this.defaultTemperature = defaultTemperature;
     }
 
-    public float consume(Vector2D location, float volume) {
-        if(!gasMappings.containsKey(location))
-            return 0;
+    public HashMap<Vector2D, GasMetaData> getGasMap() {
+        return new HashMap<>(gasMappings);
+    }
 
-        float current = gasMappings.get(location);
-        float consumed = Math.min(current, volume);
+    public void addLink(Vector2D location, GasSimulation sim) {
+        simulationLinks.put(location, sim);
+    }
 
-        current -= consumed;
-        gasMappings.put(location, current);
+    public void clearLinks() {
+        simulationLinks.clear();
+    }
+
+    public float getVolume(Vector2D location) {
+        return world.getVolume(location);
+    }
+
+    public GasMetaData consume(Vector2D location, float mols) {
+        if (Float.isNaN(mols))
+            throw new IllegalArgumentException();
+
         activeLastPass.put(location, 0);
 
-        return consumed / SCALER;
+        if (!gasMappings.containsKey(location))
+            return new GasMetaData(defaultTemperature);
+
+        GasMetaData current = gasMappings.get(location);
+
+
+        float total = current.getTotalMols();
+
+        if (total == 0)
+            return new GasMetaData(0);
+
+        float amountConsume = Math.min(1.0F, mols / total);
+
+        GasMetaData consumed = current.consume(amountConsume, 0.0F);
+        GasMetaData remaining = current.consume(1 - amountConsume, 1.0F);
+
+        gasMappings.put(location, remaining);
+
+        return consumed;
     }
 
-    public void produce(Vector2D location, float volume) {
-        if(!m_world.isAirTight(location))
+    public void produce(Vector2D location, GasMetaData gas) {
+        gas.validate();
+
+        if (!world.isAirTight(location))
             return;
 
-        if(!gasMappings.containsKey(location))
-            gasMappings.put(location, 0.0F);
+        if (!gasMappings.containsKey(location))
+            gasMappings.put(location, new GasMetaData(defaultTemperature));
 
-        float current = gasMappings.get(location);
-        current += volume * SCALER;
-
-        gasMappings.put(location, current);
+        GasMetaData current = gasMappings.get(location);
+        gasMappings.put(location, current.add(gas));
+        gasMappings.get(location).validate();
         activeLastPass.put(location, 0);
     }
 
-    public void set(Vector2D location, float volume) {
-        if(!m_world.isAirTight(location))
-            return;
+    public GasMetaData sample(Vector2D location) {
+        if (!gasMappings.containsKey(location))
+            return new GasMetaData(defaultTemperature);
+        gasMappings.get(location).validate();
 
-        gasMappings.put(location, volume * SCALER);
-        activeLastPass.put(location, 0);
+        return new GasMetaData(gasMappings.get(location));
     }
 
-    public float getQuantity(Vector2D location) {
-        if(!gasMappings.containsKey(location))
-            return 0;
+    private float calculateGasDistRatios(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
+        GasMetaData initialGas = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
 
-        activeLastPass.put(location, 0);
+        Map<Direction, GasMetaData> canidateDirections = new HashMap<>();
+        for (Direction d : Direction.ALL_DIRECTIONS) {
+            Vector2D normDest = location.add(d.getDirectionVector());
 
-        return gasMappings.get(location) / SCALER;
-    }
+            if (!world.isConnected(location, normDest))
+                continue;
 
+            GasMetaData cellValue = new GasMetaData(defaultTemperature);
+            if (world.isAirTight(normDest)) {
+                if (!gasMappings.containsKey(normDest))
+                    gasMappings.put(normDest, new GasMetaData(defaultTemperature));
 
-    public float getAreaQuantity(Vector2D location) {
-        if(!gasMappings.containsKey(location))
-            return 0;
+                cellValue = gasMappings.get(normDest);
+            } else {
+                gasMappings.remove(normDest);
+            }
 
-        activeLastPass.put(location, 0);
+            if (cellValue.calculatePressure(world.getVolume(normDest)) > initialGas.calculatePressure(world.getVolume(location))) {
+                if(cellValue.getTotalMols() > ACTIVE_THRESHOLD)
+                    toProcess.add(normDest);
 
-        float total = 0;
-        for(Vector2D v : getGroup(location))
-        {
-            total += getQuantity(location);
+                continue;
+            }
+
+            canidateDirections.put(d, cellValue);
         }
 
-        return total;
+        if (canidateDirections.isEmpty() || initialGas.getTotalMols() < ACTIVE_THRESHOLD)
+            return 0;
+
+        GasMetaData totalGas = new GasMetaData(0);
+
+        canidateDirections.put(Direction.Zero, initialGas);
+        List<Map.Entry<Direction, GasMetaData>> entries = new ArrayList<>();
+        for (Map.Entry<Direction, GasMetaData> e : canidateDirections.entrySet()) {
+            totalGas = totalGas.add(e.getValue());
+            entries.add(e);
+        }
+
+        //Index as y,x
+        final int dim = entries.size();
+        double[][] coefficientMatrix = new double[entries.size()][entries.size()];
+        double[] answerMatrix = new double[entries.size()];
+        for (int i = 0; i < coefficientMatrix.length; i++) {
+            coefficientMatrix[0][i] = 1;
+        }
+        answerMatrix[0] = totalGas.getTotalMols();
+
+        //We build the remaining of the matrix here...
+        int row = 1;
+        int col = 0;
+        Iterator<Map.Entry<Direction, GasMetaData>> it = entries.iterator();
+        Map.Entry<Direction, GasMetaData> last = null;
+        while (it.hasNext()) {
+            Map.Entry<Direction, GasMetaData> current = (last == null ? it.next() : last);
+
+            if (!it.hasNext())
+                break;
+
+            Map.Entry<Direction, GasMetaData> next = it.next();
+            last = next;
+
+            Vector2D currentNormDest = location.add(current.getKey().getDirectionVector());
+            float currentVolume = world.getVolume(currentNormDest);
+
+            Vector2D nextNormDest = location.add(next.getKey().getDirectionVector());
+            float nextVolume = world.getVolume(nextNormDest);
+
+            if (currentVolume <= 0 || nextVolume <= 0)
+                throw new IllegalArgumentException();
+
+            float currentTemperatureVolumeRation = GAS_CONSTANT * current.getValue().temperature / currentVolume;
+            float nextTemperatureVolumeRation = GAS_CONSTANT * next.getValue().temperature / nextVolume;
+            coefficientMatrix[row][col] = currentTemperatureVolumeRation;
+            coefficientMatrix[row][col + 1] = -nextTemperatureVolumeRation;
+            col++;
+            row++;
+        }
+
+        RealMatrix coefficients = new Array2DRowRealMatrix(coefficientMatrix);
+        RealVector constants = new ArrayRealVector(answerMatrix);
+        DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+        RealVector solution = solver.solve(constants);
+
+        float molsDistributed = 0;
+        for (int i = 0; i < entries.size(); i++) {
+            Map.Entry<Direction, GasMetaData> e = entries.get(i);
+            Vector2D distLocation = location.add(e.getKey().getDirectionVector());
+
+            if (e.getKey() != Direction.Zero)
+                toProcess.add(distLocation);
+
+            float amountNeeded = (float) solution.getEntry(i);
+
+            molsDistributed += Math.abs(e.getValue().getTotalMols() - amountNeeded);
+            GasMetaData result = e.getValue().consume(0, 1);
+            result = result.add(totalGas.consume(amountNeeded / totalGas.getTotalMols(), 0));
+            gasMappings.put(distLocation, result);
+
+
+        }
+
+        return molsDistributed;
     }
 
-    private void normalize(Vector2D origin, int deltaTime) {
+
+    private Map<Direction, Float> calculateHeatDistRatios(Vector2D location, Set<Vector2D> ignore, int deltaTime) {
+        GasMetaData initialGas = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
+
+        Map<Direction, GasMetaData> canidateDirections = new HashMap<>();
+        for (Direction d : Direction.HV_DIRECTIONS) {
+            Vector2D normDest = location.add(d.getDirectionVector());
+
+            float conductivity = world.getHeatConductivity(normDest);
+
+            if (conductivity < HEAT_CONDUCTIVITY_THRESHOLD)
+                continue;
+
+            GasMetaData cellValue = new GasMetaData(defaultTemperature);
+            if (world.isAirTight(normDest)) {
+                if (!gasMappings.containsKey(normDest))
+                    gasMappings.put(normDest, new GasMetaData(defaultTemperature));
+
+                cellValue = gasMappings.get(normDest);
+            } else {
+                gasMappings.remove(normDest);
+            }
+
+            if (cellValue.temperature > initialGas.temperature)
+                continue;
+
+            canidateDirections.put(d, cellValue);
+        }
+
+        float netTemperature = initialGas.temperature;
+
+        if (netTemperature < ACTIVE_THRESHOLD)
+            return new HashMap<>();
+
+        Map<Direction, Float> distRatios = new HashMap<>();
+
+        for (Map.Entry<Direction, GasMetaData> e : canidateDirections.entrySet()) {
+            Vector2D normDest = location.add(e.getKey().getDirectionVector());
+            float conductivity = world.getHeatConductivity(normDest);
+
+            netTemperature += conductivity * (initialGas.temperature - e.getValue().temperature);
+        }
+
+        for (Map.Entry<Direction, GasMetaData> e : canidateDirections.entrySet()) {
+            Vector2D normDest = location.add(e.getKey().getDirectionVector());
+            float conductivity = world.getHeatConductivity(normDest);
+
+            float tempDifference = conductivity * (initialGas.temperature - e.getValue().temperature);
+            distRatios.put(e.getKey(), tempDifference / netTemperature);
+        }
+
+        return distRatios;
+
+    }
+
+    private float normalizeGasses(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
+        GasMetaData current = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
+
+        return calculateGasDistRatios(location, ignore, toProcess, deltaTime);
+        /*
+        //This is just for gas distribution, not heat.
+        float totalGiveRatio = 0;
+        float distributableScaler = Math.min(1.0f, current.getFlowRate() * deltaTime / 1000.0f);
+
+        for(Map.Entry<Direction, Float> e : giveMappings.entrySet()) {
+            float giveRatio = e.getValue() * distributableScaler;
+
+            totalGiveRatio += giveRatio;
+
+            Vector2D normDest = location.add(e.getKey().getDirectionVector());
+
+            boolean destIsAirTight = world.isAirTight(normDest);
+
+            boolean processNeighbors = (current.consume(giveRatio, 0).getTotalMols() > ACTIVE_GAS_GIVE_THRESHOLD);
+
+            if(processNeighbors && destIsAirTight && !ignore.contains(normDest) && !toProcess.contains(normDest))
+                toProcess.add(normDest);
+
+            if(destIsAirTight) {
+                GasMetaData destValue = gasMappings.containsKey(normDest) ? gasMappings.get(normDest) : new GasMetaData(defaultTemperature);
+                destValue = destValue.add(current.consume(giveRatio, 0));
+                gasMappings.put(normDest, destValue );
+            }
+        }
+
+        gasMappings.put(location, current.consume(1-totalGiveRatio, 1));
+
+        return current.consume(totalGiveRatio, 1).calculatePressure(world.getVolume(location));
+        */
+    }
+
+
+    private float normalizeHeat(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
+        GasMetaData current = this.gasMappings.get(location);
+
+        if(current == null)
+            return 0.0f;
+
+        Map<Direction, Float> giveMappings = calculateHeatDistRatios(location, ignore, deltaTime);
+
+        float totalGiveHeat = 0;
+        float distributableHeatScaler = Math.min(1.0f, HEAT_FLOW_RATE * deltaTime / 1000.0f);
+
+        for (Map.Entry<Direction, Float> e : giveMappings.entrySet()) {
+            float giveHeatRatio = e.getValue() * distributableHeatScaler;
+
+            totalGiveHeat += giveHeatRatio;
+
+            Vector2D normDest = location.add(e.getKey().getDirectionVector());
+
+            boolean destIsAirTight = world.isAirTight(normDest);
+
+            if (destIsAirTight && !ignore.contains(normDest) && !toProcess.contains(normDest))
+                toProcess.add(normDest);
+
+            if (destIsAirTight) {
+                GasMetaData destValue = gasMappings.containsKey(normDest) ? gasMappings.get(normDest) : new GasMetaData(defaultTemperature);
+                destValue = destValue.add(current.consume(0, giveHeatRatio));
+                gasMappings.put(normDest, destValue);
+            }
+        }
+
+        gasMappings.put(location, current.consume(1, 1 - totalGiveHeat));
+
+        return current.consume(0, totalGiveHeat).temperature;
+    }
+
+    private int normalize(Vector2D origin, int deltaTime) {
         Queue<Vector2D> toProcess = new LinkedList<>();
         HashSet<Vector2D> processed = new HashSet<>();
         toProcess.add(origin);
 
-        float biggestDelta = 0;
-        Vector2D biggestDeltaLocation = null;
-
-        HashSet<Vector2D> group = getGroup(origin);
-        group.clear();
-
-        while(!toProcess.isEmpty()) {
+        int cycles = 0;
+        while (!toProcess.isEmpty()) {
             Vector2D location = toProcess.remove();
-            group.add(location);
+
+            if (processed.contains(location))
+                continue;
 
             processed.add(location);
 
-            if(processedLastPass.contains(location))
+            if (processedLastPass.contains(location))
                 continue;
 
-            Map<Direction, Float> giveMappings = new HashMap<>();
+            cycles++;
 
-            float thisValue = gasMappings.containsKey(location) ? gasMappings.get(location) : 0;
+            float totalDistMols = normalizeGasses(location, processed, toProcess, deltaTime);
 
-            if(!m_world.isAirTight(location))
-                thisValue = 0;
+            normalizeHeat(location, processed, toProcess, deltaTime);
 
-            float totalGive = 0;
-
-            float highestNeighbor = 0;
-            float lowestNeighbor = 0;
-
-            for(int i = 0; i < 2; i++) {
-                for (Direction d : Direction.HV_DIRECTIONS) {
-                    Vector2D normDest = location.add(d.getDirectionVector());
-
-                    if (processed.contains(normDest))
-                        continue;
-
-                    if (m_world.isBlocking(normDest))
-                        continue;
-
-                    float cellValue = 0;
-                    if (m_world.isAirTight(normDest)) {
-                        if (!gasMappings.containsKey(normDest))
-                            gasMappings.put(normDest, 0.0F);
-
-                        cellValue = gasMappings.get(normDest);
-                    } else {
-                        gasMappings.remove(normDest);
-                        cellValue = 0;
-                    }
-
-                    float difference = thisValue - cellValue;
-                    //If i have more quantity than them
-                    if (difference >= 0 && i == 1) {
-                        highestNeighbor = Math.max(highestNeighbor, cellValue);
-                        lowestNeighbor = Math.min(lowestNeighbor, cellValue);
-
-                        totalGive += difference;
-
-                        giveMappings.put(d, difference);
-                    } else if (difference < -ACTIVE_THRESHOLD && i == 0) {
-                        float take = -difference * (((float) flowRate) / deltaTime);
-                        gasMappings.put(normDest, gasMappings.get(normDest) - take);
-                        thisValue += take;
-                    }
-                }
-            }
-
-            float maxDistributable = Math.min(totalGive, thisValue);
-
-            if(maxDistributable > biggestDelta) {
-                biggestDelta = maxDistributable;
-                biggestDeltaLocation = location;
-            }
-
-            float amountDistributable = Math.min(maxDistributable, maxDistributable * (((float)flowRate) / deltaTime));
-            float amountLeft = thisValue - amountDistributable;
-            float remainingDifference =  thisValue - amountLeft;
-
-            totalGive += remainingDifference;
-
-            boolean processNeighbors = true;
-            if(amountDistributable < ACTIVE_THRESHOLD) {
-                if(activeLastPass.containsKey(location))
-                    queueDeactivate.add(location);
-
-                processNeighbors = false;
-            } else
+            if(totalDistMols > ACTIVE_THRESHOLD)
                 queueActivate.add(location);
-
-            if(totalGive < ACTIVE_THRESHOLD) {
-                gasMappings.put(location, thisValue);
-                continue;
-            }
-
-            gasMappings.put(location, amountLeft + amountDistributable * remainingDifference / totalGive);
-
-            for(Map.Entry<Direction, Float> e : giveMappings.entrySet()) {
-
-                float giveAmount = amountDistributable * (e.getValue()  / totalGive);
-
-                Vector2D normDest = location.add(e.getKey().getDirectionVector());
-
-                boolean destIsAirTight = m_world.isAirTight(normDest);
-
-
-                if(processNeighbors && destIsAirTight && !processed.contains(normDest) && !toProcess.contains(normDest))
-                    toProcess.add(normDest);
-
-                if(destIsAirTight) {
-                    float destValue = gasMappings.containsKey(normDest) ? gasMappings.get(normDest) : 0;
-
-                    gasMappings.put(normDest, destValue + giveAmount);
-                }
-            }
+            else
+                queueDeactivate.add(location);
         }
 
-        if(biggestDeltaLocation != null)
-            queueActivate.add(biggestDeltaLocation);
-
         processedLastPass.addAll(processed);
+        return cycles;
     }
 
-    /*
-    @Override
-    public IImmutableSceneModel getModel() {
-        return new DecoratedSceneModel(new NullSceneModel(), new ModelView());
-    }*/
+    public void syncGameLoop() {
+        Set<Vector2D> modifiedLocations = world.syncWithWorld();
 
-    public void update(int delta) {
+        if(modifiedLocations.isEmpty())
+            return;
+
+        synchronized (queueAsyncActivate) {
+            queueAsyncActivate.addAll(modifiedLocations);
+        }
+    }
+
+    public int update(int delta) {
+        synchronized (queueAsyncActivate) {
+            for(Vector2D v : queueAsyncActivate)
+                activeLastPass.put(v, 0);
+
+            queueAsyncActivate.clear();
+        }
+
+        //Before we update, we copy over the shared simulation mappings:
+        for (Map.Entry<Vector2D, GasSimulation> v : simulationLinks.entrySet()) {
+            gasMappings.put(v.getKey(), v.getValue().sample(v.getKey()));
+            activeLastPass.put(v.getKey(), 0);
+        }
+
+        int cycles = 0;
+
         sinceLastTick += delta;
-
-        if(sinceMapCacheDump >= MAP_CACHE_DUMP_INTERVAL) {
-            sinceMapCacheDump = 0;
-            isAirTightMap.clear();
-            isBlockingMap.clear();
-        } else
-            sinceMapCacheDump += delta;
-
-        processedLastPass.clear();
-        if(sinceLastTick > NORMALIZE_INTERVAL) {
-            sinceLastTick -= NORMALIZE_INTERVAL;
-
+        for (; sinceLastTick > NORMALIZE_INTERVAL; sinceLastTick -= NORMALIZE_INTERVAL) {
+            processedLastPass.clear();
             List<Vector2D> remove = new ArrayList<>();
-            List<Vector2D> refresh = new ArrayList<>();
-
-            for(Map.Entry<Vector2D, Integer> e : activeLastPass.entrySet()) {
+            List<Vector2D> stillAlive = new ArrayList<>();
+            for (Map.Entry<Vector2D, Integer> e : activeLastPass.entrySet()) {
                 if (!processedLastPass.contains(e.getKey()))
-                    normalize(e.getKey(), NORMALIZE_INTERVAL);
+                    cycles += normalize(e.getKey(), NORMALIZE_INTERVAL);
 
                 int newLife = e.getValue() + NORMALIZE_INTERVAL;
-
-                if(newLife > ACTIVE_TIMEOUT)
+                if (newLife > ACTIVE_TIMEOUT)
                     remove.add(e.getKey());
                 else
-                    refresh.add(e.getKey());
+                    stillAlive.add(e.getKey());
             }
 
-            for(Vector2D v : queueActivate)
+            for (Vector2D v : stillAlive) {
+                activeLastPass.put(v, activeLastPass.get(v) + NORMALIZE_INTERVAL);
+            }
+
+            for (Vector2D v : queueActivate)
                 activeLastPass.put(v, 0);
 
             queueActivate.clear();
 
-            remove.removeAll(queueDeactivate);
-            for(Vector2D v : remove)
+            for (Vector2D v : remove)
                 activeLastPass.remove(v);
 
-            refresh.removeAll(queueDeactivate);
-            for(Vector2D v : refresh)
-                activeLastPass.put(v, activeLastPass.get(v) + NORMALIZE_INTERVAL);
-
-            for(Vector2D v : queueDeactivate)
+            for (Vector2D v : queueDeactivate)
                 activeLastPass.remove(v);
 
             queueDeactivate.clear();
 
         }
+
+        return cycles;
     }
 
-    /*
-    private class ModelView implements IImmutableSceneModel.ISceneModelComponent {
-        @Override
-        public String getName() {
-            return "";
+    public static class GasMetaData {
+        public final Map<GasType, Float> amount;
+        public final float temperature;
+
+        public GasMetaData() {
+            this(0);
         }
 
-        @Override
-        public boolean testPick(int x, int y, float scale) {
-            return false;
+        public GasMetaData(float temperature) {
+            this(new HashMap<>(), temperature);
         }
 
-        @Override
-        public Rect3F getBounds() {
-            return new Rect3F(0, 0, 100, 100, 100, 100);
-        }
+        public GasMetaData(Map<GasType, Float> amount, float temperature) {
+            if (temperature < 0)
+                throw new IllegalArgumentException();
 
-        @Override
-        public Vector3F getOrigin() {
-            return new Vector3F(0, 0, 100);
-        }
+            this.amount = new HashMap<>(amount);
 
-        @Override
-        public void render(Graphics2D g, int x, int y, float scale) {
-            g.setColor(Color.GRAY);
-            g.fillRect(x, y, 400,400);
-            g.setColor(Color.white);
-            for(Map.Entry<Vector2D, Float> e : gasMappings.entrySet()) {
-                int xPos = x + (e.getKey().x - 6) * 40;
-                int yPos = x + (e.getKey().y - 6) * 40;
-
-                g.drawString(String.format("%.02f", e.getValue()),xPos, yPos);
+            for (Float f : this.amount.values()) {
+                if (f < 0)
+                    throw new IllegalArgumentException();
             }
+
+            this.temperature = temperature;
+        }
+
+        public void validate() {
+            for (Float f : amount.values()) {
+                if (f < 0 || Float.isNaN(f))
+                    throw new RuntimeException("Gas Metadata validation failed.");
+            }
+
+            if (temperature < 0 || Float.isNaN(temperature))
+                throw new RuntimeException("Gas Metadata validation failed.");
+        }
+
+        public GasMetaData(GasMetaData gas) {
+            this.amount = new HashMap<>(gas.amount);
+            this.temperature = gas.temperature;
+        }
+
+        public GasMetaData add(GasMetaData g) {
+            HashMap<GasType, Float> sum = new HashMap<GasType, Float>();
+
+            for (Map.Entry<GasType, Float> gas : g.amount.entrySet()) {
+                sum.put(gas.getKey(), gas.getValue());
+            }
+
+            for (Map.Entry<GasType, Float> gas : this.amount.entrySet()) {
+                float current = sum.containsKey(gas.getKey()) ? sum.get(gas.getKey()) : 0;
+                sum.put(gas.getKey(), current + gas.getValue());
+            }
+
+            return new GasMetaData(sum, g.temperature + this.temperature);
+        }
+
+        public GasMetaData add(GasType type, Float mols) {
+            GasMetaData result = new GasMetaData(this);
+            float current = result.amount.containsKey(type) ? result.amount.get(type) : 0;
+
+            result.amount.put(type, current + mols);
+
+            return result;
+        }
+
+        public GasMetaData consume(float contentsFraction) {
+            return consume(contentsFraction, contentsFraction);
+        }
+
+        public GasMetaData consume(float contentsFraction, float temperatureFraction) {
+            HashMap<GasType, Float> sum = new HashMap<GasType, Float>();
+
+            for (Map.Entry<GasType, Float> gas : amount.entrySet()) {
+                sum.put(gas.getKey(), gas.getValue() * contentsFraction);
+            }
+
+            return new GasMetaData(sum, temperature * temperatureFraction);
+        }
+
+        public float getTotalMols() {
+            float total = 0;
+
+            for (Float f : amount.values())
+                total += f;
+
+            return total;
+        }
+
+        public float getFlowRate() {
+            if (amount.isEmpty())
+                return 0;
+
+            float totalQuantity = getTotalMols();
+
+            float flowRate = 0;
+
+            for (Map.Entry<GasType, Float> e : amount.entrySet()) {
+                flowRate += e.getKey().getFlowRatio() * (e.getValue() / totalQuantity);
+            }
+
+            return flowRate;
+        }
+
+        public float calculatePressure(float volume) {
+            if (volume <= 0.0001f)
+                throw new IllegalArgumentException();
+
+            float pressure = getTotalMols() * GAS_CONSTANT * temperature / volume;
+            return pressure;
+        }
+
+        public float getPercentContent(GasType g) {
+            float quantity = amount.containsKey(g) ? amount.get(g) : 0;
+            float totalMols = getTotalMols();
+
+            if (totalMols <= 0)
+                return 0;
+
+            return quantity / totalMols;
+        }
+
+        public Color getColor() {
+            if (amount.isEmpty())
+                return null;
+
+            float totalQuantity = getTotalMols();
+
+            int r = 0;
+            int g = 0;
+            int b = 0;
+            int a = 0;
+            boolean coloured = false;
+            for (Map.Entry<GasType, Float> e : amount.entrySet()) {
+                float ratio = (e.getValue() / totalQuantity);
+
+                Color c = e.getKey().getColor(e.getValue());
+                if(c != null)
+                {
+                    coloured = true;
+                    r += c.getRed() * ratio;
+                    g += c.getGreen() * ratio;
+                    b += c.getBlue() * ratio;
+                    a += c.getAlpha() * ratio;
+                }
+            }
+
+            if(!coloured)
+                return null;
+
+            return new Color(r, g, b, a);
         }
     }
-    */
 
-    public void removedEntity(Vector3F loc){
+    public void removedEntity(Vector3F loc) {
         Vector2D location = loc.getXy().round();
 
-        if(m_world.isAirTight(location))
+        if (world.isAirTight(location))
             return;
 
-        for(Direction d : Direction.ALL_DIRECTIONS) {
+        for (Direction d : Direction.ALL_DIRECTIONS) {
             Vector2D v = location.add(d.getDirectionVector());
 
-            if(!m_world.isBlocking(v) && m_world.isAirTight(v)) {
-                if(!gasMappings.containsKey(location))
-                    gasMappings.put(location, 0.0f);
+            if (world.isConnected(location, v) && world.isAirTight(v)) {
+                if (!gasMappings.containsKey(location))
+                    gasMappings.put(location, new GasMetaData(defaultTemperature));
 
                 activeLastPass.put(location, 0);
 
@@ -360,7 +625,16 @@ public class GasSimulation {
     }
 
     public interface WorldMapReader {
-        boolean isBlocking(Vector2D location);
+        float getHeatConductivity(Vector2D location);
+
+        boolean isConnected(Vector2D locationA, Vector2D locationB);
+
         boolean isAirTight(Vector2D location);
+
+        Set<Vector2D> syncWithWorld();
+
+        float getVolume(Vector2D location);
+
+        WorldMapReader duplicate();
     }
 }

@@ -1,12 +1,6 @@
 package com.jevaengine.spacestation.gas;
 
-import com.jevaengine.spacestation.entity.GasVent;
-import com.jevaengine.spacestation.entity.Infrastructure;
-import io.github.jevaengine.math.Rect3F;
-import io.github.jevaengine.math.Vector2D;
-import io.github.jevaengine.math.Vector2F;
-import io.github.jevaengine.math.Vector3F;
-import io.github.jevaengine.rpg.entity.Door;
+import io.github.jevaengine.math.*;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.Direction;
@@ -17,159 +11,125 @@ import io.github.jevaengine.world.entity.NullEntityTaskModel;
 import io.github.jevaengine.world.entity.WorldAssociationException;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
-import io.github.jevaengine.world.scene.model.DecoratedSceneModel;
+import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.scene.model.NullSceneModel;
-import io.github.jevaengine.world.search.RadialSearchFilter;
-import org.apache.commons.lang.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.Queue;
 
-public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReader {
-    public static String INSTANCE_NAME = "GAS_SIMULATION";
+public class GasSimulationEntity implements IEntity {
+    public static String INSTANCE_NAME = "FREE_GAS_SIMULATION";
 
     private World m_world;
 
     private final String m_instanceName;
 
-    private HashMap<String, Integer> m_flags = new HashMap<>();
-    private HashMap<Vector2D, Boolean> isAirTightMap = new HashMap<>();
-    private HashMap<Vector2D, Boolean> isBlockingMap = new HashMap<>();
+    private final float m_defaultTemperature;
+
+    private HashMap<String, Integer> flags = new HashMap<>();
 
     private WorldObserver m_worldObserver = new WorldObserver();
 
-    private Map<GasType, GasSimulation> simulations = new HashMap<>();
+    private Map<GasSimulationNetwork, GasSimulation> simulation = new HashMap<>();
+    private Map<GasSimulationNetwork, GasSimulation> cachedSimulation = new HashMap<>();
+    private Map<GasSimulationNetwork, List<ISimulationAction>> queuedActions = new HashMap<>();
 
-    public boolean connectionMapDirty = true;
+    private Thread gasSimulationThread = new Thread(new GasSimulationThread());
 
-    public GasSimulationEntity() {
+    private IImmutableSceneModel m_model = new GasSimulationModel();
+
+    public GasSimulationEntity(float defaultTemperature) {
         this.m_instanceName = INSTANCE_NAME;
+        m_defaultTemperature = defaultTemperature;
+
+        gasSimulationThread.setPriority(Thread.MIN_PRIORITY);
     }
 
-    @Override
-    public boolean isAirTight(Vector2D location) {
-        if(isAirTightMap.containsKey(location))
-            return isAirTightMap.get(location);
+    public void addLink(Vector2D loc, GasSimulationNetwork a, GasSimulationNetwork b) {
+        synchronized (cachedSimulation) {
+            GasSimulation simA = cachedSimulation.get(a);
+            GasSimulation simB = cachedSimulation.get(b);
 
-        Infrastructure[] entities = m_world.getEntities().search(Infrastructure.class, new RadialSearchFilter<Infrastructure>(new Vector2F(location), 0.4F));
+            simA.addLink(loc, simB);
+            simB.addLink(loc, simA);
 
-        boolean airTight = false;
-        for(Infrastructure e : entities) {
-            if (e.isAirTight()) {
-                airTight = true;
-                break;
+            synchronized (queuedActions) {
+                queuedActions.get(a).add((GasSimulation s) -> {
+                    GasSimulation realSimB = simulation.get(b);
+                    s.addLink(new Vector2D(loc), realSimB);
+                });
+
+                queuedActions.get(b).add((GasSimulation s) -> {
+                    GasSimulation realSimA = simulation.get(a);
+                    s.addLink(new Vector2D(loc), realSimA);
+                });
             }
         }
-
-        isAirTightMap.put(location, airTight);
-
-        return airTight;
     }
 
-    @Override
-    public boolean isBlocking(Vector2D location) {
-        if(isBlockingMap.containsKey(location))
-            return isBlockingMap.get(location);
+    public GasSimulation.GasMetaData consume(GasSimulationNetwork network, Vector2D location, float volume) {
+        synchronized (cachedSimulation) {
+            GasSimulation sim = cachedSimulation.get(network);
 
-        IEntity[] entities = m_world.getEntities().search(IEntity.class, new RadialSearchFilter<>(new Vector2F(location), 0.4F));
+            if (sim == null)
+                return new GasSimulation.GasMetaData();
 
-        boolean blocking = false;
-        for(IEntity e : entities) {
-
-            if(e instanceof Door) {
-                blocking = e.getBody().isCollidable();
-                break;
-            } else if(e instanceof Infrastructure && e.getBody().isCollidable() && ((Infrastructure) e).isAirTight()) {
-                blocking = true;
-                break;
+            synchronized (queuedActions) {
+                final float volumeData = volume;
+                final Vector2D locationData = new Vector2D(location);
+                queuedActions.get(network).add((GasSimulation s) -> {
+                    s.consume(locationData, volumeData);
+                });
             }
+
+            return sim.consume(location, volume);
         }
-
-        isBlockingMap.put(location, blocking);
-
-        return blocking;
     }
 
-    public Map<GasType, Float> consume(Vector2D location, float volume) {
-        if(volume < 0 || Float.isNaN(volume))
-            throw new IllegalArgumentException();
+    public void produce(GasSimulationNetwork network, Vector2D location, GasSimulation.GasMetaData gas) {
+        synchronized (cachedSimulation) {
+            GasSimulation sim = cachedSimulation.get(network);
 
-        Map<GasType, Float> getRatio = new HashMap<>();
-        float total = 0;
+            if (sim == null)
+                return;
 
-        Map<GasType, Float> quantity = getQuantity(location);
-        for(Map.Entry<GasType, Float> e : quantity.entrySet()) {
-            total += e.getValue();
+            synchronized (queuedActions) {
+                final GasSimulation.GasMetaData gasData = new GasSimulation.GasMetaData(gas);
+                final Vector2D locationData = new Vector2D(location);
+                queuedActions.get(network).add((GasSimulation s) -> {
+                    s.produce(locationData, gasData);
+                });
+            }
+
+            sim.produce(location, gas);
         }
+    }
 
-        if(total <= 0)
-            return getRatio;
+    public GasSimulation.GasMetaData sample(GasSimulationNetwork network, Vector2D location) {
+        synchronized (cachedSimulation) {
+            GasSimulation sim = cachedSimulation.get(network);
 
-        for(GasType g : quantity.keySet()) {
-            getRatio.put(g, simulations.get(g).consume(location, volume * quantity.get(g) / total));
+            if (sim == null)
+                return new GasSimulation.GasMetaData();
+
+            return sim.sample(location);
         }
-
-        return getRatio;
     }
 
-    public void produce(Vector2D location, GasType type, float volume) {
-        if(volume < 0 || Float.isNaN(volume))
-            throw new IllegalArgumentException();
+    public float getVolume(GasSimulationNetwork network, Vector2D location) {
+        synchronized (cachedSimulation) {
+            GasSimulation sim = cachedSimulation.get(network);
 
-        if(!isAirTight(location))
-            return;
+            if (sim == null)
+                return GasSimulationNetwork.ENVIRONMENT_UNIT_VOLUME;
 
-        if(!simulations.containsKey(type))
-            simulations.put(type, new GasSimulation(this, type.getFlowRatio()));
-
-        simulations.get(type).produce(location, volume);
-    }
-
-    public void set(Vector2D location, GasType type, float volume) {
-        if(volume < 0 || Float.isNaN(volume))
-            throw new IllegalArgumentException();
-
-        if(!isAirTight(location))
-            return;
-
-        if(!simulations.containsKey(type))
-            simulations.put(type, new GasSimulation(this, type.getFlowRatio()));
-
-        simulations.get(type).set(location, volume);
-
-    }
-
-    public Map<GasType, Float> getQuantity(Vector2D location) {
-        Map<GasType, Float> quantity = new HashMap<>();
-
-        for(Map.Entry<GasType,GasSimulation> e : simulations.entrySet()) {
-            quantity.put(e.getKey(),e.getValue().getQuantity(location));
+            return sim.getVolume(location);
         }
-
-        return quantity;
-    }
-
-    public float getTotalQuantity(Vector2D location) {
-        float total = 0;
-        for(Map.Entry<GasType,Float> e : getQuantity(location).entrySet()) {
-            if(!e.getKey().isFakeGas())
-                total += e.getValue();
-        }
-
-        return total;
-    }
-
-
-    public float getTotalAreaQuantity(Vector2D location) {
-        float total = 0;
-
-        for(GasSimulation s : simulations.values())
-            total += s.getAreaQuantity(location);
-
-        return total;
     }
 
     @Override
@@ -185,13 +145,27 @@ public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReade
         }
 
         m_world = world;
+
+
+        for(GasSimulationNetwork n : GasSimulationNetwork.values()){
+            GasSimulation.WorldMapReader reader = n.createReader(m_world);
+            simulation.put(n, new GasSimulation(reader, m_defaultTemperature));
+            cachedSimulation.put(n, new GasSimulation(reader, m_defaultTemperature));
+            queuedActions.put(n, new ArrayList<>());
+        }
+
         m_world.getObservers().add(m_worldObserver);
+
+        if(!gasSimulationThread.isAlive())
+            gasSimulationThread.start();
+
     }
 
     @Override
     public void disassociate() {
         m_world.getObservers().remove(m_worldObserver);
         m_world = null;
+        gasSimulationThread.interrupt();
     }
 
     @Override
@@ -201,7 +175,7 @@ public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReade
 
     @Override
     public Map<String, Integer> getFlags() {
-        return m_flags;
+        return flags;
     }
 
     @Override
@@ -211,7 +185,7 @@ public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReade
 
     @Override
     public IImmutableSceneModel getModel() {
-        return new NullSceneModel();
+        return m_model;
     }
 
     @Override
@@ -236,13 +210,8 @@ public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReade
 
     @Override
     public void update(int delta) {
-        if(connectionMapDirty) {
-            isAirTightMap.clear();
-            isBlockingMap.clear();
-        }
-
-        for(GasSimulation g : simulations.values())
-            g.update(delta);
+        for(GasSimulation s : simulation.values())
+            s.syncGameLoop();
     }
 
     @Override
@@ -250,15 +219,150 @@ public class GasSimulationEntity implements IEntity, GasSimulation.WorldMapReade
 
     private class WorldObserver implements World.IWorldObserver {
         @Override
-        public void addedEntity(IEntity e) {
-            connectionMapDirty = true;
-        }
+        public void addedEntity(IEntity e) { }
 
         @Override
         public void removedEntity(Vector3F loc, IEntity e) {
-            connectionMapDirty = true;
-            for(GasSimulation g : simulations.values())
-                g.removedEntity(loc);
+            for(GasSimulation s : simulation.values())
+                s.removedEntity(loc);
         }
+    }
+
+    private class GasSimulationThread implements Runnable {
+        private final Logger logger = LoggerFactory.getLogger(GasSimulationThread.class);
+        @Override
+        public void run() {
+            try {
+                long lastUpdate = System.currentTimeMillis();
+                while (!Thread.interrupted()) {
+                    Thread.yield();
+                    long currentMillis = System.currentTimeMillis();
+                    int elapsed = (int) (currentMillis - lastUpdate);
+                    if (elapsed <= 50)
+                        continue;
+
+                    lastUpdate = currentMillis;
+
+                    int cycles = 0;
+                    synchronized (queuedActions) {
+                        for (Map.Entry<GasSimulationNetwork, List<ISimulationAction>> e : queuedActions.entrySet()) {
+                            GasSimulation sim = simulation.get(e.getKey());
+                            for (ISimulationAction a : e.getValue()) {
+                                a.perform(sim);
+                            }
+
+                            e.getValue().clear();
+                        }
+                    }
+
+                    for (Map.Entry<GasSimulationNetwork, GasSimulation> e : simulation.entrySet()) {
+                        cycles += e.getValue().update(elapsed);
+
+                        synchronized (cachedSimulation) {
+                            cachedSimulation.put(e.getKey(), new GasSimulation(e.getValue()));
+                        }
+                    }
+
+                    if(cycles > 0)
+                        System.out.println("Simulated: " + cycles);
+                }
+                logger.info("Gas Simulation Thread interrupted.");
+
+            } catch (Throwable e) {
+                logger.error("Exception occurred in Gas Simulation Thread.", e);
+            }
+        }
+    }
+
+    private class GasSimulationModel implements IImmutableSceneModel {
+        @Override
+        public ISceneModel clone() throws SceneModelNotCloneableException {
+            throw new SceneModelNotCloneableException();
+        }
+
+        @Override
+        public Collection<ISceneModelComponent> getComponents(Matrix3X3 projection) {
+            List<ISceneModelComponent> c = new ArrayList<>();
+            Vector3D translation = projection.dot(new Vector3F(1, 1, 0)).round();
+
+
+            HashMap<Vector2D, GasSimulation.GasMetaData> gas = null;
+            synchronized (cachedSimulation) {
+                gas = cachedSimulation.get(GasSimulationNetwork.Environment).getGasMap();
+            }
+
+            for(Map.Entry<Vector2D, GasSimulation.GasMetaData> v : gas.entrySet()) {
+                if (v.getValue().getTotalMols() < 0.00001f)
+                    continue;
+
+                Color color = v.getValue().getColor();
+
+                if (color != null) {
+                    Vector3F location = new Vector3F(v.getKey(), 0.1f);
+                    c.add(new GasModelComponent(location, translation.x, color));
+                }
+            }
+
+            return c;
+        }
+
+        @Override
+        public Rect3F getAABB() {
+            return new Rect3F(0, 0, 0, Float.MAX_VALUE / 2, Float.MAX_VALUE / 2, Float.MAX_VALUE / 2);
+        }
+
+        @Override
+        public Direction getDirection() {
+            return Direction.Zero;
+        }
+
+        @Override
+        public PhysicsBodyShape getBodyShape() {
+            return new PhysicsBodyShape(PhysicsBodyShape.PhysicsBodyShapeType.Box, getAABB());
+        }
+    }
+
+    private static class GasModelComponent implements IImmutableSceneModel.ISceneModelComponent {
+        private Vector3F location;
+        private float dimensions;
+        private Color color;
+        public GasModelComponent(Vector3F location, float dimensions, Color color) {
+            this.location = location;
+            this.dimensions = dimensions;
+            this.color = color;
+        }
+
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public boolean testPick(int x, int y, float scale) {
+            return false;
+        }
+
+        @Override
+        public Rect3F getBounds() {
+            return new Rect3F(0,0,0, dimensions, dimensions, 0.1f);
+        }
+
+        @Override
+        public Vector3F getOrigin() {
+            return this.location;//.add(new Vector3F(-0.5F, -0.5F, 0));
+        }
+
+        @Override
+        public void render(Graphics2D g, int x, int y, float scale) {
+            g.setColor(color);
+            float width = dimensions * scale;
+            float height = dimensions * scale;
+
+            g.fillRect(x - (int)(width / 2), y - (int)(height / 2), Math.round(width), Math.round(height));
+        }
+    }
+
+    private interface ISimulationAction {
+        void perform(GasSimulation s);
     }
 }
