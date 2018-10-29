@@ -1,5 +1,6 @@
 {
       "model" : "model.jmf",
 	  "blocking": false,
-	  "type": ["floor"]
+	  "type": ["floor"],
+	  "heatConductivity": 1.0
 }

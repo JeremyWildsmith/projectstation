@@ -1,3 +1,5 @@
 {
-      "model"  : "model.jmf"
+      "model"  : "model.jmf",
+	  "pressure": 150000,
+	  "volumePerSecond": 1000.0
 }

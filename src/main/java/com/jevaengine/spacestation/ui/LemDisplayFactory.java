@@ -18,9 +18,7 @@
  */
 package com.jevaengine.spacestation.ui;
 
-import com.jevaengine.spacestation.entity.ConsoleInterface;
-import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
-import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
+import com.jevaengine.spacestation.entity.power.ConsoleInterface;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.graphics.IRenderable;
 import io.github.jevaengine.joystick.InputKeyEvent;

@@ -48,7 +48,7 @@ public final class Infrastructure implements IEntity {
 	private final EntityBridge m_bridge;
 	private final boolean m_isStatic;
 	@Nullable
-	private ISceneModel m_model = new NullSceneModel();
+	private final ISceneModel m_model;
 	private IPhysicsBody m_body = new NullPhysicsBody();
 	@Nullable
 	private World m_world;
@@ -59,12 +59,14 @@ public final class Infrastructure implements IEntity {
 
 	private final Set<String> m_infrastructureType = new HashSet<>();
 
-	public Infrastructure(ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight) {
+	private final float m_heatConductivity;
+
+	public Infrastructure(ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, float heatConductivity) {
 		m_name = this.getClass().getName() + m_unnamedCount.getAndIncrement();
 		m_isAirTight = isAirTight;
 		m_infrastructureType.addAll(Arrays.asList(infrastructureTypes));
 		m_isStatic = isStatic;
-
+		m_heatConductivity = heatConductivity;
 		m_model = model;
 
 		if (!isTraversable)
@@ -73,6 +75,10 @@ public final class Infrastructure implements IEntity {
 			m_physicsBodyDescription = null;
 
 		m_bridge = new EntityBridge(this);
+	}
+
+	public float getHeatConductivity() {
+		return m_heatConductivity;
 	}
 
 	public boolean hasInfrastructureType(String type) {

@@ -91,9 +91,10 @@ import javax.swing.text.html.parser.Entity;
 
 public class Main implements WindowListener
 {
-	private static final int WINX = 1024;
-	private static final int WINY = 800;
+	private static final int WINX = 1280;
+	private static final int WINY = 1024;
 
+	private static boolean IS_FULL_SCREEN = false;
 	private int m_displayX = WINX;
 	private int m_displayY = WINY;
 
@@ -102,6 +103,7 @@ public class Main implements WindowListener
 	
 	public static void main(String[] args)
 	{
+		System.setProperty("sun.java2d.opengl", "true");
 		Main m = new Main();
 		m.entry(args);
 	}
@@ -140,13 +142,13 @@ public class Main implements WindowListener
 				public void run()
 				{
 					m_frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(""), new Point(), "trans"));
-					m_frame.setVisible(true);
 
 					m_frame.setIgnoreRepaint(true);
 					m_frame.setBackground(Color.black);
 					m_frame.setResizable(false);
 					m_frame.setTitle("Project Station");
 					m_frame.setSize(m_displayX, m_displayY);
+					//m_frame.setUndecorated(true);
 					m_frame.setVisible(true);
 					m_frame.addWindowListener(Main.this);
 					m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -154,8 +156,9 @@ public class Main implements WindowListener
 			});
 		} catch (RuntimeException | InterruptedException | InvocationTargetException ex)
 		{
-			JOptionPane.showMessageDialog(null, "An error occured initializing the game: " + ex);
-			return;
+			throw new RuntimeException(ex);
+			//JOptionPane.showMessageDialog(null, "An error occured initializing the game: " + ex);
+			//return;
 		}
 
 		Injector injector = Guice.createInjector(new EngineModule());
@@ -238,7 +241,7 @@ public class Main implements WindowListener
 			
 			bind(IAudioClipFactory.class).toInstance(new NullAudioClipFactory());
 			bind(IEffectMapFactory.class).to(TiledEffectMapFactory.class);
-			bind(IRenderer.class).toInstance(new FrameRenderer(m_frame, false, RenderFitMode.Stretch));
+			bind(IRenderer.class).toInstance(new FrameRenderer(m_frame, IS_FULL_SCREEN, RenderFitMode.Stretch));
 			bind(IParticleEmitterFactory.class).to(DefaultParticleEmitterFactory.class);
 			bind(ISpellFactory.class).to(UsrSpellFactory.class);
 			

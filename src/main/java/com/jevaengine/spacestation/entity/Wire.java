@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;

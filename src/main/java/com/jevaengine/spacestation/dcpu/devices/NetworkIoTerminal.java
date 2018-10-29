@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.dcpu.devices;
 
+import com.jevaengine.spacestation.entity.network.protocols.MeasurementProtocol;
 import de.codesourcery.jasm16.Register;
 import de.codesourcery.jasm16.WordAddress;
 import de.codesourcery.jasm16.emulator.ICPU;
@@ -69,9 +70,12 @@ public class NetworkIoTerminal implements IDcpuHardware {
 	}
 	
 	public void recievedMessage(NetworkPacket packet) {
-		if(m_attachedEmulator == null || m_recieveQueue.size() >= MAX_BACKLOG)
+		if(m_attachedEmulator == null)
 			return;
-		
+
+		if(m_recieveQueue.size() >= MAX_BACKLOG)
+			m_recieveQueue.poll();
+
 		m_recieveQueue.add(packet);
 		
 		if(m_interruptMessage != 0)
@@ -95,17 +99,31 @@ public class NetworkIoTerminal implements IDcpuHardware {
 	}
 
 	private void writePacketToMemory(NetworkPacket packet, int memoryAddress, IMemory memory) {
-		memory.write(new WordAddress(memoryAddress), packet.SenderAddress & 0xFFFF0000);
-		memory.write(new WordAddress(memoryAddress + 1), packet.SenderAddress & 0x0000FFFF);
+		memory.write(new WordAddress(memoryAddress + 0), packet.SenderAddress & 0x0000FFFF);
 
-		memory.write(new WordAddress(memoryAddress + 2), packet.RecieverAddress & 0xFFFF0000);
-		memory.write(new WordAddress(memoryAddress + 3), packet.RecieverAddress & 0x0000FFFF);
+		memory.write(new WordAddress(memoryAddress + 1), packet.RecieverAddress & 0x0000FFFF);
 
-		memory.write(new WordAddress(memoryAddress + 4), packet.Port & 0xFFFF);
+		memory.write(new WordAddress(memoryAddress + 2), packet.Port & 0xFFFF);
 
 		for (int i = 0; i < packet.data.length; i++) {
-			memory.write(new WordAddress(memoryAddress + 5 + i), packet.data[i]);
+			memory.write(new WordAddress(memoryAddress + 3 + i), packet.data[i]);
 		}
+	}
+
+	private NetworkPacket dequeueRecievedPacket(int port) {
+		NetworkPacket found = null;
+		for(NetworkPacket p : m_recieveQueue) {
+			if(p.Port == port)
+			{
+				found = p;
+				break;
+			}
+		}
+
+		if(found != null)
+			m_recieveQueue.remove(found);
+
+		return found;
 	}
 
 	@Override
@@ -124,9 +142,22 @@ public class NetworkIoTerminal implements IDcpuHardware {
 				transmitMessage(cpu.getRegisterValue(Register.X), memory);
 				break;
 			case 2:
-				m_interruptMessage = cpu.getRegisterValue(Register.X);
+				int dest = cpu.getRegisterValue(Register.Y);
+				int port = cpu.getRegisterValue(Register.X);
+
+				NetworkPacket p = dequeueRecievedPacket(port);
+				if(p != null) {
+					writePacketToMemory(p, dest, memory);
+					cpu.setRegisterValue(Register.A, 1);
+				} else {
+					cpu.setRegisterValue(Register.A, 0);
+				}
+				break;
 			case 3:
 				m_recieveQueue.clear();
+				break;
+			case 4:
+				m_interruptMessage = cpu.getRegisterValue(Register.X);
 				break;
 		}
 		

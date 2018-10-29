@@ -1,5 +1,6 @@
 {
       "model" : "model.jmf",
 	  "blocking": true,
-	  "type": ["girder"]
+	  "type": ["girder"],
+	  "heatConductivity": 1.0
 }

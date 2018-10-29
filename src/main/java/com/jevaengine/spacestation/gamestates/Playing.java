@@ -21,6 +21,8 @@ package com.jevaengine.spacestation.gamestates;
 import com.jevaengine.spacestation.IState;
 import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import com.jevaengine.spacestation.ui.GasDebugFactory;
 import com.jevaengine.spacestation.ui.HudFactory;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
 import com.jevaengine.spacestation.ui.InventoryHudFactory;
@@ -49,6 +51,8 @@ import org.slf4j.LoggerFactory;
  * @author Jeremy
  */
 public class Playing implements IState {
+
+	private static final float CAMERA_ZOOM = 1.5f;
 
 	private IStateContext m_context;
 	private final World m_world;
@@ -82,7 +86,7 @@ public class Playing implements IState {
 		try {
 			ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
 			FollowCamera camera = new FollowCamera(sceneBufferFactory);
-
+			camera.setZoom(CAMERA_ZOOM);
 
 			IRpgCharacter playerEntityBuffer = m_world.getEntities().getByName(IRpgCharacter.class, "player");
 
@@ -115,7 +119,22 @@ public class Playing implements IState {
 			m_inventoryHud.setVisible(false);
 			m_inventoryHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x + m_loadoutHud.getBounds().width + 10,
 												  m_loadoutHud.getLocation().y));
-			
+
+
+			//Gas Simulation Debug
+			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.Pipe);
+			debug.setMovable(true);
+			debug.setTopMost(true);
+			debug.setVisible(true);
+			debug.setLocation(new Vector2D(0, 0));
+
+			//Gas Simulation Debug
+			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.Environment);
+			debug.setMovable(true);
+			debug.setTopMost(true);
+			debug.setVisible(true);
+			debug.setLocation(new Vector2D(0, 0));
+
 			m_hud.getObservers().add(new HudFactory.IHudObserver() {
 				@Override
 				public void movementSpeedChanged(boolean isRunning) { }

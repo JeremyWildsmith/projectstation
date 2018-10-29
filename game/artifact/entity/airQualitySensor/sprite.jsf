@@ -1,0 +1,150 @@
+{
+  "scale": 1,
+  "animations": [
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 0
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "e_good"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 32
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "n_good"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 64
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "s_good"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 96
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "w_good"
+    },
+	{
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 128
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "e_poor"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 160
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "n_poor"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 192
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "s_poor"
+    },
+    {
+      "frames": [
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 224
+          },
+          "delay": 2000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        }
+      ],
+      "name": "w_poor"
+    }
+  ],
+  "texture": "texture.png"
+}

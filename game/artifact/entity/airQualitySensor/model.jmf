@@ -1,0 +1,177 @@
+{
+  "defaultAnimation": "good",
+  "animations": [
+    {
+      "name": "good",
+      "sets": [
+        {
+          "directions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n_good",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            0
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e_good",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            1
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "s_good",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            2
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "w_good",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "poor",
+      "sets": [
+        {
+          "directions": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n_poor",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            0
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e_poor",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            1
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "s_poor",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            2
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "w_poor",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

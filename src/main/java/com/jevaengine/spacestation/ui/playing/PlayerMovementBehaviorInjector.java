@@ -5,6 +5,10 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
+import com.jevaengine.spacestation.gas.GasSimulation;
+import com.jevaengine.spacestation.gas.GasSimulationEntity;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import com.jevaengine.spacestation.gas.GasType;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Vector2F;
@@ -19,6 +23,7 @@ import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.steering.DirectionSteeringBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 /**
  *
@@ -72,6 +77,13 @@ public class PlayerMovementBehaviorInjector extends WindowBehaviourInjector {
 					case KeyEvent.VK_LEFT:
 						vec.x = event.type == InputKeyEvent.KeyEventType.KeyDown ? -1 : 0;
 						break;
+					case KeyEvent.VK_U:
+					{
+						GasSimulationEntity e = m_character.getWorld().getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
+						HashMap<GasType, Float> gas = new HashMap<>();
+						gas.put(GasType.Water, 100f);
+						e.produce(GasSimulationNetwork.Environment, m_character.getBody().getLocation().getXy().round(), new GasSimulation.GasMetaData(gas, 0));
+					}
 				}
 
 				m_playerMovementDirector.setMovementDelta(vec);

@@ -2,5 +2,6 @@
       "model" : "model.jmf",
 	  "blocking": false,
 	  "type": ["plating", "steel"],
-	  "isAirTight": true
+	  "isAirTight": true,
+	  "heatConductivity": 1.0
 }

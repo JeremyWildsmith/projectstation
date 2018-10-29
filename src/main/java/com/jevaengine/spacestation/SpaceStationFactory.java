@@ -1,6 +1,5 @@
 package com.jevaengine.spacestation;
 
-import com.jevaengine.spacestation.gas.GasSimulation;
 import com.jevaengine.spacestation.gas.GasSimulationEntity;
 import io.github.jevaengine.IEngineThreadPool;
 import io.github.jevaengine.audio.IAudioClipFactory;
@@ -21,6 +20,8 @@ import javax.inject.Inject;
 import java.net.URI;
 
 public class SpaceStationFactory extends DefaultWorldFactory {
+    private static final float SPACE_TEMPERATURE = 200;
+
     @Inject
     public SpaceStationFactory(IEngineThreadPool threadPool, IEntityFactory entityFactory, IScriptBuilderFactory scriptFactory, IConfigurationFactory configurationFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, IPhysicsWorldFactory physicsWorldFactory, ISceneModelFactory sceneModelFactory, IWeatherFactory weatherFactory, IEffectMapFactory effectMapFactory) {
         super(threadPool, entityFactory, scriptFactory, configurationFactory, spriteFactory, audioClipFactory, physicsWorldFactory, sceneModelFactory, weatherFactory, effectMapFactory);
@@ -40,7 +41,7 @@ public class SpaceStationFactory extends DefaultWorldFactory {
     @Override
     protected World createBaseWorld(float friction, float metersPerUnit, float logicPerUnit, int worldWidthTiles, int worldHeightTiles, IWeatherFactory.IWeather weather, @Nullable URI worldScript) {
         World world = super.createBaseWorld(friction, metersPerUnit, logicPerUnit, worldWidthTiles, worldHeightTiles, weather, worldScript);
-        world.addEntity(new GasSimulationEntity());
+        world.addEntity(new GasSimulationEntity(SPACE_TEMPERATURE));
         return world;
     }
 }

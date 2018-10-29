@@ -1,5 +1,6 @@
 {
       "model" : "model.jmf",
 	  "blocking": false,
-	  "type": ["lattice"]
+	  "type": ["lattice"],
+	  "heatConductivity": 1.0
 }

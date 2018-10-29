@@ -5,11 +5,13 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.atmos.*;
+import com.jevaengine.spacestation.entity.network.NetworkAirQualitySensor;
+import com.jevaengine.spacestation.entity.network.NetworkInterfaceController;
+import com.jevaengine.spacestation.entity.network.NetworkValve;
+import com.jevaengine.spacestation.entity.network.NetworkWire;
+import com.jevaengine.spacestation.entity.power.*;
 import com.jevaengine.spacestation.gas.GasType;
-import com.jevaengine.spacestation.liquid.GasLiquid;
-import com.jevaengine.spacestation.liquid.ILiquid;
-import com.jevaengine.spacestation.liquid.Liquid;
-import com.jevaengine.spacestation.liquid.Liquid.NoSuchLiquidException;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.IAssetStreamFactory.AssetStreamConstructionException;
 import io.github.jevaengine.config.IConfigurationFactory;
@@ -191,7 +193,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		NetworkWire(NetworkWire.class, "networkWire", new EntityBuilder() {
+		NetworkWire(com.jevaengine.spacestation.entity.network.NetworkWire.class, "networkWire", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -272,7 +274,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		NetworkInterfaceController(NetworkInterfaceController.class, "networkInterfaceController", new EntityBuilder() {
+		NetworkInterfaceController(com.jevaengine.spacestation.entity.network.NetworkInterfaceController.class, "networkInterfaceController", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -285,60 +287,41 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		ProgrammableIntervalTimer(ProgrammableIntervalTimer.class, "programmableIntervalTimer", new EntityBuilder() {
-			@Override
-			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
-				try {
-					ProgrammableIntervalTimerDeclaration decl = auxConfig.getValue(ProgrammableIntervalTimerDeclaration.class);
-					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
-
-					return new ProgrammableIntervalTimer(instanceName, model);
-				} catch (ValueSerializationException | SceneModelConstructionException e) {
-					throw new IEntityFactory.EntityConstructionException(e);
-				}
-			}
-		}),
-		LiquidPipe(LiquidPipe.class, "liquidPipe", new EntityBuilder() {
+		LiquidPipe(com.jevaengine.spacestation.entity.atmos.LiquidPipe.class, "liquidPipe", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
 					LiquidPipeDeclaration decl = auxConfig.getValue(LiquidPipeDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new LiquidPipe(instanceName, model, decl.capacity);
+					return new LiquidPipe(instanceName, model);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
 		}),
-		LiquidTank(LiquidTank.class, "liquidTank", new EntityBuilder() {
+		LiquidTank(com.jevaengine.spacestation.entity.atmos.LiquidTank.class, "liquidTank", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
 					LiquidTankDeclaration decl = auxConfig.getValue(LiquidTankDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					LiquidTank tank = new LiquidTank(instanceName, model, decl.capacity);
+					LiquidTank tank = new LiquidTank(instanceName, model);
 
-					if (decl.defaultLiquid != null) {
-						ILiquid l = null;
-						if(decl.isGas)
-							l = new GasLiquid(GasType.fromName(decl.defaultLiquid));
-						else
-							l = Liquid.fromName(decl.defaultLiquid);
+					if (decl.gas != null) {
+						GasType t = GasType.fromName(decl.gas);
 
-						Map<ILiquid, Float> add = new HashMap<>();
-						add.put(l, decl.defaultVolume);
-						tank.add(new ArrayList<ILiquidCarrier>(), add);
+						tank.add(t, decl.mols);
 					}
 
 					return tank;
-				} catch (ValueSerializationException | SceneModelConstructionException | NoSuchLiquidException e) {
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
 		}),
-		ElectricMotor(ElectricMotor.class, "electricMotor", new EntityBuilder() {
+		ElectricMotor(com.jevaengine.spacestation.entity.power.ElectricMotor.class, "electricMotor", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -351,7 +334,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		FuelChamber(FuelChamber.class, "fuelChamber", new EntityBuilder() {
+		FuelChamber(com.jevaengine.spacestation.entity.power.FuelChamber.class, "fuelChamber", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -364,7 +347,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		GasEngine(GasEngine.class, "gasEngine", new EntityBuilder() {
+		GasEngine(com.jevaengine.spacestation.entity.power.GasEngine.class, "gasEngine", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -403,7 +386,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		Capacitor(Capacitor.class, "capacitor", new EntityBuilder() {
+		Capacitor(com.jevaengine.spacestation.entity.power.Capacitor.class, "capacitor", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -416,7 +399,7 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		Alternator(Alternator.class, "alternator", new EntityBuilder() {
+		Alternator(com.jevaengine.spacestation.entity.power.Alternator.class, "alternator", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -436,13 +419,13 @@ public class StationEntityFactory implements IEntityFactory {
 					InfrastructureDeclaration decl = auxConfig.getValue(InfrastructureDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new Infrastructure(model, true, !decl.blocking, decl.type, decl.isAirTight);
+					return new Infrastructure(model, true, !decl.blocking, decl.type, decl.isAirTight, decl.heatConductivity);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
 		}),
-		GasVent(GasVent.class, "gasVent", new EntityBuilder() {
+		GasVent(com.jevaengine.spacestation.entity.atmos.GasVent.class, "gasVent", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
@@ -455,14 +438,53 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
-		LiquidPump(LiquidPump.class, "liquidPump", new EntityBuilder() {
+		LiquidPump(com.jevaengine.spacestation.entity.atmos.LiquidPump.class, "liquidPump", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
 					LiquidPumpDeclaration decl = auxConfig.getValue(LiquidPumpDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new LiquidPump(instanceName, model);
+					return new LiquidPump(instanceName, model, decl.pressure, decl.volumePerSecond);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		NetworkAirQualitySensor(com.jevaengine.spacestation.entity.network.NetworkAirQualitySensor.class, "networkAirQualitySensor", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					NetworkAirQualitySensorDeclaration decl = auxConfig.getValue(NetworkAirQualitySensorDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new NetworkAirQualitySensor(instanceName, model, decl.ipAddress, decl.invert);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		NetworkValve(com.jevaengine.spacestation.entity.network.NetworkValve.class, "networkValve", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					NetworkValveDeclaration decl = auxConfig.getValue(NetworkValveDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new NetworkValve(instanceName, model, decl.ipAddress, decl.isOpen);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		PressureCollapseValve(PressureCollapseValve.class, "pressureCollapseValve", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					PressureCollapseValveDeclaration decl = auxConfig.getValue(PressureCollapseValveDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new PressureCollapseValve(instanceName, model, decl.collapsePressure);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -543,13 +565,15 @@ public class StationEntityFactory implements IEntityFactory {
 		public String[] type;
 		public boolean blocking = false;
 		public boolean isAirTight = false;
+		public float heatConductivity = 0;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
 			target.addChild("type").setValue(type);
             target.addChild("blocking").setValue(blocking);
-            target.addChild("isAirTight").setValue(isAirTight);
+			target.addChild("isAirTight").setValue(isAirTight);
+			target.addChild("heatConductivity").setValue(heatConductivity);
 		}
 
 		@Override
@@ -557,7 +581,8 @@ public class StationEntityFactory implements IEntityFactory {
 			try {
 				model = source.getChild("model").getValue(String.class);
 				type = source.getChild("type").getValues(String[].class);
-                blocking = source.getChild("blocking").getValue(Boolean.class);
+				blocking = source.getChild("blocking").getValue(Boolean.class);
+				heatConductivity = source.getChild("heatConductivity").getValue(Double.class).floatValue();
 
                 if(source.childExists("isAirTight"))
                     isAirTight = source.getChild("isAirTight").getValue(Boolean.class);
@@ -626,16 +651,96 @@ public class StationEntityFactory implements IEntityFactory {
 		}
 	}
 
-	public static final class NetworkInterfaceControllerDeclaration implements ISerializable {
+	public static final class NetworkAirQualitySensorDeclaration implements ISerializable {
 
-		public String nodeName;
+		public String model;
+		public int ipAddress = 0;
+		public boolean invert = false;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("ipAddress").setValue(ipAddress);
+			target.addChild("invert").setValue(invert);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+
+				if(source.childExists("ipAddress"))
+					ipAddress = source.getChild("ipAddress").getValue(Integer.class);
+
+				if(source.childExists("invert"))
+					invert = source.getChild("invert").getValue(Boolean.class);
+
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+
+	public static final class NetworkValveDeclaration implements ISerializable {
+
+		public String model;
+		public int ipAddress = 0;
+		public boolean isOpen = true;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("ipAddress").setValue(ipAddress);
+			target.addChild("isOpen").setValue(isOpen);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+
+				if(source.childExists("ipAddress"))
+					ipAddress = source.getChild("ipAddress").getValue(Integer.class);
+
+				if(source.childExists("isOpen"))
+					isOpen = source.getChild("isOpen").getValue(Boolean.class);
+
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+	public static final class PressureCollapseValveDeclaration implements ISerializable {
+		public String model;
+		public float collapsePressure = 0;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("collapsePressure").setValue(collapsePressure);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				collapsePressure = source.getChild("collapsePressure").getValue(Double.class).floatValue();
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+
+	public static final class NetworkInterfaceControllerDeclaration implements ISerializable {
 		public String model;
 		public int ipAddress = 0;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
-			target.addChild("nodeName").setValue(nodeName);
 			target.addChild("ipAddress").setValue(ipAddress);
 		}
 
@@ -643,26 +748,9 @@ public class StationEntityFactory implements IEntityFactory {
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
-				nodeName = source.getChild("nodeName").getValue(String.class);
-				ipAddress = source.getChild("ipAddress").getValue(Integer.class);
-			} catch (NoSuchChildVariableException ex) {
-				throw new ValueSerializationException(ex);
-			}
-		}
-	}
 
-	public static final class ProgrammableIntervalTimerDeclaration implements ISerializable {
-		public String model;
-
-		@Override
-		public void serialize(IVariable target) throws ValueSerializationException {
-			target.addChild("model").setValue(model);
-		}
-
-		@Override
-		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
-			try {
-				model = source.getChild("model").getValue(String.class);
+				if(source.childExists("ipAddress"))
+					ipAddress = source.getChild("ipAddress").getValue(Integer.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -733,16 +821,22 @@ public class StationEntityFactory implements IEntityFactory {
 	public static final class LiquidPumpDeclaration implements ISerializable {
 
 		public String model;
+		public float pressure;
+		public float volumePerSecond;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
+			target.addChild("pressure").setValue(pressure);
+			target.addChild("volumePerSecond").setValue(volumePerSecond);
 		}
 
 		@Override
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+				pressure = source.getChild("pressure").getValue(Double.class).floatValue();
+				volumePerSecond = source.getChild("volumePerSecond").getValue(Double.class).floatValue();
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -752,19 +846,16 @@ public class StationEntityFactory implements IEntityFactory {
 	public static final class LiquidPipeDeclaration implements ISerializable {
 
 		public String model;
-		public float capacity;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
-			target.addChild("capacity").setValue(capacity);
 		}
 
 		@Override
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
-				capacity = source.getChild("capacity").getValue(Double.class).floatValue();
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -774,33 +865,25 @@ public class StationEntityFactory implements IEntityFactory {
 	public static final class LiquidTankDeclaration implements ISerializable {
 
 		public String model;
-		public float capacity;
-		public String defaultLiquid;
-		public float defaultVolume;
-		public boolean isGas = false;
+		public String gas;
+		public float mols;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
-			target.addChild("capacity").setValue(capacity);
-			target.addChild("defaultLiquid").setValue(defaultLiquid);
-			target.addChild("defaultVolume").setValue(defaultVolume);
-			target.addChild("isGas").setValue(isGas);
+			target.addChild("gas").setValue(gas);
+			target.addChild("mols").setValue(mols);
 		}
 
 		@Override
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
-				capacity = source.getChild("capacity").getValue(Double.class).floatValue();
 
-				if (source.childExists("defaultLiquid")) {
-					defaultLiquid = source.getChild("defaultLiquid").getValue(String.class);
-					defaultVolume = source.getChild("defaultVolume").getValue(Double.class).floatValue();
+				if (source.childExists("gas")) {
+					gas = source.getChild("gas").getValue(String.class);
+					mols = source.getChild("mols").getValue(Double.class).floatValue();
 				}
-
-				if(source.childExists("isGas"))
-					isGas = source.getChild("isGas").getValue(Boolean.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

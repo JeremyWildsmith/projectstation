@@ -1,4 +1,4 @@
 {
       "model" : "model.jmf",
-      "firmware" : "bios.bin"
+      "firmware" : "image.bin"
 }

@@ -1,7 +1,5 @@
 {
       "model"  : "model.jmf",
-	  "defaultLiquid": "O",
-	  "isGas": true,
-	  "defaultVolume": 1000,
-	  "capacity": 1000
+	  "gas": "O",
+	  "mols": 999999999
 }

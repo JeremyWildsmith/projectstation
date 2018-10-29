@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;

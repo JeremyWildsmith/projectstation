@@ -1,6 +1,5 @@
 package com.jevaengine.spacestation.entity.character;
 
-import com.jevaengine.spacestation.gas.GasSimulation;
 import com.jevaengine.spacestation.gas.GasSimulationEntity;
 import com.jevaengine.spacestation.gas.GasType;
 import io.github.jevaengine.math.Vector2D;
@@ -12,6 +11,7 @@ import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -70,7 +70,7 @@ public class SpaceCharacterStatusResolverFactory implements IStatusResolverFacto
                 Vector2D location = host.getBody().getLocation().getXy().round();
 
                 System.out.println(location.x + ", " + location.y + ": ");
-                Map<GasType, Float> quantity = sim.getQuantity(location);
+                Map<GasType, Float> quantity = new HashMap<>();//sim.getQuantity(location);
                 for(Map.Entry<GasType, Float> e : quantity.entrySet())
                     System.out.println("\t" + e.getKey().name() + ", " + e.getValue());
             }

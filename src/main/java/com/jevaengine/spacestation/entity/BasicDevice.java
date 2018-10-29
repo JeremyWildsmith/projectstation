@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.World;
@@ -17,7 +18,6 @@ import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,15 +104,16 @@ public abstract class BasicDevice implements IEntity, IDevice {
 			return false;
 		}
 
+		m_observers.raise(IDeviceConnectionListener.class).connectionsChanged();
 		connectionChanged();
 		return true;
 	}
 
-	protected final List<IDevice> getConnections() {
+	public final List<IDevice> getConnections() {
 		return new ArrayList<>(m_connections);
 	}
 
-	protected final <T extends IDevice> List<T> getConnections(Class<T> device) {
+	public final <T extends IDevice> List<T> getConnections(Class<T> device) {
 		List<T> devices = new ArrayList<>();
 
 		for (IDevice d : m_connections) {
@@ -198,5 +199,9 @@ public abstract class BasicDevice implements IEntity, IDevice {
 		if (m_world != null) {
 			m_world.removeEntity(this);
 		}
+	}
+
+	public interface IDeviceConnectionListener {
+		void connectionsChanged();
 	}
 }
