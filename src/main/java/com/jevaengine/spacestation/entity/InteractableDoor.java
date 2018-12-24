@@ -15,8 +15,8 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
  */
 public class InteractableDoor extends Door implements IInteractableEntity {
 
-	public InteractableDoor(IAnimationSceneModel model, String name, boolean isOpen) {
-		super(model, name, isOpen);
+	public InteractableDoor(IAnimationSceneModel model, String name, boolean isOpen, boolean isLocked) {
+		super(model, name, isOpen, isLocked);
 	}
 
 	@Override

@@ -65,18 +65,8 @@ public abstract class Wire extends WiredDevice {
 	}
 
 	@Override
-	public boolean isStatic() {
-		return false;
-	}
-
-	@Override
 	public IImmutableSceneModel getModel() {
 		return m_model;
-	}
-
-	@Override
-	public void update(int delta) {
-	
 	}
 
 	@Override

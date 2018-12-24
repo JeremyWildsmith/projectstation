@@ -50,28 +50,6 @@ public class GasSimulationEntity implements IEntity {
         gasSimulationThread.setPriority(Thread.MIN_PRIORITY);
     }
 
-    public void addLink(Vector2D loc, GasSimulationNetwork a, GasSimulationNetwork b) {
-        synchronized (cachedSimulation) {
-            GasSimulation simA = cachedSimulation.get(a);
-            GasSimulation simB = cachedSimulation.get(b);
-
-            simA.addLink(loc, simB);
-            simB.addLink(loc, simA);
-
-            synchronized (queuedActions) {
-                queuedActions.get(a).add((GasSimulation s) -> {
-                    GasSimulation realSimB = simulation.get(b);
-                    s.addLink(new Vector2D(loc), realSimB);
-                });
-
-                queuedActions.get(b).add((GasSimulation s) -> {
-                    GasSimulation realSimA = simulation.get(a);
-                    s.addLink(new Vector2D(loc), realSimA);
-                });
-            }
-        }
-    }
-
     public GasSimulation.GasMetaData consume(GasSimulationNetwork network, Vector2D location, float volume) {
         synchronized (cachedSimulation) {
             GasSimulation sim = cachedSimulation.get(network);
@@ -211,7 +189,7 @@ public class GasSimulationEntity implements IEntity {
     @Override
     public void update(int delta) {
         for(GasSimulation s : simulation.values())
-            s.syncGameLoop();
+            s.syncGameLoop(simulation);
     }
 
     @Override
@@ -262,9 +240,6 @@ public class GasSimulationEntity implements IEntity {
                             cachedSimulation.put(e.getKey(), new GasSimulation(e.getValue()));
                         }
                     }
-
-                    if(cycles > 0)
-                        System.out.println("Simulated: " + cycles);
                 }
                 logger.info("Gas Simulation Thread interrupted.");
 
@@ -275,6 +250,8 @@ public class GasSimulationEntity implements IEntity {
     }
 
     private class GasSimulationModel implements IImmutableSceneModel {
+        private static final float CEIL_DEPTH = 2;
+
         @Override
         public ISceneModel clone() throws SceneModelNotCloneableException {
             throw new SceneModelNotCloneableException();
@@ -285,20 +262,23 @@ public class GasSimulationEntity implements IEntity {
             List<ISceneModelComponent> c = new ArrayList<>();
             Vector3D translation = projection.dot(new Vector3F(1, 1, 0)).round();
 
-
             HashMap<Vector2D, GasSimulation.GasMetaData> gas = null;
+            GasSimulation.WorldMapReader reader = null;
             synchronized (cachedSimulation) {
                 gas = cachedSimulation.get(GasSimulationNetwork.Environment).getGasMap();
+                reader = cachedSimulation.get(GasSimulationNetwork.Environment).getReader();
             }
 
             for(Map.Entry<Vector2D, GasSimulation.GasMetaData> v : gas.entrySet()) {
                 if (v.getValue().getTotalMols() < 0.00001f)
                     continue;
 
-                Color color = v.getValue().getColor();
+                float volume = reader.getVolume(v.getKey());
+                Color color = v.getValue().getColor(volume);
 
                 if (color != null) {
-                    Vector3F location = new Vector3F(v.getKey(), 0.1f);
+                    float depth = CEIL_DEPTH * v.getValue().getPercentColour(volume);
+                    Vector3F location = new Vector3F(v.getKey(), 0.1f + depth);
                     c.add(new GasModelComponent(location, translation.x, color));
                 }
             }

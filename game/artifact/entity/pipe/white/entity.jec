@@ -1,0 +1,5 @@
+{
+      "model" : "model.jmf",
+      "capacity": 1.0,
+	  "network": "PipeD"
+}

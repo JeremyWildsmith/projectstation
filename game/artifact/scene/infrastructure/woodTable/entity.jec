@@ -1,0 +1,7 @@
+{
+      "model" : "model.jmf",
+	  "blocking": true,
+	  "type": ["wall"],
+	  "isAirTight": true,
+	  "heatConductivity": 1.0
+}

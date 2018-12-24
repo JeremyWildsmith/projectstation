@@ -6,6 +6,11 @@
 package com.jevaengine.spacestation.entity.atmos;
 
 import com.jevaengine.spacestation.entity.power.IDevice;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import io.github.jevaengine.math.Vector2D;
+
+import java.util.Map;
+
 /**
  *
  * @author Jeremy
@@ -13,8 +18,13 @@ import com.jevaengine.spacestation.entity.power.IDevice;
 public interface ILiquidCarrier extends IDevice {
 	boolean isFreeFlow();
 	float getVolume();
+	GasSimulationNetwork getNetwork();
+
+	Map<Vector2D, GasSimulationNetwork> getLinks();
 
 	interface ILiquidCarrierObserver {
 		void freeFlowChanged();
+		void networkChanged();
+		void linksChanged();
 	}
 }

@@ -1,0 +1,54 @@
+Colour Coding Scheme:
+	Power:
+		Red   - Local power network, driven by power generation device (Generator, Solor panels)
+		Green - Global Power Network, driven by capacitors
+		Blue  - Local Power Network, driven by global power network
+	
+	Network:
+		White  - Primary Network, connects to global network
+
+Engineering Wing (ew) Schematics:
+	Network Devices:
+
+		GL - Station Control Centre NIC0
+		
+		GL - Station Control Centre NIC1
+		
+		GL - Station Control Centre NIC2
+		
+		EW - Atmospherics Positive Flow Network Valve
+			ID: NV01
+			IP Address: 1.0.0.1
+
+		EW - Common Area Air Quality Sensor
+			ID: SN01
+			IP Address: 15.0.0.1
+			
+		EW - Control System NIC
+			IP Address: 0.0.0.1
+			
+		EW - Power Supply Network Control Switch
+			ID: NS01
+			IP Address: 1.0.0.2
+			
+		EW - Power Flow Sensor
+			ID: SN02
+			IP Address: 15.0.0.2
+		
+	Control System Networks:
+		EW - Control System
+			atm	- EW Atmospherics
+				pri(mary) - SN01, NV01
+			
+			pwr	- EW Power
+				pri(mary) - NS01, NONE
+			
+			Config:
+			select atmos
+			anet atm 0.0.0.0
+			anode atm src 15.0.0.1 1.0.0.1
+			anet pwr 0.0.0.0
+			anode pwr src 15.0.0.2 0.0.0.0
+			ping
+			stat atm
+			stat pwr

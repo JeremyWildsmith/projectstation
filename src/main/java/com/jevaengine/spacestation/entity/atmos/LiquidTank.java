@@ -34,9 +34,28 @@ public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 	private World m_world = null;
 	private GasSimulationEntity m_sim = null;
 
+	private final GasSimulationNetwork m_simNetwork = GasSimulationNetwork.PipeA;
+
 	public LiquidTank(String name, IImmutableSceneModel model) {
 		super(name, false);
 		m_model = model;
+	}
+
+	@Override
+	public GasSimulationNetwork getNetwork() {
+		return m_simNetwork;
+	}
+
+	@Override
+	public Map<Vector2D, GasSimulationNetwork> getLinks() {
+		HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+
+		ILiquidCarrier connection = getConnection();
+
+		if(connection != null && connection.getNetwork() != this.m_simNetwork)
+			links.put(connection.getBody().getLocation().getXy().round(), connection.getNetwork());
+
+		return links;
 	}
 
 	public void add(GasType t, float amount) {
@@ -67,7 +86,9 @@ public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 	}
 
 	@Override
-	protected void connectionChanged() { }
+	protected void connectionChanged() {
+		m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
+	}
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {
@@ -99,7 +120,7 @@ public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 
 		GasSimulation.GasMetaData data = new GasSimulation.GasMetaData(m_pendingGas, 0);
 		Vector2D loc = this.getBody().getLocation().getXy().round();
-		m_sim.produce(GasSimulationNetwork.Pipe, loc, data);
+		m_sim.produce(m_simNetwork, loc, data);
 		m_pendingGas.clear();
 	}
 }

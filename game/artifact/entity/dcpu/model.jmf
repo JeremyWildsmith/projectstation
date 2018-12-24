@@ -64,7 +64,7 @@
       ]
     },
     {
-      "name": "crash",
+      "name": "inactive",
       "sets": [
         {
           "directions": [
@@ -80,7 +80,7 @@
           "components": [
             {
               "sprite": "sprite.jsf",
-              "animation": "crash",
+              "animation": "inactive",
               "bounds": {
                 "x": -0.5,
                 "y": -0.5,

@@ -6,6 +6,25 @@ public class MeasurementProtocol {
     private final static int PROTOCOL_HEADER = 0x4D53; //MS
     private final static int PORT = 60;
 
+    public static int[] getParts(float f) {
+        String v = String.valueOf(f);
+        String parts[] = v.split("\\.");
+
+        int left = Integer.valueOf(parts[0]);
+        int right = 0;
+
+        if(parts.length > 1) {
+            if(parts[1].length() > 5) {
+                parts[1] = parts[1].substring(0, 5);
+            }
+            right = Integer.valueOf(parts[1]);
+        }
+
+        left = Math.min(0xFFFF, left);
+
+        return new int[] {left, right};
+    }
+
     public static MeasurementSignal decode(NetworkPacket p) {
         if(p.data[0] != PROTOCOL_HEADER || p.Port != PORT)
             return null;

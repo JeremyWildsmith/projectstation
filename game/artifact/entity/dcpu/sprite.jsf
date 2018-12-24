@@ -17,7 +17,7 @@
           }
         }
       ],
-      "name": "crash"
+      "name": "inactive"
     },
     {
       "frames": [
@@ -46,7 +46,20 @@
             "y": 0,
             "x": 64
           },
-          "delay": 2000,
+          "delay": 1000,
+          "anchor": {
+            "y": 16,
+            "x": 16
+          }
+        },
+        {
+          "region": {
+            "height": 32,
+            "width": 32,
+            "y": 0,
+            "x": 96
+          },
+          "delay": 1000,
           "anchor": {
             "y": 16,
             "x": 16

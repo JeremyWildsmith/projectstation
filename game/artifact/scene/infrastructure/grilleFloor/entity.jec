@@ -1,0 +1,6 @@
+{
+      "model" : "model.jmf",
+	  "blocking": false,
+	  "type": ["grille"],
+	  "heatConductivity": 1.0
+}

@@ -1,4 +1,5 @@
 {
       "model" : "model.jmf",
-      "capacity": 1.0
+      "capacity": 1.0,
+	  "network": "PipeA"
 }

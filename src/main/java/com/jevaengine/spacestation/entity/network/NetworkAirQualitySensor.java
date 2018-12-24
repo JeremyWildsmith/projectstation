@@ -103,25 +103,6 @@ public class NetworkAirQualitySensor extends NetworkDevice {
         transmitMessage(packet);
     }
 
-    private int[] getParts(float f) {
-        String v = String.valueOf(f);
-        String parts[] = v.split("\\.");
-
-        int left = Integer.valueOf(parts[0]);
-        int right = 0;
-
-        if(parts.length > 1) {
-            if(parts[1].length() > 5) {
-                parts[1] = parts[1].substring(0, 5);
-            }
-            right = Integer.valueOf(parts[1]);
-        }
-
-        left = Math.min(0xFFFF, left);
-
-        return new int[] {left, right};
-    }
-
     private void transmitMeasurementSignal(int reciever) {
         if(m_simulation == null)
             return;
@@ -130,8 +111,8 @@ public class NetworkAirQualitySensor extends NetworkDevice {
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, testLocation);
         GasSimulation.GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, testLocation);
 
-        int[] percentOxygen = getParts(sample.getPercentContent(GasType.Oxygen) * 100);
-        int[] pressure = getParts(sample.calculatePressure(sampleVolume) / 1000.0f);
+        int[] percentOxygen = MeasurementProtocol.getParts(sample.getPercentContent(GasType.Oxygen) * 100);
+        int[] pressure = MeasurementProtocol.getParts(sample.calculatePressure(sampleVolume) / 1000.0f);
 
         NetworkPacket packet = MeasurementProtocol.encode(new MeasurementProtocol.MeasurementSignal("kPa", pressure[0], pressure[1]));
         packet.RecieverAddress = reciever;

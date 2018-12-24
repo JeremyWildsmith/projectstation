@@ -7,6 +7,8 @@ package com.jevaengine.spacestation.entity.atmos;
 
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
@@ -31,9 +33,29 @@ public class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	private final IAnimationSceneModel m_model;
 
-	public LiquidPipe(String name, IAnimationSceneModel model) {
+	private final GasSimulationNetwork m_simNetwork;
+
+	public LiquidPipe(String name, IAnimationSceneModel model, GasSimulationNetwork simNetwork) {
 		super(name, true);
 		m_model = model;
+		m_simNetwork = simNetwork;
+	}
+
+	@Override
+	public GasSimulationNetwork getNetwork() {
+		return m_simNetwork;
+	}
+
+	@Override
+	public Map<Vector2D, GasSimulationNetwork> getLinks() {
+		HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+			if(c.getNetwork() != this.getNetwork() && c.isFreeFlow()) {
+				links.put(c.getBody().getLocation().getXy().round(), c.getNetwork());
+			}
+		}
+
+		return links;
 	}
 
 	private void updateModel() {
@@ -90,6 +112,7 @@ public class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 
 	@Override
 	protected void connectionChanged() {
+		m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
 		updateModel();
 	}
 
@@ -104,6 +127,9 @@ public class LiquidPipe extends WiredDevice implements ILiquidCarrier {
 		if(d.getClass().equals(LiquidPipe.class)) {
 			boolean sameDepth = Math.abs(this.getBody().getLocation().z - d.getBody().getLocation().z) < Vector2F.TOLERANCE;
 			if(!sameDepth)
+				return false;
+
+			if(((ILiquidCarrier) d).getNetwork() != this.getNetwork())
 				return false;
 		}
 		

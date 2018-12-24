@@ -5,6 +5,7 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.network.NetworkToggleControl;
 import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;

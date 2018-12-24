@@ -5,8 +5,12 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.entity.network.NetworkToggleControl;
+import com.jevaengine.spacestation.entity.network.NetworkWire;
 import com.jevaengine.spacestation.entity.power.IDevice;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
+import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.IPhysicsBodyOrientationObserver;
 import io.github.jevaengine.world.search.ISearchFilter;

@@ -3,9 +3,6 @@ package com.jevaengine.spacestation.gas;
 import io.github.jevaengine.math.Vector2D;
 
 public interface IGasSimulation {
-    void addLink(Vector2D location, GasSimulation sim);
-
-    void clearLinks();
 
     float getVolume(Vector2D location);
 

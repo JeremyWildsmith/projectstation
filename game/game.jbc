@@ -2,5 +2,25 @@
   "projection": [32.0, 0.0, 0.0,
                 0.0, 32.0, 0.0,
                 0.0, 0.0, 1.0
-  ]
+  ],
+  "layers": {
+	"Framework": -2.0,
+	"Infrastructure": -1.0,
+	"PWR-Red": -0.900,
+	"PWR-Green": -0.8,
+	"PWR-Blue": -0.7,
+	"NET-Black": -0.6,
+	"NET-Grey": -0.5,
+	"NET-White": -0.4,
+	"PIP-Red Wire": -0.3,
+	"PIP-Grn Wire": -0.2,
+	"PIP-Blu Wire": -0.1,
+	"PIP-White Wire": -0.05,
+	"Under Entity": -0.08,
+	"Floor": 0.0,
+	"Floor Decal": 0.1,
+	"Wall / Entity": 1.0,
+	"Wall Mount": 1.1,
+	"Player": 2.0
+  }
 }

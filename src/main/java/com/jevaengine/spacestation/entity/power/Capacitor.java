@@ -26,7 +26,7 @@ public class Capacitor extends WiredDevice implements IPowerDevice {
 	public Capacitor(String name, IImmutableSceneModel model, int energyJoules) {
 		super(name, false);
 		m_model = model;
-		m_storedJoules = Math.min(MAX_CAPACITY, energyJoules);
+		m_storedJoules = MAX_CAPACITY;//Math.min(MAX_CAPACITY, energyJoules);
 	}
 	
 	@Override
@@ -50,7 +50,10 @@ public class Capacitor extends WiredDevice implements IPowerDevice {
 		requested.add(this);
 
 		final int maxIntake = Math.min(MAX_INPUT, MAX_CAPACITY - m_storedJoules);
-		
+
+		if(maxIntake <= 0)
+			return;
+
 		for(IPowerDevice d : getConnections(IPowerDevice.class)) {
 			consumed += d.drawEnergy(requested, maxIntake - consumed);
 		}

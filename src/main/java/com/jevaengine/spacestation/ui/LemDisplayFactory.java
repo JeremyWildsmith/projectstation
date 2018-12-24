@@ -18,7 +18,7 @@
  */
 package com.jevaengine.spacestation.ui;
 
-import com.jevaengine.spacestation.entity.power.ConsoleInterface;
+import com.jevaengine.spacestation.entity.power.Dcpu;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.graphics.IRenderable;
 import io.github.jevaengine.joystick.InputKeyEvent;
@@ -53,7 +53,7 @@ public final class LemDisplayFactory {
 		m_layout = layout;
 	}
 
-	public LemDisplay create(ConsoleInterface consoleInterface) throws WindowConstructionException {
+	public LemDisplay create(Dcpu consoleInterface) throws WindowConstructionException {
 		Observers observers = new Observers();
 
 		Window window = m_windowFactory.create(m_layout, new LemDisplayBehaviorInjector(observers, consoleInterface));
@@ -123,9 +123,9 @@ public final class LemDisplayFactory {
 	private class LemDisplayBehaviorInjector extends WindowBehaviourInjector {
 
 		private final Observers m_observers;
-		private final ConsoleInterface m_consoleInterface;
+		private final Dcpu m_consoleInterface;
 
-		public LemDisplayBehaviorInjector(final Observers observers, ConsoleInterface consoleInterface) {
+		public LemDisplayBehaviorInjector(final Observers observers, Dcpu consoleInterface) {
 			m_observers = observers;
 			m_consoleInterface = consoleInterface;
 		}

@@ -1,0 +1,31 @@
+{
+  "worldWidth" : 50,
+  "metersPerUnit" : 1.0,
+  "worldHeight" : 50,
+  "entities" : [ {
+    "auxConfig" : null,
+    "name" : "player",
+    "location" : {
+      "x" : 11.0,
+      "y" : 5.0,
+      "z" : 1.0
+    },
+    "type" : "character",
+    "config" : "/artifact/entity/human/entity.jec",
+    "direction" : 8
+  } ],
+  "artifactImports" : [ {
+    "isTraversable" : true,
+    "isStatic" : true,
+    "model" : "/artifact/scene/infrastructure/wall/model.jmf",
+    "locations" : [ {
+      "x" : 20.0,
+      "y" : 10.0,
+      "z" : 1.0
+    } ],
+    "direction" : 0
+  } ],
+  "logicPerUnit" : 1.0,
+  "zones" : [ ],
+  "friction" : 1.0
+}

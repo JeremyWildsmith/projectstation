@@ -62,7 +62,7 @@ public final class PlayingWindowFactory {
 		try {
 			new PlayerMovementBehaviorInjector(character).inject(window);
 			new WorldInteractionBehaviorInjector(character, interactionHandlers.toArray(new IInteractionHandler[0])).inject(window);
-			new CameraBehaviorInjector(camera).inject(window);
+			new CameraBehaviorInjector(character, camera).inject(window);
 		} catch (NoSuchControlException ex) {
 			throw new WindowConstructionException(PLAYING_VIEW_WINDOW, ex);
 		}

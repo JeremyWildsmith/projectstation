@@ -5,7 +5,7 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
-import com.jevaengine.spacestation.entity.power.ConsoleInterface;
+import com.jevaengine.spacestation.entity.power.Dcpu;
 import com.jevaengine.spacestation.ui.LemDisplayFactory;
 import com.jevaengine.spacestation.ui.LemDisplayFactory.LemDisplay;
 import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector.IInteractionHandler;
@@ -44,13 +44,13 @@ public class ConsoleInterfaceInteractionHandler implements IInteractionHandler {
 	
 	@Override
 	public Class<?> getHandleSubject() {
-		return ConsoleInterface.class;
+		return Dcpu.class;
 	}
 
 	@Override
 	public void handle(IEntity subject, boolean isSecondary, float interactionReach) {
 		try {
-			ConsoleInterface entity = (ConsoleInterface)subject;
+			Dcpu entity = (Dcpu)subject;
 			
 			LemDisplay lem = m_lemDisplayFactory.create(entity);
 			lem.setTopMost(true);

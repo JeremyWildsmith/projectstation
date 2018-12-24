@@ -13,11 +13,20 @@ import io.github.jevaengine.world.entity.IEntity;
 import java.util.*;
 
 public enum GasSimulationNetwork {
-    Pipe((World world) -> {
-        return new PipeNetworkWorldReader(world);
+    PipeA((World world) -> {
+        return new PipeNetworkWorldReader(world, "PipeA");
+    }),
+    PipeB((World world) -> {
+        return new PipeNetworkWorldReader(world, "PipeB");
+    }),
+    PipeC((World world) -> {
+        return new PipeNetworkWorldReader(world, "PipeC");
+    }),
+    PipeD((World world) -> {
+        return new PipeNetworkWorldReader(world, "PipeD");
     }),
     Environment((World world) -> {
-        return new EnvironmentWorldReader(world);
+        return new EnvironmentWorldReader(world, "Environment");
     });
 
     private interface WorldMapReaderFactory {
@@ -43,6 +52,9 @@ public enum GasSimulationNetwork {
         private final HashSet<ConnectedPipePair> pipeMap;
         private final HashSet<Vector2D> airTight;
         private final HashMap<Vector2D, Float> volumeMap;
+        private final HashMap<ConnectedLinkPair, GasSimulation> links = new HashMap<>();
+
+        private final GasSimulationNetwork network;
 
         public PipeNetworkWorldReader(PipeNetworkWorldReader reader) {
             isDirty = false;
@@ -50,6 +62,7 @@ public enum GasSimulationNetwork {
             pipeMap = new HashSet(reader.pipeMap);
             airTight = new HashSet(reader.airTight);
             volumeMap = new HashMap<>(reader.volumeMap);
+            network = reader.network;
         }
 
         @Override
@@ -57,11 +70,12 @@ public enum GasSimulationNetwork {
             return new PipeNetworkWorldReader(this);
         }
 
-        public PipeNetworkWorldReader(World world) {
+        public PipeNetworkWorldReader(World world, String network) {
             this.world = world;
             pipeMap = new HashSet<>();
             airTight = new HashSet<>();
             volumeMap = new HashMap<>();
+            this.network = GasSimulationNetwork.valueOf(network);
         }
 
         @Override
@@ -71,6 +85,16 @@ public enum GasSimulationNetwork {
 
         @Override
         public void freeFlowChanged() {
+            isDirty = true;
+        }
+
+        @Override
+        public void networkChanged() {
+            isDirty = true;
+        }
+
+        @Override
+        public void linksChanged() {
             isDirty = true;
         }
 
@@ -92,8 +116,15 @@ public enum GasSimulationNetwork {
         }
 
         @Override
-        public synchronized Set<Vector2D> syncWithWorld() {
-            if(!isDirty)
+        public Map<ConnectedLinkPair, GasSimulation> getLinks() {
+            synchronized (links) {
+                return links;
+            }
+        }
+
+        @Override
+        public synchronized Set<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> simulations) {
+            if (!isDirty)
                 return new HashSet<>();
 
             isDirty = false;
@@ -103,8 +134,8 @@ public enum GasSimulationNetwork {
             IEntity entities[] = world.getEntities().all();
             List<ILiquidCarrier> pipeEntities = new ArrayList<>();
 
-            for(IEntity e : entities) {
-                if(e instanceof  ILiquidCarrier) {
+            for (IEntity e : entities) {
+                if (e instanceof ILiquidCarrier) {
                     pipeEntities.add((ILiquidCarrier) e);
 
                     e.getObservers().add(this);
@@ -115,24 +146,46 @@ public enum GasSimulationNetwork {
                 synchronized (pipeMap) {
                     pipeMap.clear();
                     for (ILiquidCarrier e : pipeEntities) {
+
+                        if(e.getNetwork() != this.network || !e.isFreeFlow())
+                            continue;
+
                         Vector2D location = e.getBody().getLocation().getXy().round();
                         airTight.add(location);
                         modified.add(location);
 
-                        if(volumeMap.containsKey(location)) {
+                        if (volumeMap.containsKey(location)) {
                             volumeMap.put(location, Math.max(e.getVolume(), volumeMap.get(location)));
                         } else
                             volumeMap.put(location, e.getVolume());
 
                         for (ILiquidCarrier c : e.getConnections(ILiquidCarrier.class)) {
+
+                            if (c.getNetwork() != this.network || !e.isFreeFlow())
+                                continue;
+
                             Vector2D connectionLocation = c.getBody().getLocation().getXy().round();
 
                             modified.add(connectionLocation);
                             airTight.add(connectionLocation);
 
-                            if(c.isFreeFlow() && e.isFreeFlow())
+                            if (c.isFreeFlow() && e.isFreeFlow())
                                 pipeMap.add(new ConnectedPipePair(location, connectionLocation));
                         }
+                    }
+                }
+            }
+
+            synchronized (links) {
+                for (ILiquidCarrier e : pipeEntities) {
+                    Vector2D location = e.getBody().getLocation().getXy().round();
+
+                    if (e.getNetwork() != network || !e.isFreeFlow())
+                        continue;
+
+                    for (Map.Entry<Vector2D, GasSimulationNetwork> l : e.getLinks().entrySet()) {
+                        if (l.getValue() != network)
+                            links.put(new ConnectedLinkPair(l.getKey(), location), simulations.get(l.getValue()));
                     }
                 }
             }
@@ -162,7 +215,7 @@ public enum GasSimulationNetwork {
         @Override
         public float getVolume(Vector2D location) {
             synchronized (volumeMap) {
-                if(!volumeMap.containsKey(location))
+                if (!volumeMap.containsKey(location))
                     return ENVIRONMENT_UNIT_VOLUME;
                 else
                     return volumeMap.get(location);
@@ -170,7 +223,7 @@ public enum GasSimulationNetwork {
         }
     }
 
-    private static class EnvironmentWorldReader implements GasSimulation.WorldMapReader, World.IWorldObserver, Door.IDoorObserver {
+    private static class EnvironmentWorldReader implements GasSimulation.WorldMapReader, World.IWorldObserver, Door.IDoorObserver, ILiquidCarrier.ILiquidCarrierObserver {
         private final World world;
         private boolean isDirty = true;
 
@@ -178,12 +231,17 @@ public enum GasSimulationNetwork {
         private HashMap<Vector2D, Boolean> isBlockingMap = new HashMap<>();
         private HashMap<Vector2D, Float> heatConductivityMap = new HashMap<>();
 
+        private final HashMap<ConnectedLinkPair, GasSimulation> links = new HashMap<>();
+
+        private final GasSimulationNetwork network;
+
         public EnvironmentWorldReader(EnvironmentWorldReader reader) {
             isDirty = false;
             world = reader.world;
             isAirTightMap = new HashMap(reader.isAirTightMap);
             isBlockingMap = new HashMap(reader.isBlockingMap);
             heatConductivityMap = new HashMap<>(reader.heatConductivityMap);
+            network = reader.network;
         }
 
         @Override
@@ -191,8 +249,16 @@ public enum GasSimulationNetwork {
             return new EnvironmentWorldReader(this);
         }
 
-        public EnvironmentWorldReader(World world) {
+        @Override
+        public Map<ConnectedLinkPair, GasSimulation> getLinks() {
+            synchronized (links) {
+                return links;
+            }
+        }
+
+        public EnvironmentWorldReader(World world, String network) {
             this.world = world;
+            this.network = GasSimulationNetwork.valueOf(network);
         }
 
         @Override
@@ -210,8 +276,22 @@ public enum GasSimulationNetwork {
             isDirty = true;
         }
 
-        public synchronized HashSet<Vector2D> syncWithWorld() {
-            if(!isDirty)
+        @Override
+        public void freeFlowChanged() {
+        }
+
+        @Override
+        public void networkChanged() {
+            isDirty = true;
+        }
+
+        @Override
+        public void linksChanged() {
+            isDirty = true;
+        }
+
+        public synchronized HashSet<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> simulations) {
+            if (!isDirty)
                 return new HashSet<>();
 
             isDirty = false;
@@ -221,12 +301,17 @@ public enum GasSimulationNetwork {
             List<Infrastructure> infrastructureEntities = new ArrayList<>();
             List<Door> doors = new ArrayList<>();
 
-            for(IEntity e : entities) {
-                if(e instanceof  Infrastructure)
-                    infrastructureEntities.add((Infrastructure)e);
+            List<ILiquidCarrier> pipeEntities = new ArrayList<>();
 
-                if(e instanceof Door)
-                    doors.add((Door)e);
+            for (IEntity e : entities) {
+                if (e instanceof Infrastructure)
+                    infrastructureEntities.add((Infrastructure) e);
+
+                if (e instanceof Door)
+                    doors.add((Door) e);
+
+                if (e instanceof ILiquidCarrier)
+                    pipeEntities.add((ILiquidCarrier) e);
             }
 
             synchronized (isAirTightMap) {
@@ -251,8 +336,8 @@ public enum GasSimulationNetwork {
                     modified.add(location);
                 }
 
-                for(Door d : doors) {
-                    if(!d.isOpen()) {
+                for (Door d : doors) {
+                    if (!d.isOpen()) {
                         Vector2D location = d.getBody().getLocation().getXy().round();
                         isBlockingMap.put(location, true);
                         modified.add(location);
@@ -268,6 +353,22 @@ public enum GasSimulationNetwork {
                     Vector2D location = e.getBody().getLocation().getXy().round();
                     float currentConductivity = heatConductivityMap.containsKey(location) ? heatConductivityMap.get(location) : 1.0f;
                     heatConductivityMap.put(location, Math.min(currentConductivity, e.getHeatConductivity()));
+                }
+            }
+
+            synchronized (links) {
+                for (ILiquidCarrier e : pipeEntities) {
+                    Vector2D location = e.getBody().getLocation().getXy().round();
+
+                    if (e.getNetwork() != network)
+                        continue;
+
+                    e.getObservers().add(this);
+                    for (Map.Entry<Vector2D, GasSimulationNetwork> l : e.getLinks().entrySet()) {
+                        if (l.getValue() != network) {
+                            links.put(new ConnectedLinkPair(l.getKey(), location), simulations.get(l.getValue()));
+                        }
+                    }
                 }
             }
 
@@ -290,7 +391,7 @@ public enum GasSimulationNetwork {
         public boolean isConnected(Vector2D a, Vector2D b) {
             synchronized (isBlockingMap) {
                 float distance = a.difference(b).getLengthSquared();
-                if(distance > 2 + Vector2F.TOLERANCE)
+                if (distance > 2 + Vector2F.TOLERANCE)
                     return false;
 
                 boolean aBlocking = isBlockingMap.containsKey(a) ? isBlockingMap.get(a) : false;
@@ -317,7 +418,6 @@ public enum GasSimulationNetwork {
         }
     }
 
-
     private static class ConnectedPipePair {
         private Vector2D locationA;
         private Vector2D locationB;
@@ -342,6 +442,32 @@ public enum GasSimulationNetwork {
         @Override
         public int hashCode() {
             return Objects.hashCode(locationA) * Objects.hashCode(locationB);
+        }
+    }
+
+
+    public static class ConnectedLinkPair {
+        public Vector2D source;
+        public Vector2D dest;
+
+        public ConnectedLinkPair(Vector2D src, Vector2D dest) {
+            this.source = new Vector2D(src);
+            this.dest = new Vector2D(dest);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ConnectedLinkPair that = (ConnectedLinkPair) o;
+
+            return (Objects.equals(source, that.source) &&
+                    Objects.equals(dest, that.dest));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(source) * Objects.hashCode(dest);
         }
     }
 }

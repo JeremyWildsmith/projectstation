@@ -16,7 +16,9 @@ import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier {
 
@@ -25,6 +27,8 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
     private float m_collapsePressure;
     private World m_world;
     private GasSimulationEntity m_sim;
+
+    private final GasSimulationNetwork m_simNetwork = GasSimulationNetwork.PipeA;
 
     public PressureCollapseValve(String name, IAnimationSceneModel model, float collapsePressure) {
         super(name, true);
@@ -36,6 +40,23 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
     @Override
     public float getVolume() {
         return LiquidPipe.PIPE_VOLUME;
+    }
+
+    @Override
+    public GasSimulationNetwork getNetwork() {
+        return m_simNetwork;
+    }
+
+    @Override
+    public Map<Vector2D, GasSimulationNetwork> getLinks() {
+        HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+
+        for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+            if(c.getNetwork() != m_simNetwork) {
+                links.put(c.getBody().getLocation().getXy().round(), c.getNetwork());
+            }
+        }
+        return links;
     }
 
     @Override
@@ -69,7 +90,7 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
 
     @Override
     protected void connectionChanged() {
-
+        m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
     }
 
     @Override
@@ -115,11 +136,14 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
             Vector2D locationA = a.getBody().getLocation().getXy().round();
             Vector2D locationB = b.getBody().getLocation().getXy().round();
 
-            float aVol = m_sim.getVolume(GasSimulationNetwork.Pipe, locationA);
-            float bVol = m_sim.getVolume(GasSimulationNetwork.Pipe, locationB);
+            GasSimulationNetwork networkA = a.getNetwork();
+            GasSimulationNetwork networkB = b.getNetwork();
 
-            float pressureA = m_sim.sample(GasSimulationNetwork.Pipe, locationA).calculatePressure(aVol);
-            float pressureB = m_sim.sample(GasSimulationNetwork.Pipe, locationB).calculatePressure(bVol);
+            float aVol = m_sim.getVolume(networkA, locationA);
+            float bVol = m_sim.getVolume(networkB, locationB);
+
+            float pressureA = m_sim.sample(networkA, locationA).calculatePressure(aVol);
+            float pressureB = m_sim.sample(networkB, locationB).calculatePressure(bVol);
 
             if(Math.abs(pressureA - pressureB) > m_collapsePressure)
                 open();

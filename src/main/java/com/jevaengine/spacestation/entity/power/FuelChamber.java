@@ -8,6 +8,8 @@ package com.jevaengine.spacestation.entity.power;
 import com.jevaengine.spacestation.entity.atmos.ILiquidCarrier;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.atmos.LiquidPipe;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
@@ -27,18 +29,41 @@ public final class FuelChamber extends WiredDevice implements ILiquidCarrier {
 
 	private final float m_capacity;
 
+	private final GasSimulationNetwork m_simNetwork = GasSimulationNetwork.PipeA;
+
 	public FuelChamber(String name, IImmutableSceneModel model, float capacity) {
 		super(name, false);
 		m_model = model;
 		m_capacity = capacity;
 	}
+
+	@Override
+	public GasSimulationNetwork getNetwork() {
+		return m_simNetwork;
+	}
+
+	@Override
+	public Map<Vector2D, GasSimulationNetwork> getLinks() {
+		HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+
+		for(ILiquidCarrier c : getConnections(ILiquidCarrier.class)) {
+			if(c.getNetwork() != m_simNetwork) {
+				links.put(c.getBody().getLocation().getXy().round(), c.getNetwork());
+			}
+		}
+
+		return links;
+	}
+
 	@Override
 	public float getVolume() {
 		return FUEL_CHAMBER_VOLUME;
 	}
 
 	@Override
-	protected void connectionChanged() { }
+	protected void connectionChanged() {
+		m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
+	}
 
 	@Override
 	protected boolean canConnectTo(IDevice d) {

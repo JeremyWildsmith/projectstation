@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Playing implements IState {
 
-	private static final float CAMERA_ZOOM = 1.5f;
+	private static final float CAMERA_ZOOM = 2.5f;
 
 	private IStateContext m_context;
 	private final World m_world;
@@ -121,8 +121,23 @@ public class Playing implements IState {
 												  m_loadoutHud.getLocation().y));
 
 
+
 			//Gas Simulation Debug
-			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.Pipe);
+			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeB);
+			debug.setMovable(true);
+			debug.setTopMost(true);
+			debug.setVisible(true);
+			debug.setLocation(new Vector2D(0, 0));
+
+			//Gas Simulation Debug
+			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeA);
+			debug.setMovable(true);
+			debug.setTopMost(true);
+			debug.setVisible(true);
+			debug.setLocation(new Vector2D(0, 0));
+
+			//Gas Simulation Debug
+			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeC);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
@@ -134,6 +149,14 @@ public class Playing implements IState {
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
+
+			//Gas Simulation Debug
+			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeD);
+			debug.setMovable(true);
+			debug.setTopMost(true);
+			debug.setVisible(true);
+			debug.setLocation(new Vector2D(0, 0));
+
 
 			m_hud.getObservers().add(new HudFactory.IHudObserver() {
 				@Override

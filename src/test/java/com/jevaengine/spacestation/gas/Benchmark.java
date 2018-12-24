@@ -33,8 +33,13 @@ public class Benchmark {
 
         GasSimulation sim = new GasSimulation(new GasSimulation.WorldMapReader() {
             @Override
-            public Set<Vector2D> syncWithWorld() {
+            public Set<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> s) {
                 return new HashSet<>();
+            }
+
+            @Override
+            public Map<GasSimulationNetwork.ConnectedLinkPair, GasSimulation> getLinks() {
+                return new HashMap<>();
             }
 
             @Override

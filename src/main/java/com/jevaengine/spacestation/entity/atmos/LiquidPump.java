@@ -13,6 +13,9 @@ import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LiquidPump extends WiredDevice implements ILiquidCarrier {
 
     private final int MAX_CONNECTIONS = 2;
@@ -100,7 +103,18 @@ public class LiquidPump extends WiredDevice implements ILiquidCarrier {
     }
 
     @Override
+    public GasSimulationNetwork getNetwork() {
+        return GasSimulationNetwork.PipeA;
+    }
+
+    @Override
+    public Map<Vector2D, GasSimulationNetwork> getLinks() {
+        return new HashMap<>();
+    }
+
+    @Override
     public void update(int delta) {
+
         if(world != getWorld()) {
             world = getWorld();
             gasSim = world.getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
@@ -118,17 +132,21 @@ public class LiquidPump extends WiredDevice implements ILiquidCarrier {
 
         Vector2D sourceLocation = src.getBody().getLocation().getXy().round();
         Vector2D destLocation = dest.getBody().getLocation().getXy().round();
-        GasSimulation.GasMetaData destData = gasSim.sample(GasSimulationNetwork.Pipe, destLocation);
 
-        float destVolume = gasSim.getVolume(GasSimulationNetwork.Pipe, destLocation);
+        GasSimulationNetwork sourceNetwork = src.getNetwork();
+        GasSimulationNetwork destNetwork = dest.getNetwork();
+
+        GasSimulation.GasMetaData destData = gasSim.sample(destNetwork, destLocation);
+
+        float destVolume = gasSim.getVolume(destNetwork, destLocation);
 
         float attemptConsumeLitres = volumePerSecond * delta / 1000.0f;
 
         if(outputPressure < 0 || destData.calculatePressure(destVolume) < outputPressure) {
-            GasSimulation.GasMetaData sample = gasSim.consume(GasSimulationNetwork.Pipe, sourceLocation, attemptConsumeLitres);
+            GasSimulation.GasMetaData sample = gasSim.consume(sourceNetwork, sourceLocation, attemptConsumeLitres);
 
             if(sample.getTotalMols() > 0)
-                gasSim.produce(GasSimulationNetwork.Pipe, destLocation, sample);
+                gasSim.produce(destNetwork, destLocation, sample);
         }
     }
 }

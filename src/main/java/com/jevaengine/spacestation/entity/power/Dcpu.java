@@ -12,10 +12,14 @@ import de.codesourcery.jasm16.Address;
 import de.codesourcery.jasm16.emulator.Emulator;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultClock;
+import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
+import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
 import de.codesourcery.jasm16.emulator.exceptions.EmulationErrorException;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,11 +44,14 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 
 	private final Emulator m_dcpu = new Emulator();
 	private final DefaultClock m_clock = new DefaultClock();
+	private final DefaultKeyboard m_keyboard = new DefaultKeyboard(false);
+	private final DefaultScreen m_screen = new DefaultScreen(false, false);
 
 	private boolean m_isOn = false;
 	private boolean m_hasCrashed = false;
 
 	private final byte[] m_firmware;
+
 
 	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
@@ -55,7 +62,8 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 		m_model = model;
 		m_firmware = firmware;
 		m_dcpu.addDevice(m_clock);
-
+		m_dcpu.addDevice(m_keyboard);
+		m_dcpu.addDevice(m_screen);
 		if (isOn) {
 			turnOn();
 		} else {
@@ -98,6 +106,8 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 		m_model.getAnimation("on").setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
 
 		m_clock.reset();
+		m_keyboard.reset();
+		m_screen.reset();
 		m_dcpu.reset(true);
 		m_dcpu.loadMemory(Address.ZERO, m_firmware);
 	}
@@ -113,7 +123,25 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 
 	public void crash() {
 		m_hasCrashed = true;
-		m_model.getAnimation("crash").setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
+	}
+
+
+	public void simulateKeyTyped(int keyCode, char keyChar) {
+		if(!m_isOn)
+			return;
+
+		m_keyboard.simulateKeyTyped(keyCode, keyChar);
+	}
+
+	public boolean isOn() {
+		return m_isOn;
+	}
+
+	public BufferedImage getScreen() {
+		if(!m_screen.isActive())
+			return null;
+
+		return m_screen.getScreenImage();
 	}
 
 	@Override
@@ -194,6 +222,25 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 				removeOldDcpuConnection(d);
 			}
 		}
+
+		m_model.update(delta);
+
+		IAnimationSceneModel.IAnimationSceneModelAnimation on = m_model.getAnimation("on");
+		IAnimationSceneModel.IAnimationSceneModelAnimation off = m_model.getAnimation("off");
+		IAnimationSceneModel.IAnimationSceneModelAnimation inactive = m_model.getAnimation("inactive");
+
+		if(!drawEnergy(delta))
+			turnOff();
+
+		if(m_isOn) {
+			if(m_screen.isActive()) {
+				if(on.getState() != IAnimationSceneModel.AnimationSceneModelAnimationState.Play)
+					on.setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
+			} else {
+				inactive.setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
+			}
+		} else if (off.getState() != IAnimationSceneModel.AnimationSceneModelAnimationState.Play)
+			off.setState(IAnimationSceneModel.AnimationSceneModelAnimationState.Play);
 
 		if (!m_isOn) {
 			return;

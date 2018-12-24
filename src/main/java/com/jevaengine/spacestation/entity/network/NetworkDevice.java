@@ -19,10 +19,6 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
         return m_ipAddress;
     }
 
-    public final boolean hasIp() {
-        return m_ipAddress != 0;
-    }
-
     public void setIp(int ipAddress) {
         m_ipAddress = ipAddress;
     }
@@ -45,7 +41,7 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
 
         carried.add(this);
 
-        if (!hasIp() || packet.RecieverAddress != getIp()) {
+        if (packet.RecieverAddress != getIp()) {
             return;
         }
 
@@ -53,10 +49,6 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
     }
 
     protected void transmitMessage(NetworkPacket packet) {
-        if (!hasIp()) {
-            return;
-        }
-
         packet.SenderAddress = getIp();
         for(INetworkDataCarrier c : getConnections(INetworkDataCarrier.class)) {
             List<INetworkDataCarrier> carriers = new ArrayList<>();

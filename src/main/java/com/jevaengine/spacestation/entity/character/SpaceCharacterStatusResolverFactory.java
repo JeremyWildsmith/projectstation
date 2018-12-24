@@ -68,11 +68,11 @@ public class SpaceCharacterStatusResolverFactory implements IStatusResolverFacto
             if(lastBreath > BREATH_INTERVAL) {
                 lastBreath = 0;
                 Vector2D location = host.getBody().getLocation().getXy().round();
-
+                /*
                 System.out.println(location.x + ", " + location.y + ": ");
                 Map<GasType, Float> quantity = new HashMap<>();//sim.getQuantity(location);
                 for(Map.Entry<GasType, Float> e : quantity.entrySet())
-                    System.out.println("\t" + e.getKey().name() + ", " + e.getValue());
+                    System.out.println("\t" + e.getKey().name() + ", " + e.getValue());*/
             }
         }
 

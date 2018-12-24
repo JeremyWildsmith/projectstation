@@ -9,6 +9,7 @@ import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
 import com.jevaengine.spacestation.entity.Wire;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 import java.util.List;
@@ -41,5 +42,14 @@ public final class NetworkWire extends Wire implements INetworkDataCarrier {
 		for(INetworkDataCarrier d : getConnections(INetworkDataCarrier.class)) {
 			d.carry(carried, packet);
 		}
+	}
+
+	@Override
+	public boolean isStatic() {
+		return true;
+	}
+
+	@Override
+	public void update(int delta) {
 	}
 }

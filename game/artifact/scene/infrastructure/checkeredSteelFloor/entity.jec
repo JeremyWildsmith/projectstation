@@ -1,0 +1,7 @@
+{
+      "model" : "model.jmf",
+	  "blocking": false,
+	  "type": ["floor", "wood"],
+	  "isAirTight": true,
+	  "heatConductivity": 1.0
+}

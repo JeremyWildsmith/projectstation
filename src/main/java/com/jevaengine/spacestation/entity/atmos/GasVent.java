@@ -14,6 +14,10 @@ import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author Jeremy
@@ -22,16 +26,14 @@ public final class GasVent extends LiquidPipe {
 
     private static final int MAX_CONNECTIONS = 1;
 
-    private GasSimulationEntity sim = null;
-    private World m_world = null;
-
     public GasVent(String name, IAnimationSceneModel model) {
-        super(name, model);
+        super(name, model, GasSimulationNetwork.Environment);
     }
 
 
     @Override
     protected void connectionChanged() {
+        m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
     }
 
     @Override
@@ -40,8 +42,27 @@ public final class GasVent extends LiquidPipe {
     }
 
     @Override
+    public GasSimulationNetwork getNetwork() {
+        return GasSimulationNetwork.Environment;
+    }
+
+    @Override
+    public Map<Vector2D, GasSimulationNetwork> getLinks() {
+        List<ILiquidCarrier> connections = getConnections(ILiquidCarrier.class);
+
+        if(connections.isEmpty())
+            return new HashMap<>();
+
+        Map<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+
+        links.put(this.getBody().getLocation().getXy().round(), connections.get(0).getNetwork());
+
+        return links;
+    }
+
+    @Override
     public boolean isStatic() {
-        return false;
+        return true;
     }
 
     @Override
@@ -64,22 +85,6 @@ public final class GasVent extends LiquidPipe {
             return false;
 
         return true;
-    }
-
-
-    @Override
-    public void update(int delta) {
-        if (m_world != getWorld()) {
-            m_world = getWorld();
-            sim = m_world.getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
-
-            Vector2D location = this.getBody().getLocation().getXy().round();
-
-            sim.addLink(location, GasSimulationNetwork.Environment, GasSimulationNetwork.Pipe);
-
-        }
-
-        super.update(delta);
     }
 
 }

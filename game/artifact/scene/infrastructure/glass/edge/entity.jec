@@ -1,0 +1,8 @@
+{
+      "model" : "model.jmf",
+	  "blocking": true,
+	  "type": ["glass"],
+	  "isAirTight": true,
+	  "heatConductivity": 1.0,
+	  "isTransparent": true
+}

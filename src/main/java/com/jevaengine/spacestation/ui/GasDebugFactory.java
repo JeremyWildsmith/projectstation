@@ -26,6 +26,7 @@ import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
+import io.github.jevaengine.ui.Label;
 import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.entity.IEntity;
@@ -128,6 +129,8 @@ public final class GasDebugFactory {
 		@Override
 		protected void doInject() throws NoSuchControlException {
 			final Viewport displayView = getControl(Viewport.class, "displayView");
+			final Label desc = getControl(Label.class, "description");
+			desc.setText("Network: " + m_network.name());
 
 			displayView.setView(new IRenderable() {
 				@Override

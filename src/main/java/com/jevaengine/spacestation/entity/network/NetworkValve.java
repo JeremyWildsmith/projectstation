@@ -5,15 +5,22 @@ import com.jevaengine.spacestation.entity.atmos.ILiquidCarrier;
 import com.jevaengine.spacestation.entity.atmos.LiquidPipe;
 import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;
+import com.jevaengine.spacestation.gas.GasSimulation;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
+
+    private final GasSimulationNetwork simNetwork = GasSimulationNetwork.PipeA;
 
     private IAnimationSceneModel m_model;
     private boolean m_isOpen;
@@ -21,7 +28,26 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
     public NetworkValve(String name, IAnimationSceneModel model, int ipAddress, boolean isOpen) {
         super(name, true, ipAddress);
         m_model = model;
-        m_isOpen = isOpen;
+        m_isOpen = false;
+    }
+
+    @Override
+    public GasSimulationNetwork getNetwork() {
+        return simNetwork;
+    }
+
+    @Override
+    public Map<Vector2D, GasSimulationNetwork> getLinks() {
+        List<ILiquidCarrier> connections = getConnections(ILiquidCarrier.class);
+        HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
+
+        for(ILiquidCarrier c : connections) {
+            if(c.getNetwork() != this.getNetwork() && c.isFreeFlow()) {
+                links.put(this.getBody().getLocation().getXy().round(), c.getNetwork());
+            }
+        }
+
+        return links;
     }
 
     @Override
@@ -35,6 +61,9 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
             return d.getBody().getLocation().getXy().round().difference(this.getBody().getLocation().getXy().round()).isZero() &&
                     this.getConnections(INetworkDataCarrier.class).size() <= 0;
         } else if (d instanceof ILiquidCarrier) {
+
+            if(getConnections(ILiquidCarrier.class).size() >= 2)
+                return false;
 
             Direction thisDir = getBody().getDirection();
 
@@ -64,12 +93,13 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
         if(signal != null) {
             m_isOpen = signal.signal;
             m_observers.raise(ILiquidCarrierObserver.class).freeFlowChanged();
+            m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
         }
     }
 
     @Override
     protected void connectionChanged() {
-
+        m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
     }
 
     @Override

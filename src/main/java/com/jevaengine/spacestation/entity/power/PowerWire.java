@@ -52,4 +52,14 @@ public final class PowerWire extends Wire implements IPowerDevice {
 		
 		return (d instanceof WiredDevice) && (d instanceof IPowerDevice);
 	}
+
+	@Override
+	public boolean isStatic() {
+		return true;
+	}
+
+	@Override
+	public void update(int delta) {
+
+	}
 }

@@ -18,9 +18,11 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
+import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityTaskModel;
@@ -47,6 +49,7 @@ public final class Infrastructure implements IEntity {
 	private final Observers m_observers = new Observers();
 	private final EntityBridge m_bridge;
 	private final boolean m_isStatic;
+	private final boolean m_isTransparent;
 	@Nullable
 	private final ISceneModel m_model;
 	private IPhysicsBody m_body = new NullPhysicsBody();
@@ -61,18 +64,24 @@ public final class Infrastructure implements IEntity {
 
 	private final float m_heatConductivity;
 
-	public Infrastructure(ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, float heatConductivity) {
+	public Infrastructure(ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity) {
 		m_name = this.getClass().getName() + m_unnamedCount.getAndIncrement();
+		m_isTransparent = isTransparent;
 		m_isAirTight = isAirTight;
 		m_infrastructureType.addAll(Arrays.asList(infrastructureTypes));
 		m_isStatic = isStatic;
 		m_heatConductivity = heatConductivity;
 		m_model = model;
 
-		if (!isTraversable)
+		if (!isTraversable) {
 			m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
-		else
+			m_physicsBodyDescription.collisionExceptions = new Class[] {
+					Infrastructure.class,
+					Door.class
+			};
+		} else
 			m_physicsBodyDescription = null;
+
 
 		m_bridge = new EntityBridge(this);
 	}
@@ -87,6 +96,10 @@ public final class Infrastructure implements IEntity {
 
 	public boolean isAirTight() {
 		return m_isAirTight;
+	}
+
+	public boolean isTransparent() {
+		return m_isTransparent;
 	}
 
 	@Override
@@ -131,17 +144,23 @@ public final class Infrastructure implements IEntity {
 	}
 
 	private void constructPhysicsBody() {
+		Direction dir = m_body.getDirection();
 		if (m_physicsBodyDescription == null)
 			m_body = new NonparticipantPhysicsBody(this, m_model.getAABB());
 		else {
 			m_body = m_world.getPhysicsWorld().createBody(this, m_physicsBodyDescription);
 			m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 		}
+
+		m_body.setDirection(dir);
 	}
 
 	private void destroyPhysicsBody() {
+		Direction dir = m_body.getDirection();
+
 		m_body.destory();
 		m_body = new NullPhysicsBody();
+		m_body.setDirection(dir);
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 	}
 
@@ -163,6 +182,9 @@ public final class Infrastructure implements IEntity {
 	@Override
 	@Nullable
 	public IImmutableSceneModel getModel() {
+		Direction dir = this.getBody().getDirection();
+		if(dir != Direction.Zero)
+			m_model.setDirection(this.getBody().getDirection());
 		return m_model;
 	}
 

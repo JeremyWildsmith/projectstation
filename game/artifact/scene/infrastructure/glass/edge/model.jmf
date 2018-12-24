@@ -1,0 +1,163 @@
+{
+  "defaultAnimation": "idle",
+  "animations": [
+    {
+      "name": "idle",
+      "sets": [
+        {
+          "directions": [
+            0,
+            8
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "e",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            1
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "s",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            2
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "w",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            3
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "n",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            4
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "se",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            5
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "nw",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            6
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "ne",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        },
+        {
+          "directions": [
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "sw",
+              "bounds": {
+                "x": -0.5,
+                "y": -0.5,
+                "z": 0,
+                "width": 1,
+                "height": 1,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

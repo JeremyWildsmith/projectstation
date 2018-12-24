@@ -5,13 +5,24 @@
       "name": "displayView",
       "location": {
         "x": 10,
-        "y": 10
+        "y": 40
       },
       "config": {
         "bounds": {
           "width": 500,
-          "height": 500
+          "height": 470
         }
+      }
+    },
+	{
+      "type": "label",
+      "name": "description",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "text": "Description"
       }
     }
   ],

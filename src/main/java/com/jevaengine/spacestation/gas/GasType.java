@@ -7,10 +7,10 @@ import java.awt.*;
 import java.util.NoSuchElementException;
 
 public enum GasType {
-    Oxygen("O", 1000F, 15.999F),
-    Nitrogen("N", 1000F, 15.999F),
-    CarbonDioxide("CO2", 0.7F, 44.09F),
-    Water("H2O", 0.7F, 18.02F, new Color(44,145,195), 1, 30, 0.1f);
+    Oxygen("O", 1000F, 15.999F, true),
+    Nitrogen("N", 1000F, 15.999F, true),
+    CarbonDioxide("CO2", 0.7F, 44.09F, true),
+    Water("H2O", 0.7F, 18.02F, false, new Color(44,145,195), 1, 30, 20000, 0.1f);
 
     private final String name;
     private final float flowRatio;
@@ -20,14 +20,17 @@ public enum GasType {
     private float minColourMols = 0;
     private float maxColourMols = 0;
     private float opacityVariance = 0;
+    private float liquidPressure = 0;
+    private final boolean isAirborne;
 
-    GasType(String name, float flowRatio, float atomicMass) {
+    GasType(String name, float flowRatio, float atomicMass, boolean isAirborne) {
         this.name = name;
         this.flowRatio = flowRatio;
         this.atomicMass = atomicMass;
+        this.isAirborne = isAirborne;
     }
 
-    GasType(String name, float flowRatio, float atomicMass, Color color, float minColourMols, float maxColourMols, float opacityVariance) {
+    GasType(String name, float flowRatio, float atomicMass, boolean isAirborne, Color color, float minColourMols, float maxColourMols, float liquidPressure, float opacityVariance) {
         this.name = name;
         this.flowRatio = flowRatio;
         this.atomicMass = atomicMass;
@@ -35,11 +38,20 @@ public enum GasType {
         this.minColourMols = minColourMols;
         this.maxColourMols = maxColourMols;
         this.opacityVariance = opacityVariance;
+        this.isAirborne = isAirborne;
+        this.liquidPressure = liquidPressure;
+    }
+
+    public boolean isAirborne(float pressure) {
+        if(liquidPressure != 0 && pressure < liquidPressure)
+            return true;
+
+        return isAirborne;
     }
 
     @Nullable
-    public Color getColor(float mols) {
-        if(baseColor == null || mols < minColourMols)
+    public Color getColor(float mols, float pressure) {
+        if(baseColor == null || mols < minColourMols || pressure <= liquidPressure)
             return null;
 
         float colourRatio = Math.min(1.0f, (mols - minColourMols) / (maxColourMols - minColourMols));

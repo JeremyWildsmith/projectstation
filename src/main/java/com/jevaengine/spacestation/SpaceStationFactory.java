@@ -32,7 +32,9 @@ public class SpaceStationFactory extends DefaultWorldFactory {
         try {
             URI createContext = context.resolve(artifactDecl.model).resolve("entity.jec");
             URI infrastructureUri = createContext.resolve("entity.jec");
-            return m_entityFactory.create("infrastructure", null, createContext, m_configurationFactory.create(infrastructureUri));
+            IEntity e = m_entityFactory.create("infrastructure", null, createContext, m_configurationFactory.create(infrastructureUri));
+            e.getBody().setDirection(artifactDecl.direction);
+            return e;
         } catch (IConfigurationFactory.ConfigurationConstructionException e) {
             throw new IEntityFactory.EntityConstructionException(e);
         }

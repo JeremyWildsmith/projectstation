@@ -27,7 +27,6 @@ public class GasSimulation implements IGasSimulation {
     private WorldMapReader world;
 
     private HashMap<Vector2D, GasMetaData> gasMappings = new HashMap<>();
-    private HashMap<Vector2D, GasSimulation> simulationLinks = new HashMap<>();
 
     private int sinceLastTick = 0;
 
@@ -43,7 +42,6 @@ public class GasSimulation implements IGasSimulation {
     public GasSimulation(GasSimulation sim) {
         this.defaultTemperature = sim.defaultTemperature;
         this.gasMappings = new HashMap<>(sim.gasMappings);
-        this.simulationLinks = new HashMap<>(simulationLinks);
         this.world = sim.world.duplicate();
     }
 
@@ -54,14 +52,6 @@ public class GasSimulation implements IGasSimulation {
 
     public HashMap<Vector2D, GasMetaData> getGasMap() {
         return new HashMap<>(gasMappings);
-    }
-
-    public void addLink(Vector2D location, GasSimulation sim) {
-        simulationLinks.put(location, sim);
-    }
-
-    public void clearLinks() {
-        simulationLinks.clear();
     }
 
     public float getVolume(Vector2D location) {
@@ -118,7 +108,11 @@ public class GasSimulation implements IGasSimulation {
         return new GasMetaData(gasMappings.get(location));
     }
 
-    private float calculateGasDistRatios(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
+    public WorldMapReader getReader() {
+        return world.duplicate();
+    }
+
+    private float normalizeGasses(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
         GasMetaData initialGas = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
 
         Map<Direction, GasMetaData> canidateDirections = new HashMap<>();
@@ -226,6 +220,41 @@ public class GasSimulation implements IGasSimulation {
         return molsDistributed;
     }
 
+    private float calculateGive(GasMetaData source, float sourceVolume, GasMetaData dest, float destVolume) {
+
+        float totalMols = source.getTotalMols() + dest.getTotalMols();
+
+        if(totalMols <= 0)
+            return 0;
+
+        //Index as y,x
+        double[][] coefficientMatrix = new double[2][2];
+        double[] answerMatrix = new double[2];
+
+        for (int i = 0; i < coefficientMatrix.length; i++) {
+            coefficientMatrix[0][i] = 1;
+        }
+
+        answerMatrix[0] = totalMols;
+
+        float sourceTemperatureVolumeRation = GAS_CONSTANT * source.temperature / sourceVolume;
+        float destTemperatureVolumeRation = GAS_CONSTANT * dest.temperature / destVolume;
+
+        if(sourceTemperatureVolumeRation == 0 || destTemperatureVolumeRation == 0)
+            return 0;
+
+        coefficientMatrix[1][0] = sourceTemperatureVolumeRation;
+        coefficientMatrix[1][1] = -destTemperatureVolumeRation;
+
+        RealMatrix coefficients = new Array2DRowRealMatrix(coefficientMatrix);
+        RealVector constants = new ArrayRealVector(answerMatrix);
+        DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+        RealVector solution = solver.solve(constants);
+
+        float giveRatio = (float)solution.getEntry(1) / totalMols;
+        return giveRatio;
+    }
+
 
     private Map<Direction, Float> calculateHeatDistRatios(Vector2D location, Set<Vector2D> ignore, int deltaTime) {
         GasMetaData initialGas = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
@@ -280,43 +309,6 @@ public class GasSimulation implements IGasSimulation {
         return distRatios;
 
     }
-
-    private float normalizeGasses(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
-        GasMetaData current = gasMappings.containsKey(location) ? gasMappings.get(location) : new GasMetaData(defaultTemperature);
-
-        return calculateGasDistRatios(location, ignore, toProcess, deltaTime);
-        /*
-        //This is just for gas distribution, not heat.
-        float totalGiveRatio = 0;
-        float distributableScaler = Math.min(1.0f, current.getFlowRate() * deltaTime / 1000.0f);
-
-        for(Map.Entry<Direction, Float> e : giveMappings.entrySet()) {
-            float giveRatio = e.getValue() * distributableScaler;
-
-            totalGiveRatio += giveRatio;
-
-            Vector2D normDest = location.add(e.getKey().getDirectionVector());
-
-            boolean destIsAirTight = world.isAirTight(normDest);
-
-            boolean processNeighbors = (current.consume(giveRatio, 0).getTotalMols() > ACTIVE_GAS_GIVE_THRESHOLD);
-
-            if(processNeighbors && destIsAirTight && !ignore.contains(normDest) && !toProcess.contains(normDest))
-                toProcess.add(normDest);
-
-            if(destIsAirTight) {
-                GasMetaData destValue = gasMappings.containsKey(normDest) ? gasMappings.get(normDest) : new GasMetaData(defaultTemperature);
-                destValue = destValue.add(current.consume(giveRatio, 0));
-                gasMappings.put(normDest, destValue );
-            }
-        }
-
-        gasMappings.put(location, current.consume(1-totalGiveRatio, 1));
-
-        return current.consume(totalGiveRatio, 1).calculatePressure(world.getVolume(location));
-        */
-    }
-
 
     private float normalizeHeat(Vector2D location, Set<Vector2D> ignore, Queue<Vector2D> toProcess, int deltaTime) {
         GasMetaData current = this.gasMappings.get(location);
@@ -386,8 +378,8 @@ public class GasSimulation implements IGasSimulation {
         return cycles;
     }
 
-    public void syncGameLoop() {
-        Set<Vector2D> modifiedLocations = world.syncWithWorld();
+    public void syncGameLoop(Map<GasSimulationNetwork, GasSimulation> simulations) {
+        Set<Vector2D> modifiedLocations = world.syncWithWorld(simulations);
 
         if(modifiedLocations.isEmpty())
             return;
@@ -406,9 +398,23 @@ public class GasSimulation implements IGasSimulation {
         }
 
         //Before we update, we copy over the shared simulation mappings:
-        for (Map.Entry<Vector2D, GasSimulation> v : simulationLinks.entrySet()) {
-            gasMappings.put(v.getKey(), v.getValue().sample(v.getKey()));
-            activeLastPass.put(v.getKey(), 0);
+        for (Map.Entry<GasSimulationNetwork.ConnectedLinkPair, GasSimulation> v : world.getLinks().entrySet()) {
+            GasMetaData sourceGas = v.getValue().sample(v.getKey().source);
+            GasMetaData destGas = sample(v.getKey().dest);
+
+            GasMetaData total = sourceGas.add(destGas);
+
+            float sourceVolume = v.getValue().world.getVolume(v.getKey().source);
+            float destVolume = world.getVolume(v.getKey().dest);
+
+            float destGiveRatio = calculateGive(sourceGas, sourceVolume, destGas, destVolume);
+            float sourceGiveRatio = 1.0f - destGiveRatio;
+
+            v.getValue().gasMappings.put(v.getKey().source, total.consume(sourceGiveRatio, 0.5f));
+            v.getValue().activeLastPass.put(v.getKey().source, 0);
+
+            gasMappings.put(v.getKey().dest, total.consume(destGiveRatio, 0.5f));
+            activeLastPass.put(v.getKey().dest, 0);
         }
 
         int cycles = 0;
@@ -572,9 +578,66 @@ public class GasSimulation implements IGasSimulation {
             return quantity / totalMols;
         }
 
-        public Color getColor() {
+        public float getPercentContent(GasType g, boolean airBorne, float volume) {
+            float quantity = amount.containsKey(g) ? amount.get(g) : 0;
+            float totalMols = 0;
+
+            float pressure = calculatePressure(volume);
+
+            for(Map.Entry<GasType, Float> a : amount.entrySet())
+            {
+                if(a.getKey().isAirborne(pressure) == airBorne)
+                    totalMols += a.getValue();
+            }
+
+            if (totalMols <= 0)
+                return 0;
+
+            return quantity / totalMols;
+        }
+
+        public float getPercentColour(float volume) {
+            float totalMols = getTotalMols();
+            float coloured = 0;
+
+            if(totalMols <= 0)
+                return 0;
+
+            float pressure = calculatePressure(volume);
+            for(Map.Entry<GasType, Float> a : amount.entrySet())
+            {
+                if(a.getKey().getColor(a.getValue(), pressure) != null)
+                    coloured += a.getValue();
+            }
+
+            return coloured / totalMols;
+        }
+
+        public float getPercentAirborne(boolean isAirborne, float volume) {
+            float totalMols = getTotalMols();
+            float airBorne = 0;
+
+            if (totalMols <= 0)
+                return 0;
+
+            float pressure = calculatePressure(volume);
+            for(Map.Entry<GasType, Float> g : amount.entrySet())
+            {
+                if(g.getKey().isAirborne(pressure))
+                    airBorne += g.getValue();
+            }
+
+            if(isAirborne)
+                return airBorne / totalMols;
+            else
+                return (1f - airBorne / totalMols);
+        }
+
+        public Color getColor(float volume) {
             if (amount.isEmpty())
                 return null;
+
+            float pressure = calculatePressure(volume);
 
             float totalQuantity = getTotalMols();
 
@@ -586,7 +649,7 @@ public class GasSimulation implements IGasSimulation {
             for (Map.Entry<GasType, Float> e : amount.entrySet()) {
                 float ratio = (e.getValue() / totalQuantity);
 
-                Color c = e.getKey().getColor(e.getValue());
+                Color c = e.getKey().getColor(e.getValue(), pressure);
                 if(c != null)
                 {
                     coloured = true;
@@ -631,10 +694,12 @@ public class GasSimulation implements IGasSimulation {
 
         boolean isAirTight(Vector2D location);
 
-        Set<Vector2D> syncWithWorld();
+        Set<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> simulations);
 
         float getVolume(Vector2D location);
 
         WorldMapReader duplicate();
+
+        Map<GasSimulationNetwork.ConnectedLinkPair, GasSimulation> getLinks();
     }
 }

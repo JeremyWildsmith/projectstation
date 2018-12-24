@@ -64,6 +64,7 @@ public class Diode extends WiredDevice implements IPowerDevice {
 
 	@Override
 	public IImmutableSceneModel getModel() {
+		m_model.setDirection(this.getBody().getDirection());
 		return m_model;
 	}
 
@@ -106,7 +107,7 @@ public class Diode extends WiredDevice implements IPowerDevice {
 		
 		requested.add(this);
 		
-		if(requested.contains(dest))
+		if(requested.contains(source))
 			return 0;
 		
 		return source.drawEnergy(requested, joules);
