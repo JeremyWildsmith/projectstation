@@ -18,7 +18,6 @@
  */
 package com.jevaengine.spacestation.ui;
 
-import com.jevaengine.spacestation.ui.LoadoutHudFactory.ILoadoutHudObserver;
 import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
@@ -28,13 +27,10 @@ import io.github.jevaengine.rpg.item.IImmutableItemSlot;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
+
 import java.net.URI;
 
 public final class LoadoutHudFactory {

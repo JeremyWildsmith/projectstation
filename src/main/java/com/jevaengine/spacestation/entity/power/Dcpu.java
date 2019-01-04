@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity.power;
 
-import com.jevaengine.spacestation.entity.BasicDevice;
 import com.jevaengine.spacestation.entity.IInteractableEntity;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import de.codesourcery.jasm16.Address;

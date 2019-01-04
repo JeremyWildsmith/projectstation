@@ -23,19 +23,16 @@ import com.jevaengine.spacestation.IStateContext;
 import io.github.jevaengine.FutureResult;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.graphics.ISpriteFactory;
-import io.github.jevaengine.ui.Button;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.Button.IButtonPressObserver;
-import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.world.IParallelWorldFactory;
 import io.github.jevaengine.world.IWorldFactory.WorldConstructionException;
 import io.github.jevaengine.world.World;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URI;
 
 public class MainMenu implements IState
 {

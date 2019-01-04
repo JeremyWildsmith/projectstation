@@ -7,18 +7,16 @@ package com.jevaengine.spacestation.entity.network;
 
 import com.jevaengine.spacestation.dcpu.devices.NetworkIoTerminal;
 import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
-import com.jevaengine.spacestation.entity.IInteractableEntity;
 import com.jevaengine.spacestation.entity.power.Dcpu;
 import com.jevaengine.spacestation.entity.power.IDcpuCompatibleDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
 import com.jevaengine.spacestation.entity.power.IPowerDevice;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSceneModelAnimation;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**

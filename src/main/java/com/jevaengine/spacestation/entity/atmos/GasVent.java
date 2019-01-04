@@ -6,12 +6,10 @@
 package com.jevaengine.spacestation.entity.atmos;
 
 import com.jevaengine.spacestation.entity.power.IDevice;
-import com.jevaengine.spacestation.gas.GasSimulationEntity;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
-import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 import java.util.HashMap;

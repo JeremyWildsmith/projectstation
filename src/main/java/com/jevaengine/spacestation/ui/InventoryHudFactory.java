@@ -38,7 +38,6 @@ import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.entity.IEntity;
 
-import java.awt.event.KeyEvent;
 import java.net.URI;
 
 public final class InventoryHudFactory {

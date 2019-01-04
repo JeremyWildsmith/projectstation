@@ -12,6 +12,7 @@ import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+
 import java.util.List;
 
 /**

@@ -14,7 +14,6 @@ import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
-import io.github.jevaengine.world.scene.model.NullSceneModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

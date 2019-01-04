@@ -12,6 +12,7 @@ import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;

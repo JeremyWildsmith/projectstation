@@ -28,6 +28,7 @@ import io.github.jevaengine.joystick.IInputSource;
 import io.github.jevaengine.rpg.spell.ISpellFactory;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.world.IWorldFactory;
+
 import javax.inject.Inject;
 
 public final class StationGameFactory implements IGameFactory

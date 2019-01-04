@@ -1,7 +1,6 @@
 package com.jevaengine.spacestation.entity.character;
 
 import com.jevaengine.spacestation.gas.GasSimulationEntity;
-import com.jevaengine.spacestation.gas.GasType;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
@@ -10,9 +9,6 @@ import io.github.jevaengine.rpg.entity.character.IStatusResolverFactory;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SpaceCharacterStatusResolverFactory implements IStatusResolverFactory {

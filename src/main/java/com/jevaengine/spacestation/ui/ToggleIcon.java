@@ -12,7 +12,8 @@ import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 
 /**
  *

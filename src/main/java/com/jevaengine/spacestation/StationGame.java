@@ -33,9 +33,10 @@ import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.world.IParallelWorldFactory;
 import io.github.jevaengine.world.IWorldFactory;
 import io.github.jevaengine.world.ThreadPooledWorldFactory;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URI;
 
 public final class StationGame extends DefaultGame implements IStateContext
 {

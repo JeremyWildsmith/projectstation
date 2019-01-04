@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.entity;
 
-import com.jevaengine.spacestation.entity.network.NetworkToggleControl;
 import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
@@ -18,6 +17,7 @@ import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

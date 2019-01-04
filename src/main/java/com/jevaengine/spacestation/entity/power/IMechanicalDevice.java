@@ -5,8 +5,6 @@
  */
 package com.jevaengine.spacestation.entity.power;
 
-import com.jevaengine.spacestation.entity.power.IDevice;
-
 /**
  *
  * @author Jeremy

@@ -9,12 +9,12 @@ import io.github.jevaengine.math.Rect2F;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.world.Direction;
-import io.github.jevaengine.world.IImmutableEffectMap.LogicEffects;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.SceneArtifact;
 import io.github.jevaengine.world.pathfinding.IRoutingRules;
 import io.github.jevaengine.world.search.RectangleSearchFilter;
+
 import java.util.ArrayList;
 import java.util.List;
 

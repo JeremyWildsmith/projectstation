@@ -6,19 +6,13 @@
 package com.jevaengine.spacestation.entity.network;
 
 import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
-import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;
-import com.jevaengine.spacestation.entity.power.IPowerDevice;
-import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.Door;
-import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.search.RadialSearchFilter;
-
-import java.util.List;
 
 /**
  *

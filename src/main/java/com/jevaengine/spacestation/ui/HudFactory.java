@@ -18,25 +18,18 @@
  */
 package com.jevaengine.spacestation.ui;
 
-import com.jevaengine.spacestation.entity.ItemDrop;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
-import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.entity.character.ILoadout;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
-import io.github.jevaengine.world.entity.IEntity;
 
 import java.net.URI;
 

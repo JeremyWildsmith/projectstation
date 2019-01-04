@@ -8,20 +8,11 @@ package com.jevaengine.spacestation.entity;
 import com.jevaengine.spacestation.entity.atmos.*;
 import com.jevaengine.spacestation.entity.network.*;
 import com.jevaengine.spacestation.entity.power.*;
-import com.jevaengine.spacestation.gas.GasSimulation;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import com.jevaengine.spacestation.gas.GasType;
-import com.jevaengine.spacestation.gas.IGasSimulation;
 import io.github.jevaengine.IAssetStreamFactory;
 import io.github.jevaengine.IAssetStreamFactory.AssetStreamConstructionException;
-import io.github.jevaengine.config.IConfigurationFactory;
-import io.github.jevaengine.config.IImmutableVariable;
-import io.github.jevaengine.config.ISerializable;
-import io.github.jevaengine.config.IVariable;
-import io.github.jevaengine.config.ImmutableVariableOverlay;
-import io.github.jevaengine.config.NoSuchChildVariableException;
-import io.github.jevaengine.config.NullVariable;
-import io.github.jevaengine.config.ValueSerializationException;
+import io.github.jevaengine.config.*;
 import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.rpg.entity.RpgEntityFactory.DoorDeclaration;
 import io.github.jevaengine.rpg.item.IItem;
@@ -35,17 +26,15 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *

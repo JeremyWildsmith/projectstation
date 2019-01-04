@@ -6,7 +6,6 @@
 package com.jevaengine.spacestation.entity.network;
 
 import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
-import com.jevaengine.spacestation.entity.Wire;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;

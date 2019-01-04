@@ -9,7 +9,6 @@ import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
 import com.jevaengine.spacestation.entity.Wire;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
-import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 import java.util.List;

@@ -8,6 +8,7 @@ package com.jevaengine.spacestation.entity.power;
 import com.jevaengine.spacestation.entity.BasicDevice;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+
 import java.util.List;
 
 /**

@@ -5,7 +5,6 @@
  */
 package com.jevaengine.spacestation.dcpu.devices;
 
-import com.jevaengine.spacestation.entity.network.protocols.MeasurementProtocol;
 import de.codesourcery.jasm16.Register;
 import de.codesourcery.jasm16.WordAddress;
 import de.codesourcery.jasm16.emulator.ICPU;
@@ -15,6 +14,7 @@ import de.codesourcery.jasm16.emulator.devices.HardwareInterrupt;
 import de.codesourcery.jasm16.emulator.devices.IDcpuHardware;
 import de.codesourcery.jasm16.emulator.memory.IMemory;
 import io.github.jevaengine.util.Nullable;
+
 import java.util.LinkedList;
 import java.util.Queue;
 

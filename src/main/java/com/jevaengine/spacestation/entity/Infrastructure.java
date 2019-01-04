@@ -35,7 +35,6 @@ import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription.PhysicsBodyType;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
-import io.github.jevaengine.world.scene.model.NullSceneModel;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

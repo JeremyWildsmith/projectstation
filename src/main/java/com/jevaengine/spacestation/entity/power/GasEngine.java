@@ -5,16 +5,16 @@
  */
 package com.jevaengine.spacestation.entity.power;
 
-import com.jevaengine.spacestation.entity.atmos.ILiquidCarrier;
 import com.jevaengine.spacestation.entity.WiredDevice;
+import com.jevaengine.spacestation.entity.atmos.ILiquidCarrier;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

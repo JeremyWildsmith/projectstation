@@ -6,16 +6,13 @@
 package com.jevaengine.spacestation.ui;
 
 import com.jevaengine.spacestation.entity.character.InteractionNature;
-import static com.jevaengine.spacestation.entity.character.InteractionNature.Disarm;
-import static com.jevaengine.spacestation.entity.character.InteractionNature.Grab;
-import static com.jevaengine.spacestation.entity.character.InteractionNature.Harm;
-import static com.jevaengine.spacestation.entity.character.InteractionNature.Help;
 import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.ui.Control;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 
 /**
  *

@@ -1,10 +1,7 @@
 package com.jevaengine.spacestation.entity.atmos;
 
-import com.jevaengine.spacestation.dcpu.devices.NetworkPacket;
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.network.INetworkDataCarrier;
-import com.jevaengine.spacestation.entity.network.NetworkDevice;
-import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;
 import com.jevaengine.spacestation.gas.GasSimulationEntity;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;

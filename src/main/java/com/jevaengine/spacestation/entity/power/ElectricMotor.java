@@ -5,6 +5,7 @@ import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
+
 import java.util.ArrayList;
 import java.util.List;
 

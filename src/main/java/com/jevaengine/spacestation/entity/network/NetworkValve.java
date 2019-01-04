@@ -5,7 +5,6 @@ import com.jevaengine.spacestation.entity.atmos.ILiquidCarrier;
 import com.jevaengine.spacestation.entity.atmos.LiquidPipe;
 import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;
-import com.jevaengine.spacestation.gas.GasSimulation;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;

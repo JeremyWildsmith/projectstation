@@ -2,7 +2,6 @@ package com.jevaengine.spacestation.item;
 
 import com.jevaengine.spacestation.entity.Infrastructure;
 import io.github.jevaengine.config.*;
-import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.AttributeSet;
@@ -19,11 +18,9 @@ import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.smartcardio.ATR;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
 
 public class ConstructionItemFunctionFactory implements IItemFunctionFactory {

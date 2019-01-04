@@ -1,12 +1,14 @@
 package com.jevaengine.spacestation.gas;
 
-import io.github.jevaengine.math.*;
+import io.github.jevaengine.math.Vector2D;
+import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.world.Direction;
 import org.apache.commons.math3.linear.*;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.Queue;
 
 public class GasSimulation implements IGasSimulation {
 

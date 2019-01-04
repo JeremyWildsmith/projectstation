@@ -1,7 +1,6 @@
 package com.jevaengine.spacestation.gas;
 
 import io.github.jevaengine.math.Vector2D;
-import io.github.jevaengine.math.Vector2F;
 
 import java.util.HashMap;
 import java.util.HashSet;
