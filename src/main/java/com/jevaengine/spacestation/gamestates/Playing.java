@@ -22,15 +22,14 @@ import com.jevaengine.spacestation.IState;
 import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
-import com.jevaengine.spacestation.ui.GasDebugFactory;
-import com.jevaengine.spacestation.ui.HudFactory;
+import com.jevaengine.spacestation.ui.*;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
-import com.jevaengine.spacestation.ui.InventoryHudFactory;
 import com.jevaengine.spacestation.ui.InventoryHudFactory.InventoryHud;
-import com.jevaengine.spacestation.ui.LoadoutHudFactory;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory.LoadoutHud;
+import com.jevaengine.spacestation.ui.playing.ConsoleInterfaceInteractionHandler;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory.PlayingWindow;
+import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.graphics.ISpriteFactory;
 import io.github.jevaengine.math.Vector2D;
@@ -46,11 +45,15 @@ import io.github.jevaengine.world.scene.camera.FollowCamera;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+
 /**
  *
  * @author Jeremy
  */
 public class Playing implements IState {
+
+	private static final URI LEM_DISPLAY_WINDOW = URI.create("file:///ui/windows/dcpu/lem/layout.jwl");
 
 	private static final float CAMERA_ZOOM = 2.5f;
 
@@ -77,6 +80,14 @@ public class Playing implements IState {
 		m_audioClipFactory = audioClipFactory;
 		m_spriteFactory = spriteFactory;
 		m_world = world;
+	}
+
+	private WorldInteractionBehaviorInjector.IInteractionHandler[] createInteractionHandlers() {
+		LemDisplayFactory lemDisplayFactory = new LemDisplayFactory(m_context.getWindowManager(), m_windowFactory, LEM_DISPLAY_WINDOW);
+		return new WorldInteractionBehaviorInjector.IInteractionHandler[] {
+				new ConsoleInterfaceInteractionHandler(lemDisplayFactory)
+		};
+
 	}
 
 	@Override
@@ -169,7 +180,7 @@ public class Playing implements IState {
 				}
 			});
 			
-			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory).create(camera, m_player);
+			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory).create(camera, m_player, createInteractionHandlers());
 			m_playingWindow.center();
 			m_playingWindow.focus();
 			
