@@ -35,14 +35,7 @@ import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory.DialogueRouteConstructionException;
 import io.github.jevaengine.rpg.dialogue.NullDialogueRoute;
-import io.github.jevaengine.rpg.entity.character.DefaultInventory;
-import io.github.jevaengine.rpg.entity.character.DefaultLoadout;
-import io.github.jevaengine.rpg.entity.character.DefaultRpgCharacter;
-import io.github.jevaengine.rpg.entity.character.EquipmentCompositedAnimationSceneModel;
-import io.github.jevaengine.rpg.entity.character.IImmutableLoadout;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
-import io.github.jevaengine.rpg.entity.character.SimpleModelActionBehavior;
+import io.github.jevaengine.rpg.entity.character.*;
 import io.github.jevaengine.rpg.entity.character.usr.*;
 import io.github.jevaengine.rpg.item.IImmutableItemStore;
 import io.github.jevaengine.rpg.item.IItem;
@@ -253,6 +246,34 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
         return actionModel;
     }
 
+    protected IAllegianceResolverFactory createAllegienceResolverFactory() {
+        return new UsrAllegianceResolverFactory();
+    }
+
+    protected IStatusResolverFactory createStatusResolverFactory(URI configContext, UsrCharacterDeclaration characterDecl) throws URISyntaxException, UIStyleConstructionException {
+        return new SpaceCharacterStatusResolverFactory(new UsrStatusResolverFactory(m_styleFactory.create(configContext.resolve(new URI(characterDecl.statusStyle)))));
+    }
+
+    protected ICombatResolverFactory createCombatResolverFactory() {
+        return new UsrCombatResolverFactory();
+    }
+
+    protected IMovementResolverFactory createMovementResolverFactory() {
+        return new UsrMovementResolverFactory();
+    }
+
+    protected IDialogueResolverFactory createDialogueResolverFactory(IDialogueRoute route) {
+        return new UsrDialogueResolverFactory(route);
+    }
+
+    protected ISpellCastResolverFactory createSpellCastResolverFactory() {
+        return new UsrSpellCastResolverFactory();
+    }
+
+    protected IVisionResolverFactory createVisionResolverFactory() {
+        return new UsrVisionResolverFactory();
+    }
+
     @Override
     public IRpgCharacter create(String instanceName, @Nullable URI config, IImmutableVariable auxConfig) throws CharacterCreationException
     {
@@ -279,13 +300,13 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
             return new DefaultRpgCharacter(behavior,
                     m_dialogueRouteFactory,
                     attributes,
-                    new SpaceCharacterStatusResolverFactory(new UsrStatusResolverFactory(m_styleFactory.create(name.resolve(new URI(characterDecl.statusStyle))))),
-                    new UsrCombatResolverFactory(),
-                    new UsrSpellCastResolverFactory(),
-                    new UsrDialogueResolverFactory(dialogueRoute),
-                    new UsrMovementResolverFactory(),
-                    new UsrVisionResolverFactory(),
-                    new UsrAllegianceResolverFactory(),
+                    createStatusResolverFactory(name, characterDecl),
+                    createCombatResolverFactory(),
+                    createSpellCastResolverFactory(),
+                    createDialogueResolverFactory(dialogueRoute),
+                    createMovementResolverFactory(),
+                    createVisionResolverFactory(),
+                    createAllegienceResolverFactory(),
                     loadout,
                     inventory,
                     model,
