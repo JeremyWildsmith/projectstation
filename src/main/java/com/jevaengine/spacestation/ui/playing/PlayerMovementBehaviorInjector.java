@@ -5,25 +5,16 @@
  */
 package com.jevaengine.spacestation.ui.playing;
 
-import com.jevaengine.spacestation.gas.GasSimulation;
-import com.jevaengine.spacestation.gas.GasSimulationEntity;
-import com.jevaengine.spacestation.gas.GasSimulationNetwork;
-import com.jevaengine.spacestation.gas.GasType;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Timer;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WorldView;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.steering.DirectionSteeringBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
+
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
 
 /**
  *
@@ -32,10 +23,10 @@ import java.util.HashMap;
 public class PlayerMovementBehaviorInjector extends WindowBehaviourInjector {
 
 	private final PlayerMovementDirector m_playerMovementDirector = new PlayerMovementDirector();
-	private final IRpgCharacter m_character;
+	private final IMovementResolver m_targetMovementResolver;
 
-	public PlayerMovementBehaviorInjector(IRpgCharacter character) {
-		m_character = character;
+	public PlayerMovementBehaviorInjector(IMovementResolver targetMovementResolver) {
+		m_targetMovementResolver = targetMovementResolver;
 	}
 
 	@Override
@@ -77,13 +68,6 @@ public class PlayerMovementBehaviorInjector extends WindowBehaviourInjector {
 					case KeyEvent.VK_LEFT:
 						vec.x = event.type == InputKeyEvent.KeyEventType.KeyDown ? -1 : 0;
 						break;
-					case KeyEvent.VK_U:
-					{
-						GasSimulationEntity e = m_character.getWorld().getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
-						HashMap<GasType, Float> gas = new HashMap<>();
-						gas.put(GasType.Water, 100f);
-						e.produce(GasSimulationNetwork.Environment, m_character.getBody().getLocation().getXy().round(), new GasSimulation.GasMetaData(gas, 0));
-					}
 				}
 
 				m_playerMovementDirector.setMovementDelta(vec);
@@ -136,7 +120,7 @@ public class PlayerMovementBehaviorInjector extends WindowBehaviourInjector {
 		public void update(int deltaTime) {
 			if (!m_movementDelta.isZero() && !m_isQueued) {
 				m_isQueued = true;
-				m_character.getMovementResolver().queueTop(this);
+				m_targetMovementResolver.queue(this);
 			}
 		}
 	}
