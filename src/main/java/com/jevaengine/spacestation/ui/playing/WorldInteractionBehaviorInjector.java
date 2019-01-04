@@ -9,7 +9,6 @@ import com.jevaengine.spacestation.entity.IInteractableEntity;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.joystick.InputMouseEvent.MouseButton;
-import io.github.jevaengine.math.Rect2F;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
@@ -22,7 +21,6 @@ import io.github.jevaengine.ui.WorldView;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.search.RadialSearchFilter;
-import io.github.jevaengine.world.search.RectangleSearchFilter;
 
 import java.awt.event.KeyEvent;
 
@@ -119,6 +117,10 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 					for (IInteractableEntity e : interactable) {
 						if (Direction.fromVector(e.getBody().getLocation().getXy().difference(playerPos)) == playerDirection) {
+
+							IInteractionHandler handler = getHandler(e.getClass());
+							if(handler != null)
+								handler.handle(e, false, m_interactionDistance);
 							e.interactedWith(m_character);
 						}
 					}
