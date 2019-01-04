@@ -140,6 +140,9 @@ public final class GasDebugFactory {
 
 					GasSimulationEntity sim = m_follow.getWorld().getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
 
+					if(sim == null)
+						return;
+
 					g.setColor(Color.black);
 					g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);
 					Rect2D bounds = displayView.getBounds();
