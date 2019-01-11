@@ -1,9 +1,12 @@
 {
-  "name": "Right Arm",
+  "name": "Right Leg",
   "model": "model.jmf",
-  "function": "Chest Armor",
-  "description": "This is a human arm.",
+  "function": "BodyPart",
+  "description": "This is a human leg.",
   "attributes": {
     "Defence Bonus": 0.0
+  },
+  "parameters": {
+	"target": "RightLeg"
   }
 }
