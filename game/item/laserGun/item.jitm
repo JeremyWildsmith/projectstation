@@ -1,0 +1,13 @@
+{
+  "name": "Laser Gun",
+  "model": "model.jmf",
+  "icon" : "icon.png",
+  "function": "ProjectileWeapon",
+  "description": "A handy tool.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  },
+  "parameters": {
+	"projectile": "file:///artifact/entity/laser/lethal/entity.jec"
+  }
+}
