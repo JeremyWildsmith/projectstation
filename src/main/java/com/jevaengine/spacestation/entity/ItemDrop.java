@@ -63,6 +63,10 @@ public final class ItemDrop implements IEntity, IInteractableEntity {
 		m_bridge = new EntityBridge(this);
 	}
 
+	public IItem getItem() {
+		return m_item;
+	}
+
 	private void constructPhysicsBody() {
 		m_body = new NonparticipantPhysicsBody(this);
 

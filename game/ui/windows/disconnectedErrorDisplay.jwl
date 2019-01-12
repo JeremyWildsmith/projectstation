@@ -1,0 +1,58 @@
+{
+  "style": "file:///ui/style/mainmenu/style.juis",
+  "bounds": {
+    "width": 1280,
+    "height": 1024
+  },
+  "controls": [
+    {
+      "type": "label",
+      "name": "lblReason",
+      "location": {
+        "x": 250,
+        "y": 460
+      },
+      "config": {
+        "text": "Cause:"
+      }
+    },
+    {
+      "type": "textArea",
+      "name": "txtReason",
+      "location": {
+        "x": 250,
+        "y": 500
+      },
+      "config": {		  
+		"bounds": {
+			"width": 900,
+			"height": 300
+		},
+        "text": "Disconnected from the server for an unknown reason."
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnContinue",
+      "location": {
+        "x": 550,
+        "y": 760
+      },
+      "config": {
+        "text": "Okay"
+      }
+    },
+    {
+      "type": "label",
+      "name": "lblTitle",
+      "location": {
+        "x": 150,
+        "y": 260
+      },
+	  "style": "file:///ui/style/mainmenu/title.juis",
+      "config": {
+        "text": "Disconnected"
+      }
+    }
+  ]
+}

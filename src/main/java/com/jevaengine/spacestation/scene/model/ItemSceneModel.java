@@ -10,6 +10,8 @@ import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.item.IItem;
+import io.github.jevaengine.util.IObserverRegistry;
+import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.ISceneModel;
@@ -86,6 +88,11 @@ public class ItemSceneModel implements ISceneModel {
 	@Override
 	public Direction getDirection() {
 		return Direction.Zero;
+	}
+
+	@Override
+	public IObserverRegistry getObservers() {
+		return new Observers();
 	}
 
 	@Override

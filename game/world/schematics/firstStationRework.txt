@@ -41,7 +41,7 @@ Engineering Wing (ew) Schematics:
 				pri(mary) - SN01, NV01
 			
 			pwr	- EW Power
-				pri(mary) - NS01, NONE
+				pri(mary) - SN02, NONE
 			
 			Config:
 			select atmos

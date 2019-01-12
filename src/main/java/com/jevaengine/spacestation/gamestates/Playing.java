@@ -61,11 +61,6 @@ public class Playing implements IState {
 	private final World m_world;
 	private PlayingWindow m_playingWindow;
 
-	private final IWindowFactory m_windowFactory;
-	private final IParallelWorldFactory m_worldFactory;
-	private final IAudioClipFactory m_audioClipFactory;
-	private final ISpriteFactory m_spriteFactory;
-
 	private final Logger m_logger = LoggerFactory.getLogger(Playing.class);
 
 	private IRpgCharacter m_player = new NullRpgCharacter();
@@ -74,16 +69,12 @@ public class Playing implements IState {
 	private LoadoutHud m_loadoutHud;
 	private InventoryHud m_inventoryHud;
 
-	public Playing(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, World world) {
-		m_windowFactory = windowFactory;
-		m_worldFactory = worldFactory;
-		m_audioClipFactory = audioClipFactory;
-		m_spriteFactory = spriteFactory;
+	public Playing(World world) {
 		m_world = world;
 	}
 
 	private WorldInteractionBehaviorInjector.IInteractionHandler[] createInteractionHandlers() {
-		LemDisplayFactory lemDisplayFactory = new LemDisplayFactory(m_context.getWindowManager(), m_windowFactory, LEM_DISPLAY_WINDOW);
+		LemDisplayFactory lemDisplayFactory = new LemDisplayFactory(m_context.getWindowManager(), m_context.getWindowFactory(), LEM_DISPLAY_WINDOW);
 		return new WorldInteractionBehaviorInjector.IInteractionHandler[] {
 				new ConsoleInterfaceInteractionHandler(lemDisplayFactory)
 		};
@@ -111,20 +102,20 @@ public class Playing implements IState {
 			camera.setTarget(m_player);
 
 			Vector2D resolution = context.getWindowManager().getResolution();
-			m_hud = new HudFactory(context.getWindowManager(), m_windowFactory).create(m_player, m_player.getInventory(), m_player.getLoadout());
+			m_hud = new HudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, m_player.getInventory(), m_player.getLoadout());
 			m_hud.setTopMost(true);
 			m_hud.setMovable(false);
 			m_hud.center();
 			m_hud.setLocation(new Vector2D(m_hud.getLocation().x, resolution.y - m_hud.getBounds().height));
 			
-			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), m_windowFactory).create(m_player.getLoadout(), m_player.getInventory());
+			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory());
 			m_loadoutHud.setMovable(false);
 			m_loadoutHud.setTopMost(true);
 			m_loadoutHud.setVisible(false);
 			m_loadoutHud.center();
 			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x, resolution.y - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
 			
-			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), m_windowFactory).create(m_player.getLoadout(), m_player.getInventory(), m_player);
+			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory(), m_player);
 			m_inventoryHud.setMovable(false);
 			m_inventoryHud.setTopMost(true);
 			m_inventoryHud.setVisible(false);
@@ -134,35 +125,35 @@ public class Playing implements IState {
 
 
 			//Gas Simulation Debug
-			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeB);
+			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeB);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
 			//Gas Simulation Debug
-			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeA);
+			debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeA);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
 			//Gas Simulation Debug
-			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeC);
+			debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeC);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
 			//Gas Simulation Debug
-			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.Environment);
+			debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
 			//Gas Simulation Debug
-			debug = new GasDebugFactory(context.getWindowManager(), m_windowFactory).create(m_player, GasSimulationNetwork.PipeD);
+			debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeD);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
@@ -180,13 +171,13 @@ public class Playing implements IState {
 				}
 			});
 			
-			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), m_windowFactory).create(camera, m_player, createInteractionHandlers());
+			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), context.getWindowFactory()).create(camera, m_player, createInteractionHandlers());
 			m_playingWindow.center();
 			m_playingWindow.focus();
 			
 		} catch (WindowConstructionException e) {
 			m_logger.error("Error occured constructing demo world or world view. Reverting to MainMenu.", e);
-			m_context.setState(new MainMenu(m_windowFactory, m_worldFactory, m_audioClipFactory, m_spriteFactory));
+			m_context.setState(new MainMenu());
 		}
 	}
 

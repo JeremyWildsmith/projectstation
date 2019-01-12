@@ -61,7 +61,7 @@ public final class HudFactory {
 		private final Window m_window;
 		private final Observers m_observers;
 
-		private Hud(Window window, Observers observers) {
+		public Hud(Window window, Observers observers) {
 			m_window = window;
 			m_observers = observers;
 		}
@@ -154,10 +154,10 @@ public final class HudFactory {
 
 			private void tryUseItem() {
 				IItem item = m_slot.getItem();
-				IItem.ItemUseAbilityTestResults result = item.getFunction().testUseAbility(m_owner, m_owner, item.getAttributes());
+				IItem.ItemUseAbilityTestResults result = item.getFunction().testUseAbility(m_owner, new IItem.ItemTarget(m_owner), item.getAttributes());
 
 				if(result.isUseable()) {
-					item.getFunction().use(m_owner, null, item.getAttributes(), item);
+					item.getFunction().use(m_owner, new IItem.ItemTarget(m_owner), item.getAttributes(), item);
 				}
 			}
 

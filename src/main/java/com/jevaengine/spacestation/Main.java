@@ -222,8 +222,7 @@ public class Main implements WindowListener
 					return new StationControlFactory(baseFactory, configurationFactory, graphicFactory);
 				}
 			});
-			
-			bind(IAudioClipFactory.class).toInstance(new NullAudioClipFactory());
+
 			bind(IEffectMapFactory.class).to(TiledEffectMapFactory.class);
 			bind(IRenderer.class).toInstance(new FrameRenderer(m_frame, IS_FULL_SCREEN, RenderFitMode.Stretch));
 			bind(IParticleEmitterFactory.class).to(DefaultParticleEmitterFactory.class);

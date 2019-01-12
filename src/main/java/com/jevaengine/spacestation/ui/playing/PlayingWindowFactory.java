@@ -46,14 +46,18 @@ public final class PlayingWindowFactory {
 	}
 
 	public PlayingWindow create(ICamera camera, IRpgCharacter character, IInteractionHandler[] interactionHandlers) throws WindowConstructionException {
-		Observers observers = new Observers();
+		return this.create(camera, character, interactionHandlers, new WorldInteractionBehaviorInjector.DefaultActionHandler());
+	}
+
+	public PlayingWindow create(ICamera camera, IRpgCharacter character, IInteractionHandler[] interactionHandlers, WorldInteractionBehaviorInjector.IActionHandler actionHandler) throws WindowConstructionException {
+			Observers observers = new Observers();
 		
 		Window window = m_windowFactory.create(PLAYING_VIEW_WINDOW);
 		m_windowManager.addWindow(window);
 
 		try {
 			new PlayerMovementBehaviorInjector(character.getMovementResolver()).inject(window);
-			new WorldInteractionBehaviorInjector(character, interactionHandlers).inject(window);
+			new WorldInteractionBehaviorInjector(character, actionHandler, interactionHandlers).inject(window);
 			new CameraBehaviorInjector(character, camera).inject(window);
 		} catch (NoSuchControlException ex) {
 			throw new WindowConstructionException(PLAYING_VIEW_WINDOW, ex);

@@ -15,6 +15,7 @@ import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -25,7 +26,7 @@ public class ToolItemFunctionFactory implements IItemFunctionFactory {
     private static final String CONSTRUCT_FLAG_PREFIX = "CONSTRUCT_";
 
     @Override
-    public IItem.IItemFunction create(IItemFactory itemFactory, IEntityFactory entityFactory, IImmutableVariable parameters) {
+    public IItem.IItemFunction create(IItemFactory itemFactory, IEntityFactory entityFactory, ISceneModelFactory modelFactory, IImmutableVariable parameters) {
         try {
             ToolRule[] rules = parameters.getChild("rules").getValues(ToolRule[].class);
             return new ToolItemFunction(itemFactory, rules);
@@ -156,7 +157,7 @@ public class ToolItemFunctionFactory implements IItemFunctionFactory {
         }
 
         @Override
-        public IImmutableAttributeSet use(IRpgCharacter user, Object target, AttributeSet itemAttributes, IItem item) {
+        public IImmutableAttributeSet use(IRpgCharacter user, IItem.ItemTarget target, AttributeSet itemAttributes, IItem item) {
             for(ToolRule r : rules) {
                 if(r.testUseability(user).isUseable()) {
                     r.use(itemFactory, user);
@@ -168,10 +169,7 @@ public class ToolItemFunctionFactory implements IItemFunctionFactory {
         }
 
         @Override
-        public IItem.ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, Object target, IImmutableAttributeSet item) {
-            if(target != null)
-                return new IItem.ItemUseAbilityTestResults(false, "These two items cannot be used together.");
-
+        public IItem.ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, IItem.ItemTarget target, IImmutableAttributeSet item) {
             IItem.ItemUseAbilityTestResults first = null;
 
             for(ToolRule r : rules) {

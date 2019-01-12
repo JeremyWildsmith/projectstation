@@ -5,7 +5,8 @@
       "items" : [
 		"file:///item/metalRod/item.jitm","file:///item/metalRod/item.jitm","file:///item/metalRod/item.jitm",
 		"file:///item/metalSheet/item.jitm","file:///item/metalSheet/item.jitm", "file:///item/powerWire/red/item.jitm",
-		"file:///item/powerWire/green/item.jitm", "file:///item/powerWire/blue/item.jitm", "file:///item/powerWire/blue/item.jitm"
+		"file:///item/powerWire/green/item.jitm", "file:///item/powerWire/blue/item.jitm", "file:///item/powerWire/blue/item.jitm",
+		"file:///item/laserGun/item.jitm"
 	  ],
       "loadout" : { 
         "Head" : "file:///item/bodyparts/head/item.jitm",

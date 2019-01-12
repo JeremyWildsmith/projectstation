@@ -15,6 +15,7 @@ import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -25,7 +26,7 @@ import java.util.Objects;
 
 public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
     @Override
-    public IItem.IItemFunction create(IItemFactory itemFactory, IEntityFactory entityFactory, IImmutableVariable parameters) {
+    public IItem.IItemFunction create(IItemFactory itemFactory, IEntityFactory entityFactory, ISceneModelFactory modelFactory, IImmutableVariable parameters) {
         try {
             ConstructionRule[] rules = parameters.getChild("rules").getValues(ConstructionRule[].class);
             return new ConstructionItemFunction(itemFactory, entityFactory, rules);
@@ -224,11 +225,8 @@ public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
         }
 
         @Override
-        public IImmutableAttributeSet use(IRpgCharacter user, Object target, AttributeSet itemAttributes, IItem item) {
-            IItem targetItem = null;
-
-            if(target instanceof IItem)
-                targetItem = (IItem)target;
+        public IImmutableAttributeSet use(IRpgCharacter user, IItem.ItemTarget target, AttributeSet itemAttributes, IItem item) {
+            IItem targetItem = target.getTarget(IItem.class);
 
 
             for(ConstructionRule r : rules) {
@@ -242,9 +240,9 @@ public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
         }
 
         @Override
-        public IItem.ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, Object target, IImmutableAttributeSet item) {
+        public IItem.ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, IItem.ItemTarget target, IImmutableAttributeSet item) {
 
-            IItem targetItem = (target instanceof IItem ? (IItem)target : null);
+            IItem targetItem = target.getTarget(IItem.class);
 
             IItem.ItemUseAbilityTestResults first = null;
 

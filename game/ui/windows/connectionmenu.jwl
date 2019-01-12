@@ -2,21 +2,34 @@
   "style": "file:///ui/style/mainmenu/style.juis",
   "bounds": {
     "width": 1280,
-    "height": 720
+    "height": 1024
   },
   "controls": [
-		{
-      "type": "worldView",
-      "name": "worldView",
+    {
+      "type": "label",
+      "name": "lblNickname",
       "location": {
-        "x": 0,
-        "y": 0
+        "x": 250,
+        "y": 460
       },
       "config": {
-        "bounds" : {
-          "width" : 1280,
-          "height" : 720
-        }
+        "text": "Nickname:"
+      }
+    },
+    {
+      "type": "textArea",
+      "name": "txtNickname",
+      "location": {
+        "x": 485,
+        "y": 465
+      },
+	  "width": 50,
+	  "height": 50,
+      "config": {
+        "text": "Player1",
+		"multiline": false,
+		"wordWrap": false,
+		"maxLength": 15
       }
     },
     {
@@ -24,10 +37,22 @@
       "name": "btnConnect",
       "location": {
         "x": 550,
-        "y": 360
+        "y": 760
       },
       "config": {
         "text": "Connect"
+      }
+    },
+    {
+      "type": "label",
+      "name": "lblTitle",
+      "location": {
+        "x": 150,
+        "y": 260
+      },
+	  "style": "file:///ui/style/mainmenu/title.juis",
+      "config": {
+        "text": "Project Station 13"
       }
     }
   ]

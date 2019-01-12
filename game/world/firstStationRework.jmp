@@ -2,16 +2,20 @@
   "worldWidth" : 400,
   "metersPerUnit" : 1.0,
   "worldHeight" : 400,
-  "entities" : [ {
-    "auxConfig" : null,
-    "name" : "player",
+  "entities" : [
+  {
+    "auxConfig" : {
+		"type": "character",
+		"config": "/artifact/entity/human/entity.jec",
+		"spawnDepth": 2.0
+	},
+    "name" : "spawnController",
     "location" : {
-      "x" : 36.0,
-      "y" : 26.0,
-      "z" : 2.0
+      "x" : 0.0,
+      "y" : 0.0,
+      "z" : 0.0
     },
-    "type" : "character",
-    "config" : "/artifact/entity/human/entity.jec",
+    "type" : "randomSpawnController",
     "direction" : 8
   }, {
     "auxConfig" : null,

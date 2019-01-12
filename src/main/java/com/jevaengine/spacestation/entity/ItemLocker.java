@@ -76,6 +76,12 @@ public final class ItemLocker implements IEntity, IItemStore {
 	}
 
 	@Override
+	public void clear() {
+		for(IItemSlot s : m_slots)
+			s.clear();
+	}
+
+	@Override
 	public IItemSlot[] getSlots() {
 		return m_slots.toArray(new IItemSlot[m_slots.size()]);
 	}

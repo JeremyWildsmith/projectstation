@@ -61,7 +61,7 @@ public final class LoadoutHudFactory {
 		private final Window m_window;
 		private final Observers m_observers;
 
-		private LoadoutHud(Window window, Observers observers) {
+		public LoadoutHud(Window window, Observers observers) {
 			m_window = window;
 			m_observers = observers;
 		}

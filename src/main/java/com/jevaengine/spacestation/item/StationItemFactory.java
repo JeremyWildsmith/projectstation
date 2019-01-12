@@ -55,10 +55,10 @@ public final class StationItemFactory implements IItemFactory {
 	private final IGraphicFactory m_graphicFactory;
 	private final IAnimationSceneModelFactory m_modelFactory;
 	private final Provider<IEntityFactory> m_entityFactory;
-	private final IItemFactory m_itemFactory;
+	private final Provider<IItemFactory> m_itemFactory;
 
 	@Inject
-	public StationItemFactory(IConfigurationFactory configurationFactory, IGraphicFactory graphicFactory, IAnimationSceneModelFactory modelFactory, Provider<IEntityFactory> entityFactory, IItemFactory itemFactory) {
+	public StationItemFactory(IConfigurationFactory configurationFactory, IGraphicFactory graphicFactory, IAnimationSceneModelFactory modelFactory, Provider<IEntityFactory> entityFactory, Provider<IItemFactory> itemFactory) {
 		m_configurationFactory = configurationFactory;
 		m_graphicFactory = graphicFactory;
 		m_modelFactory = modelFactory;
@@ -88,7 +88,7 @@ public final class StationItemFactory implements IItemFactory {
 
 				for (StationItemFunctionFactory f : StationItemFunctionFactory.values()) {
 					if (f.getName().equals(functionName)) {
-						function = f.create(m_itemFactory, m_entityFactory.get(), itemDecl.parameters);
+						function = f.create(m_itemFactory.get(), m_entityFactory.get(), m_modelFactory, itemDecl.parameters);
 					}
 				}
 			}

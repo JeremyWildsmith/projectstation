@@ -18,7 +18,19 @@
  */
 package com.jevaengine.spacestation;
 
+import io.github.jevaengine.audio.IAudioClipFactory;
+import io.github.jevaengine.graphics.IFontFactory;
+import io.github.jevaengine.graphics.ISpriteFactory;
+import io.github.jevaengine.rpg.item.IItemFactory;
+import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.WindowManager;
+import io.github.jevaengine.world.IEffectMapFactory;
+import io.github.jevaengine.world.IParallelWorldFactory;
+import io.github.jevaengine.world.IWorldFactory;
+import io.github.jevaengine.world.entity.IEntity;
+import io.github.jevaengine.world.entity.IEntityFactory;
+import io.github.jevaengine.world.entity.IParallelEntityFactory;
+import io.github.jevaengine.world.physics.IPhysicsWorldFactory;
 
 /**
  *
@@ -28,4 +40,17 @@ public interface IStateContext
 {
 	void setState(IState state);
 	WindowManager getWindowManager();
+
+	IFontFactory getFontFactory();
+	IPhysicsWorldFactory getPhysicsWorldFactory();
+	IEntityFactory getEntityFactory();
+	IParallelEntityFactory getParallelEntityFactory();
+	IWindowFactory getWindowFactory();
+	IParallelWorldFactory getParallelWorldFactory();
+	IWorldFactory getWorldFactory();
+	IAudioClipFactory getAudioClipFactory();
+	ISpriteFactory getSpriteFactory();
+	IEffectMapFactory getEffectMapFactory();
+
+	IItemFactory getItemFactory();
 }

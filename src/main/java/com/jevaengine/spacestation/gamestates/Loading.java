@@ -42,12 +42,7 @@ public class Loading implements IState
 {
 	private IStateContext m_context;
 	private Window m_window;
-	
-	private final IWindowFactory m_windowFactory;
-	private final IParallelWorldFactory m_worldFactory;
-	private final IAudioClipFactory m_audioClipFactory;
-	private final ISpriteFactory m_spriteFactory;
-	
+
 	private final Logger m_logger = LoggerFactory.getLogger(Loading.class);
 	
 	private final URI m_worldName;
@@ -55,13 +50,9 @@ public class Loading implements IState
 	
 	private final ILoadingWorldHandler m_handler;
 	
-	public Loading(IWindowFactory windowFactory, IParallelWorldFactory worldFactory, IAudioClipFactory audioClipFactory, ISpriteFactory spriteFactory, URI world, ILoadingWorldHandler handler)
+	public Loading(URI world, ILoadingWorldHandler handler)
 	{
 		m_handler = handler;
-		m_windowFactory = windowFactory;
-		m_worldFactory = worldFactory;
-		m_audioClipFactory = audioClipFactory;
-		m_spriteFactory = spriteFactory;
 		m_worldName = world;
 	}
 	
@@ -73,11 +64,11 @@ public class Loading implements IState
 		{
 			final LoadingBehaviourInjector behavior = new LoadingBehaviourInjector();
 			
-			m_window = m_windowFactory.create(URI.create("file:///ui/windows/loading.jwl"), behavior);
+			m_window = context.getWindowFactory().create(URI.create("file:///ui/windows/loading.jwl"), behavior);
 			context.getWindowManager().addWindow(m_window);
 			m_window.center();
 			
-			m_worldFactory.create(m_worldName, new IInitializationMonitor<World, WorldConstructionException>() {
+			context.getParallelWorldFactory().create(m_worldName, new IInitializationMonitor<World, WorldConstructionException>() {
 
 				@Override
 				public void completed(FutureResult<World, WorldConstructionException> result) {

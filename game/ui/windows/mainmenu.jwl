@@ -2,7 +2,7 @@
   "style": "file:///ui/style/mainmenu/style.juis",
   "bounds": {
     "width": 1280,
-    "height": 720
+    "height": 1024
   },
   "controls": [
 		{
@@ -15,7 +15,7 @@
       "config": {
         "bounds" : {
           "width" : 1280,
-          "height" : 720
+          "height" : 1024
         }
       }
     },

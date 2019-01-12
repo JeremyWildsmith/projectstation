@@ -67,7 +67,7 @@ public final class InventoryHudFactory {
 		private final Window m_window;
 		private final Observers m_observers;
 
-		private InventoryHud(Window window, Observers observers) {
+		public InventoryHud(Window window, Observers observers) {
 			m_window = window;
 			m_observers = observers;
 		}
@@ -197,8 +197,8 @@ public final class InventoryHudFactory {
 				if(inHands.isEmpty())
 					return;
 
-				if(inHands.getItem().getFunction().testUseAbility(m_owner, m_slot.getItem(), inHands.getItem().getAttributes()).isUseable()) {
-					inHands.getItem().getFunction().use(m_owner, m_slot.getItem(), inHands.getItem().getAttributes(), inHands.getItem());
+				if(inHands.getItem().getFunction().testUseAbility(m_owner, new IItem.ItemTarget(m_slot.getItem()), inHands.getItem().getAttributes()).isUseable()) {
+					inHands.getItem().getFunction().use(m_owner, new IItem.ItemTarget(m_slot.getItem()), inHands.getItem().getAttributes(), inHands.getItem());
 				}
 			}
 
@@ -209,7 +209,7 @@ public final class InventoryHudFactory {
 				if(m_slot.isEmpty()) {
 					if(!inHands.isEmpty())
 						m_slot.setItem(inHands.clear());
-				} else if(!inHands.isEmpty() && inHands.getItem().getFunction().testUseAbility(m_owner, m_slot.getItem(), inHands.getItem().getAttributes()).isUseable()) {
+				} else if(!inHands.isEmpty() && inHands.getItem().getFunction().testUseAbility(m_owner, new IItem.ItemTarget(m_slot.getItem()), inHands.getItem().getAttributes()).isUseable()) {
 					IWieldTarget[] itemWieldTargets = m_slot.getItem().getFunction().getWieldTargets();
 
 					if(itemWieldTargets.length == 0)

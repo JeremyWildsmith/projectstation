@@ -8,6 +8,7 @@ package com.jevaengine.spacestation.entity;
 import com.jevaengine.spacestation.entity.atmos.*;
 import com.jevaengine.spacestation.entity.network.*;
 import com.jevaengine.spacestation.entity.power.*;
+import com.jevaengine.spacestation.entity.projectile.LaserProjectile;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import com.jevaengine.spacestation.gas.GasType;
 import io.github.jevaengine.IAssetStreamFactory;
@@ -98,7 +99,7 @@ public class StationEntityFactory implements IEntityFactory {
 			m_logger.error("Unable to insantiate configuration for entity. Using null configuration instead.", e);
 		}
 
-		return create(entityClass, instanceName, configVar);
+		return create(entityClass, instanceName, config, configVar);
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class StationEntityFactory implements IEntityFactory {
 		return create(entityClazz, instanceName, config, auxConfig);
 	}
 
-	private enum StationEntity {
+	public enum StationEntity {
 		PowerWire(Wire.class, "powerWire", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
@@ -395,7 +396,7 @@ public class StationEntityFactory implements IEntityFactory {
 					InfrastructureDeclaration decl = auxConfig.getValue(InfrastructureDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new Infrastructure(model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity);
+					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -530,6 +531,19 @@ public class StationEntityFactory implements IEntityFactory {
 					throw new EntityConstructionException(e);
 				}
 			}
+		}),
+		LaserProjectile(com.jevaengine.spacestation.entity.projectile.LaserProjectile.class, "laserProjetile", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException {
+				try {
+					LaserProjectileDeclaration decl = auxConfig.getValue(LaserProjectileDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new LaserProjectile(model, decl.speed, decl.life);
+				} catch (ValueSerializationException | SceneModelConstructionException e) {
+					throw new EntityConstructionException(e);
+				}
+			}
 		});
 
 		private final Class<? extends IEntity> m_class;
@@ -575,6 +589,32 @@ public class StationEntityFactory implements IEntityFactory {
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+
+	public static final class LaserProjectileDeclaration implements ISerializable {
+
+		public String model;
+		private float speed;
+		private int life;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("speed").setValue(speed);
+			target.addChild("life").setValue(life);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				speed = source.getChild("speed").getValue(Double.class).floatValue();
+				life = source.getChild("life").getValue(Integer.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

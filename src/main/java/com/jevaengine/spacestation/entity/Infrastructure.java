@@ -62,15 +62,17 @@ public final class Infrastructure implements IEntity {
 	private final Set<String> m_infrastructureType = new HashSet<>();
 
 	private final float m_heatConductivity;
+	private final boolean m_isTraversable;
 
-	public Infrastructure(ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity) {
-		m_name = this.getClass().getName() + m_unnamedCount.getAndIncrement();
+	public Infrastructure(String name, ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity) {
+		m_name = name;
 		m_isTransparent = isTransparent;
 		m_isAirTight = isAirTight;
 		m_infrastructureType.addAll(Arrays.asList(infrastructureTypes));
 		m_isStatic = isStatic;
 		m_heatConductivity = heatConductivity;
 		m_model = model;
+		m_isTraversable = isTraversable;
 
 		if (!isTraversable) {
 			m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
@@ -85,12 +87,20 @@ public final class Infrastructure implements IEntity {
 		m_bridge = new EntityBridge(this);
 	}
 
+	public boolean isTraversable() {
+		return m_isTraversable;
+	}
+
 	public float getHeatConductivity() {
 		return m_heatConductivity;
 	}
 
 	public boolean hasInfrastructureType(String type) {
 		return m_infrastructureType.contains(type);
+	}
+
+	public String[] getInfrastructureTypes() {
+		return m_infrastructureType.toArray(new String[m_infrastructureType.size()]);
 	}
 
 	public boolean isAirTight() {

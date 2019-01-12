@@ -111,16 +111,6 @@ public class CameraBehaviorInjector extends WindowBehaviourInjector {
 		}
 
 		@Override
-		public IRenderable getUnderlay(Rect2D bounds, Matrix3X3 projection) {
-			return new NullGraphic();
-		}
-
-		@Override
-		public IRenderable getOverlay(Rect2D bounds, Matrix3X3 projection) {
-			return new NullGraphic();
-		}
-
-		@Override
 		public ISceneBuffer.ISceneComponentEffect[] getComponentEffect(Graphics2D g, int offsetX, int offsetY, float scale, Vector2D renderLocation, Matrix3X3 projection, ISceneBuffer.ISceneBufferEntry subject, Collection<ISceneBuffer.ISceneBufferEntry> beneath) {
 			boolean found = false;
 
