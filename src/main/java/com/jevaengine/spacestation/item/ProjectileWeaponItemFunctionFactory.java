@@ -32,8 +32,6 @@ public class ProjectileWeaponItemFunctionFactory implements IItemFunctionFactory
     @Override
     public IItem.IItemFunction create(IItemFactory itemFactory, IEntityFactory entityFactory, ISceneModelFactory modelFactory, IImmutableVariable parameters) {
         URI entity = null;
-        float speed = 0;
-        int life = 0;
 
         try {
             if(parameters.childExists("projectile"))
