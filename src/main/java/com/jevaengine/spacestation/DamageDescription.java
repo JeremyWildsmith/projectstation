@@ -3,49 +3,24 @@ package com.jevaengine.spacestation;
 import io.github.jevaengine.config.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DamageDescription implements ISerializable, Serializable {
-    private DamageSeverity brute = DamageSeverity.None;
-    private DamageSeverity burn = DamageSeverity.None;
-    private DamageSeverity electrical = DamageSeverity.None;
-    private DamageSeverity suffocation = DamageSeverity.None;
-    private DamageSeverity toxin = DamageSeverity.None;
+    private Map<DamageCategory, DamageSeverity> damageSeverityMapping = new HashMap<>();
 
-    public DamageDescription() {
 
-    }
+    public DamageSeverity getDamageSeverity(DamageCategory category) {
+        if(!damageSeverityMapping.containsKey(category))
+            return DamageSeverity.None;
 
-    public DamageDescription(DamageSeverity brute, DamageSeverity burn, DamageSeverity suffocation, DamageSeverity toxin, DamageSeverity electrical) {
-        this.brute = brute;
-        this.burn = burn;
-        this.suffocation = suffocation;
-        this.toxin = toxin;
-        this.electrical = electrical;
-    }
-
-    public DamageSeverity getBrute() {
-        return brute;
-    }
-
-    public DamageSeverity getBurn() {
-        return burn;
-    }
-
-    public DamageSeverity getSuffocation() {
-        return suffocation;
-    }
-
-    public DamageSeverity getToxin() {
-        return toxin;
+        return damageSeverityMapping.get(category);
     }
 
     @Override
     public void serialize(IVariable target) throws ValueSerializationException {
-        target.addChild("brute").setValue(brute.toString());
-        target.addChild("burn").setValue(burn.toString());
-        target.addChild("suffocation").setValue(suffocation.toString());
-        target.addChild("toxin").setValue(toxin.toString());
-        target.addChild("electrical").setValue(electrical.toString());
+        for(Map.Entry<DamageCategory, DamageSeverity> e : damageSeverityMapping.entrySet())
+            target.addChild(e.getKey().toString()).setValue(e.getValue().toString());
     }
 
     private static DamageSeverity tryReadSeverity(IImmutableVariable source, String name) throws ValueSerializationException, NoSuchChildVariableException {
@@ -64,11 +39,8 @@ public class DamageDescription implements ISerializable, Serializable {
     @Override
     public void deserialize(IImmutableVariable source) throws ValueSerializationException {
         try {
-            this.brute = tryReadSeverity(source, "brute");
-            this.burn = tryReadSeverity(source, "burn");
-            this.suffocation = tryReadSeverity(source, "suffocation");
-            this.toxin = tryReadSeverity(source, "toxin");
-            this.electrical = tryReadSeverity(source, "electrical");
+            for(DamageCategory cat : DamageCategory.values())
+                damageSeverityMapping.put(cat, tryReadSeverity(source, cat.toString()));
         } catch (ValueSerializationException | NoSuchChildVariableException ex) {
             throw new ValueSerializationException(ex);
         }

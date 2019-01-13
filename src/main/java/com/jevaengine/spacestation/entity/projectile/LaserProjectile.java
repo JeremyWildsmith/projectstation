@@ -1,5 +1,7 @@
 package com.jevaengine.spacestation.entity.projectile;
 
+import com.jevaengine.spacestation.DamageDescription;
+import com.jevaengine.spacestation.entity.IDamageConsumer;
 import com.jevaengine.spacestation.entity.Infrastructure;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.entity.Door;
@@ -45,9 +47,12 @@ public class LaserProjectile implements IProjectile {
 
     private IEntity m_ignore = null;
 
-    public LaserProjectile(ISceneModel model, float speed, int maxLife) {
-        m_name = this.getClass().getName() + m_unnamedCount.getAndIncrement();
+    private final DamageDescription m_damageDescription;
+
+    public LaserProjectile(String name, ISceneModel model, DamageDescription damageDescription, float speed, int maxLife) {
+        m_name = name;
         m_model = model;
+        m_damageDescription = damageDescription;
         m_maxLife = maxLife;
         m_speed = speed;
         m_direction = new Vector3F();
@@ -202,6 +207,9 @@ public class LaserProjectile implements IProjectile {
         @Override
         public void onBeginContact(IImmutablePhysicsBody other) {
             if(!other.isSensor() && other.getOwner() != m_ignore && other.isCollidable()) {
+                if(other instanceof IDamageConsumer) {
+                    ((IDamageConsumer) other).consume(m_damageDescription);
+                }
                 m_world.removeEntity(LaserProjectile.this);
             }
         }

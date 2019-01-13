@@ -10,6 +10,7 @@ public interface IProjectile extends IEntity {
     Vector3F getTravelDirection();
     float getSpeed();
 
+
     interface IProjectileObserver {
         void changedDirection();
         void changedIgnore();

@@ -18,6 +18,10 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.DamageCategory;
+import com.jevaengine.spacestation.DamageDescription;
+import com.jevaengine.spacestation.DamageSeverity;
+import io.github.jevaengine.graphics.IGraphicShader;
 import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
@@ -33,13 +37,14 @@ import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription.PhysicsBodyType;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class Infrastructure implements IEntity {
+public final class Infrastructure implements IEntity, IDamageConsumer {
 	private static final AtomicInteger m_unnamedCount = new AtomicInteger(0);
 
 	private final String m_name;
@@ -50,7 +55,7 @@ public final class Infrastructure implements IEntity {
 	private final boolean m_isStatic;
 	private final boolean m_isTransparent;
 	@Nullable
-	private final ISceneModel m_model;
+	private final IAnimationSceneModel m_model;
 	private IPhysicsBody m_body = new NullPhysicsBody();
 	@Nullable
 	private World m_world;
@@ -64,7 +69,12 @@ public final class Infrastructure implements IEntity {
 	private final float m_heatConductivity;
 	private final boolean m_isTraversable;
 
-	public Infrastructure(String name, ISceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity) {
+	private int m_hitpoints;
+	private final Map<DamageCategory, Integer> m_baseDamage;
+	private final Map<DamageSeverity, Integer> m_damageMultiplier;
+	private final Map<Integer, String> m_hitpointsAnimationMapping;
+
+	public Infrastructure(String name, IAnimationSceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, int hitpoints, Map<Integer, String> hitpointsAnimation) {
 		m_name = name;
 		m_isTransparent = isTransparent;
 		m_isAirTight = isAirTight;
@@ -74,6 +84,10 @@ public final class Infrastructure implements IEntity {
 		m_model = model;
 		m_isTraversable = isTraversable;
 
+		m_hitpointsAnimationMapping = hitpointsAnimation;
+		m_baseDamage = baseDamage;
+		m_damageMultiplier = damageMultiplier;
+		m_hitpoints = hitpoints;
 		if (!isTraversable) {
 			m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
 			m_physicsBodyDescription.collisionExceptions = new Class[] {
@@ -85,6 +99,18 @@ public final class Infrastructure implements IEntity {
 
 
 		m_bridge = new EntityBridge(this);
+	}
+
+	private void updateAnimation() {
+		String animation = null;
+		for(Map.Entry<Integer, String> a : m_hitpointsAnimationMapping.entrySet()) {
+			if(m_hitpoints <= a.getKey())
+				animation = a.getValue();
+		}
+
+		if(animation != null && m_model.hasAnimation(animation)) {
+			m_model.getAnimation(animation).setState(IAnimationSceneModel.AnimationSceneModelAnimationState.PlayToEnd);
+		}
 	}
 
 	public boolean isTraversable() {
@@ -171,6 +197,26 @@ public final class Infrastructure implements IEntity {
 		m_body = new NullPhysicsBody();
 		m_body.setDirection(dir);
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
+	}
+
+	@Override
+	public void consume(DamageDescription damage) {
+		int hitpoints = 0;
+
+		for(DamageCategory cat : DamageCategory.values()) {
+			DamageSeverity sev = damage.getDamageSeverity(cat);
+			if(sev == DamageSeverity.None)
+				continue;
+
+			int calcDamage = m_baseDamage.get(cat);
+			calcDamage *= m_damageMultiplier.get(sev);
+
+			hitpoints += calcDamage;
+		}
+
+		m_hitpoints = Math.max(0, m_hitpoints - hitpoints);
+
+		updateAnimation();
 	}
 
 	@Override

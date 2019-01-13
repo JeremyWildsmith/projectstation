@@ -5,6 +5,9 @@
  */
 package com.jevaengine.spacestation.entity;
 
+import com.jevaengine.spacestation.DamageCategory;
+import com.jevaengine.spacestation.DamageDescription;
+import com.jevaengine.spacestation.DamageSeverity;
 import com.jevaengine.spacestation.entity.atmos.*;
 import com.jevaengine.spacestation.entity.network.*;
 import com.jevaengine.spacestation.entity.power.*;
@@ -35,6 +38,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -396,7 +401,7 @@ public class StationEntityFactory implements IEntityFactory {
 					InfrastructureDeclaration decl = auxConfig.getValue(InfrastructureDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity);
+					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity, decl.baseDamageMapping, decl.damageMultiplierMapping, decl.hitpoints, decl.hitpointsAnimationMapping);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -539,7 +544,7 @@ public class StationEntityFactory implements IEntityFactory {
 					LaserProjectileDeclaration decl = auxConfig.getValue(LaserProjectileDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new LaserProjectile(model, decl.speed, decl.life);
+					return new LaserProjectile(instanceName, model, decl.damage, decl.speed, decl.life);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new EntityConstructionException(e);
 				}
@@ -599,14 +604,16 @@ public class StationEntityFactory implements IEntityFactory {
 	public static final class LaserProjectileDeclaration implements ISerializable {
 
 		public String model;
-		private float speed;
-		private int life;
+		public float speed;
+		public int life;
+		public DamageDescription damage;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
 			target.addChild("speed").setValue(speed);
 			target.addChild("life").setValue(life);
+			target.addChild("damage").setValue(damage);
 		}
 
 		@Override
@@ -615,6 +622,7 @@ public class StationEntityFactory implements IEntityFactory {
 				model = source.getChild("model").getValue(String.class);
 				speed = source.getChild("speed").getValue(Double.class).floatValue();
 				life = source.getChild("life").getValue(Integer.class);
+				damage = source.getChild("damage").getValue(DamageDescription.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -669,6 +677,13 @@ public class StationEntityFactory implements IEntityFactory {
 		public boolean isTransparent = false;
 		public float heatConductivity = 0;
 
+		private int hitpoints = 0;
+
+		public Map<DamageCategory, Integer> baseDamageMapping = new HashMap<>();
+		public Map<DamageSeverity, Integer> damageMultiplierMapping = new HashMap<>();
+
+		public Map<Integer, String> hitpointsAnimationMapping = new HashMap<>();
+
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
 			target.addChild("model").setValue(model);
@@ -677,12 +692,15 @@ public class StationEntityFactory implements IEntityFactory {
 			target.addChild("isAirTight").setValue(isAirTight);
 			target.addChild("heatConductivity").setValue(heatConductivity);
 			target.addChild("isTransparent").setValue(isTransparent);
+			target.addChild("hitpoints").setValue(hitpoints);
+
 		}
 
 		@Override
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+				hitpoints = source.getChild("hitpoints").getValue(Integer.class);
 				type = source.getChild("type").getValues(String[].class);
 				blocking = source.getChild("blocking").getValue(Boolean.class);
 				heatConductivity = source.getChild("heatConductivity").getValue(Double.class).floatValue();
@@ -691,6 +709,39 @@ public class StationEntityFactory implements IEntityFactory {
 					isAirTight = source.getChild("isAirTight").getValue(Boolean.class);
 				if(source.childExists("isTransparent"))
 					isTransparent = source.getChild("isTransparent").getValue(Boolean.class);
+
+				if(source.childExists("damage")) {
+					IImmutableVariable damage = source.getChild("damage");
+
+					if(damage.childExists("base")) {
+						IImmutableVariable baseDamage = damage.getChild("base");
+						for(DamageCategory c : DamageCategory.values()) {
+							if(baseDamage.childExists(c.toString())) {
+								int base = baseDamage.getChild(c.toString()).getValue(Integer.class);
+								baseDamageMapping.put(c, base);
+							}
+						}
+					}
+
+					if(damage.childExists("multiplier")) {
+						IImmutableVariable multiplier = damage.getChild("multiplier");
+						for(DamageSeverity s : DamageSeverity.values()) {
+							if(multiplier.childExists(s.toString())) {
+								int m = multiplier.getChild(s.toString()).getValue(Integer.class);
+								damageMultiplierMapping.put(s, m);
+							}
+						}
+					}
+
+
+					if(damage.childExists("animation")) {
+						IImmutableVariable animations = damage.getChild("animation");
+						for(String a : animations.getChildren()) {
+							int hp = animations.getChild(a).getValue(Integer.class);
+							hitpointsAnimationMapping.put(hp, a);
+						}
+					}
+				}
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
