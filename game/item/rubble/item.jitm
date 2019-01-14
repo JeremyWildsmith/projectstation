@@ -1,0 +1,12 @@
+{
+  "name": "Rubble",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A pile of rubble.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+	]
+  }
+}

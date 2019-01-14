@@ -19,6 +19,7 @@
 package com.jevaengine.spacestation.ui;
 
 import com.jevaengine.spacestation.entity.ItemDrop;
+import com.jevaengine.spacestation.item.SpaceCharacterWieldTarget;
 import com.jevaengine.spacestation.ui.SimpleItemContainer.ISimpleItemContainerObserver;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.joystick.InputKeyEvent;
@@ -32,7 +33,6 @@ import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItemStore;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.util.Observers;
@@ -192,7 +192,7 @@ public final class InventoryHudFactory {
 			}
 
 			private void tryUseWithHandsItem() {
-				IItemSlot inHands = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+				IItemSlot inHands = m_loadout.getSlot(SpaceCharacterWieldTarget.LeftHand);
 
 				if(inHands.isEmpty())
 					return;
@@ -204,7 +204,7 @@ public final class InventoryHudFactory {
 
 			@Override
 			public void selected() {
-				IItemSlot inHands = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+				IItemSlot inHands = m_loadout.getSlot(SpaceCharacterWieldTarget.LeftHand);
 
 				if(m_slot.isEmpty()) {
 					if(!inHands.isEmpty())

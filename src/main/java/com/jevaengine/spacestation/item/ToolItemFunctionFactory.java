@@ -10,7 +10,6 @@ import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemFactory;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
@@ -148,7 +147,7 @@ public class ToolItemFunctionFactory implements IItemFunctionFactory {
 
         @Override
         public IItem.IWieldTarget[] getWieldTargets() {
-            return new IItem.IWieldTarget[] {UsrWieldTarget.LeftHand};
+            return new IItem.IWieldTarget[] {SpaceCharacterWieldTarget.LeftHand};
         }
 
         @Override

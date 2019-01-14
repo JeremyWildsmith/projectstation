@@ -9,6 +9,7 @@ public interface IProjectile extends IEntity {
     void setTravelDirection(Vector3F direction);
     Vector3F getTravelDirection();
     float getSpeed();
+    void setCollidable(boolean collidable);
 
 
     interface IProjectileObserver {

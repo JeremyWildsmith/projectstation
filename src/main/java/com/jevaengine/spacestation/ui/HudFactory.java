@@ -18,6 +18,7 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.item.SpaceCharacterWieldTarget;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
@@ -26,7 +27,6 @@ import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItemStore;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.util.Observers;
@@ -133,7 +133,7 @@ public final class HudFactory {
 
 			final SimpleItemContainer hand = getControl(SimpleItemContainer.class, "toggleHand");
 
-			IItemSlot handSlot = m_loadout.getSlot(UsrWieldTarget.LeftHand);
+			IItemSlot handSlot = m_loadout.getSlot(SpaceCharacterWieldTarget.LeftHand);
 			hand.setSlot(handSlot);
 			hand.getObservers().add(new HandUse(handSlot));
 			toggleInventory.getObservers().add(new ToggleIcon.IToggleIconObserver() {

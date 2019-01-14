@@ -1,0 +1,4 @@
+{
+  "texture": "../../texture.png",
+  "shader": "../../../damageShader/inner/critical.jsh"
+}

@@ -57,8 +57,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.github.jevaengine.base.rpg</groupId>
-			<artifactId>usr</artifactId>
+			<groupId>com.jevaengine.base</groupId>
+			<artifactId>rpg</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>

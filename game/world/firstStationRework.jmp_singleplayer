@@ -14,18 +14,15 @@
     "config" : "/artifact/entity/human/entity.jec",
     "direction" : 8
   },{
-    "auxConfig" : {
-		"type": "character",
-		"config": "/artifact/entity/human/entity.jec",
-		"spawnDepth": 2.0
-	},
-    "name" : "spawnController",
+    "auxConfig" : null,
+    "name" : "other",
     "location" : {
-      "x" : 0.0,
-      "y" : 0.0,
-      "z" : 0.0
+      "x" : 36.0,
+      "y" : 24.0,
+      "z" : 2.0
     },
-    "type" : "randomSpawnController",
+    "type" : "character",
+    "config" : "/artifact/entity/human/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,

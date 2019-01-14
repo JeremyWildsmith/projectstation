@@ -31,7 +31,6 @@ import io.github.jevaengine.graphics.NullGraphic;
 import io.github.jevaengine.joystick.IInputSource;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.item.IItemFactory;
-import io.github.jevaengine.rpg.spell.ISpellFactory;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.world.IEffectMapFactory;
 import io.github.jevaengine.world.IParallelWorldFactory;
@@ -65,7 +64,7 @@ public final class StationGame extends DefaultGame implements IStateContext
 	private final IEffectMapFactory m_effectMapFactory;
 	private final IItemFactory m_itemFactory;
 
-	public StationGame(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, Vector2D resolution, ISpellFactory spellFactory)
+	public StationGame(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, Vector2D resolution)
 	{
 		super(inputSource, resolution);
 	

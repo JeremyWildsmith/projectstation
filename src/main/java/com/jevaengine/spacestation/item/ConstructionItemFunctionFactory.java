@@ -10,7 +10,6 @@ import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemFactory;
 import io.github.jevaengine.rpg.item.IItemSlot;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
@@ -94,7 +93,7 @@ public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
                 user.getWorld().addEntity(e);
                 e.getBody().setLocation(location);
 
-                IItemSlot handSlot = user.getLoadout().getSlot(UsrWieldTarget.LeftHand);
+                IItemSlot handSlot = user.getLoadout().getSlot(SpaceCharacterWieldTarget.LeftHand);
                 IItem handSlotItem = handSlot.getItem();
 
                 handSlot.clear();
@@ -216,7 +215,7 @@ public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
 
         @Override
         public IItem.IWieldTarget[] getWieldTargets() {
-            return new UsrWieldTarget[] {UsrWieldTarget.LeftHand};
+            return new SpaceCharacterWieldTarget[] {SpaceCharacterWieldTarget.LeftHand};
         }
 
         @Override

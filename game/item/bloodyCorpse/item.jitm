@@ -1,0 +1,12 @@
+{
+  "name": "Bloody Corpse",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A bloody corpse.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+	]
+  }
+}

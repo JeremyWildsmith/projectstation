@@ -1,0 +1,12 @@
+{
+  "name": "Glass Shards",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A pile of glass shards.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+	]
+  }
+}

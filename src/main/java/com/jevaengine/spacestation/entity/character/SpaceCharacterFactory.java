@@ -18,6 +18,10 @@
  */
 package com.jevaengine.spacestation.entity.character;
 
+import com.jevaengine.spacestation.DamageCategory;
+import com.jevaengine.spacestation.DamageSeverity;
+import com.jevaengine.spacestation.entity.ItemDrop;
+import com.jevaengine.spacestation.item.SpaceCharacterWieldTarget;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.config.*;
 import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
@@ -30,13 +34,11 @@ import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory.DialogueRouteConstructionException;
 import io.github.jevaengine.rpg.dialogue.NullDialogueRoute;
 import io.github.jevaengine.rpg.entity.character.*;
-import io.github.jevaengine.rpg.entity.character.usr.*;
 import io.github.jevaengine.rpg.item.IImmutableItemStore;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemFactory;
 import io.github.jevaengine.rpg.item.IItemFactory.ItemContructionException;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.script.IScriptBuilder;
 import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.script.IScriptBuilderFactory.ScriptBuilderConstructionException;
@@ -44,6 +46,7 @@ import io.github.jevaengine.script.NullScriptBuilder;
 import io.github.jevaengine.ui.style.IUIStyleFactory;
 import io.github.jevaengine.ui.style.IUIStyleFactory.UIStyleConstructionException;
 import io.github.jevaengine.util.Nullable;
+import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription.PhysicsBodyType;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
@@ -54,7 +57,6 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel.NullAnimation
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import io.github.jevaengine.world.scene.model.action.DefaultActionModel;
-import io.github.jevaengine.world.scene.model.action.DefaultActionModel.IDefaultActionModelBehavior;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +68,6 @@ import java.util.*;
 
 public final class SpaceCharacterFactory implements IRpgCharacterFactory
 {
-    private static final IWieldTarget WEAPON_WIELD_TARGET = UsrWieldTarget.RightArm;
-
     private final Logger m_logger = LoggerFactory.getLogger(SpaceCharacterFactory.class);
     private final IItemFactory m_itemFactory;
     private final IScriptBuilderFactory m_scriptBuilderFactory;
@@ -132,7 +132,7 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
         Map<SpaceCharacterAnimation, IAnimationSceneModelAnimation> animations = createAnimations(animationModel);
         DefaultActionModel actionModel = new DefaultActionModel(animationModel);
 
-        for(SpaceRpgCharacterAction a : SpaceRpgCharacterAction.values())
+        for(SpaceCharacterAction a : SpaceCharacterAction.values())
             actionModel.addAction(a.build(animations, attributes, loadout, itemStore));
 
         return actionModel;
@@ -237,31 +237,23 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
     }
 
     protected IAllegianceResolverFactory createAllegienceResolverFactory() {
-        return new UsrAllegianceResolverFactory();
+        return new IAllegianceResolverFactory.NullAllegianceResolverFactory();
     }
 
     protected IStatusResolverFactory createStatusResolverFactory(URI configContext, UsrCharacterDeclaration characterDecl) throws URISyntaxException, UIStyleConstructionException {
-        return new SpaceCharacterStatusResolverFactory(new UsrStatusResolverFactory(m_styleFactory.create(configContext.resolve(new URI(characterDecl.statusStyle)))));
-    }
-
-    protected ICombatResolverFactory createCombatResolverFactory() {
-        return new UsrCombatResolverFactory();
+        return new SpaceCharacterStatusResolverFactory();
     }
 
     protected IMovementResolverFactory createMovementResolverFactory() {
-        return new UsrMovementResolverFactory();
+        return new SpaceMovementResolverFactory();
     }
 
     protected IDialogueResolverFactory createDialogueResolverFactory(IDialogueRoute route) {
-        return new UsrDialogueResolverFactory(route);
-    }
-
-    protected ISpellCastResolverFactory createSpellCastResolverFactory() {
-        return new UsrSpellCastResolverFactory();
+        return new DefaultDialogueResolverFactory(route);
     }
 
     protected IVisionResolverFactory createVisionResolverFactory() {
-        return new UsrVisionResolverFactory();
+        return new IVisionResolverFactory.NullVisionResolverFactory();
     }
 
     @Override
@@ -287,12 +279,20 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
                     model.getBodyShape(),
                     1.0F, true, false, 0.0F, DefaultRpgCharacter.class);
 
-            return new DefaultRpgCharacter(behavior,
+            SpaceCharacter.ICorpseProducer corpseProducer = () -> {
+                try {
+                    IItem item = m_itemFactory.create(new URI(characterDecl.produce));
+                    return new ItemDrop(item);
+                } catch (ItemContructionException | URISyntaxException ex) {
+                    m_logger.error("Unable to produce character corpse.", ex);
+                    return null;
+                }
+            };
+
+            return new SpaceCharacter(behavior,
                     m_dialogueRouteFactory,
                     attributes,
                     createStatusResolverFactory(name, characterDecl),
-                    createCombatResolverFactory(),
-                    createSpellCastResolverFactory(),
                     createDialogueResolverFactory(dialogueRoute),
                     createMovementResolverFactory(),
                     createVisionResolverFactory(),
@@ -301,6 +301,9 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
                     inventory,
                     model,
                     physicsBody,
+                    characterDecl.baseDamageMapping,
+                    characterDecl.damageMultiplierMapping,
+                    corpseProducer,
                     instanceName);
 
         } catch (UIStyleConstructionException | URISyntaxException | ValueSerializationException | ConfigurationConstructionException e)
@@ -313,86 +316,6 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
     public IRpgCharacter create(String instanceName, IImmutableVariable auxConfig) throws CharacterCreationException
     {
         return create(instanceName, null, auxConfig);
-    }
-
-    private enum SpaceCharacterAnimation
-    {
-        Idle("idle");
-        private final String m_name;
-
-        private SpaceCharacterAnimation(String name)
-        {
-            m_name = name;
-        }
-
-        public String getName()
-        {
-            return m_name;
-        }
-    }
-
-    public enum SpaceRpgCharacterAction
-    {
-        Die("die", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, false)),
-        Attack("attack", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, false)),
-        Walk("walk", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true)),
-        Idle("idle", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true)),
-        Flinch("flinch", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true));
-
-        private final String m_name;
-        private final IActionBuilder m_builder;
-
-        SpaceRpgCharacterAction(String name, IActionBuilder builder)
-        {
-            m_name = name;
-            m_builder = builder;
-
-            builder.setMe(this);
-        }
-
-        public String getName()
-        {
-            return m_name;
-        }
-
-        IDefaultActionModelBehavior build(Map<SpaceCharacterAnimation, IAnimationSceneModelAnimation> animations, IImmutableAttributeSet attributes, IImmutableLoadout loadout, IImmutableItemStore itemStore)
-        {
-            return m_builder.build(animations, attributes, loadout, itemStore);
-        }
-
-        private interface IActionBuilder
-        {
-            void setMe(SpaceRpgCharacterAction action);
-            IDefaultActionModelBehavior build(Map<SpaceCharacterAnimation, IAnimationSceneModelAnimation> animations, IImmutableAttributeSet attributes, IImmutableLoadout loadout, IImmutableItemStore itemStore);
-        }
-
-        private static class SimpleActionBehaviorBuilder implements IActionBuilder
-        {
-            private SpaceRpgCharacterAction m_action;
-            private final SpaceCharacterAnimation m_animation;
-            private final boolean m_isPassive;
-
-            public SimpleActionBehaviorBuilder(@Nullable SpaceCharacterAnimation animation, boolean isPassive)
-            {
-                m_animation = animation;
-                m_isPassive = isPassive;
-            }
-
-            @Override
-            public void setMe(SpaceRpgCharacterAction action)
-            {
-                m_action = action;
-            }
-
-            @Override
-            public IDefaultActionModelBehavior build(
-                    Map<SpaceCharacterAnimation, IAnimationSceneModelAnimation> animations,
-                    IImmutableAttributeSet attributes,
-                    IImmutableLoadout loadout, IImmutableItemStore itemStore)
-            {
-                return new SimpleModelActionBehavior(m_action.getName(), m_animation == null ? new NullAnimationSceneModelAnimation() : animations.get(m_animation), m_isPassive);
-            }
-        }
     }
 
     public static final class UsrCharacterDeclaration implements ISerializable
@@ -416,8 +339,13 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
 
         public String blood;
 
+        public String produce;
+
         @Nullable
-        public UsrWieldTarget combatWieldTarget;
+        public SpaceCharacterWieldTarget combatWieldTarget;
+
+        public Map<DamageCategory, Integer> baseDamageMapping = new HashMap<>();
+        public Map<DamageSeverity, Integer> damageMultiplierMapping = new HashMap<>();
 
         @Override
         public void serialize(IVariable target) throws ValueSerializationException
@@ -465,7 +393,7 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
                 IImmutableVariable attributesVar = source.getChild("attributes");
                 for(String attributeName : attributesVar.getChildren())
                 {
-                    for(IAttributeIdentifier attributeIdentifiers[] : new IAttributeIdentifier[][] {UsrCharacterAttribute.values(), UsrActiveCharacterAttribute.values()})
+                    for(IAttributeIdentifier attributeIdentifiers[] : new IAttributeIdentifier[][] {SpaceCharacterAttribute.values()})
                     {
                         for(IAttributeIdentifier attributeIdentifier : attributeIdentifiers)
                         {
@@ -476,12 +404,12 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
                 }
 
                 String[] wieldTargetNames = source.getChild("wieldTargets").getValues(String[].class);
-                wieldTargets = new UsrWieldTarget[wieldTargetNames.length];
+                wieldTargets = new SpaceCharacterWieldTarget[wieldTargetNames.length];
 
                 for(int i = 0; i < wieldTargetNames.length; i++)
                 {
                     IWieldTarget wieldTarget = null;
-                    for(IWieldTarget w : UsrWieldTarget.values())
+                    for(IWieldTarget w : SpaceCharacterWieldTarget.values())
                     {
                         if(w.getName().equals(wieldTargetNames[i]))
                             wieldTarget = w;
@@ -511,8 +439,34 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
                 if(source.childExists("combatWieldTarget"))
                 {
                     int ordinal = source.getChild("combatWieldTarget").getValue(Integer.class);
-                    if(ordinal < 0 || ordinal >= UsrWieldTarget.values().length)
+                    if(ordinal < 0 || ordinal >= SpaceCharacterWieldTarget.values().length)
                         throw new ValueSerializationException(new IndexOutOfBoundsException("combatWieldTarget is out of the ordinal bounds of UsrWieldTarget."));
+                }
+
+
+                if(source.childExists("damage")) {
+                    IImmutableVariable damage = source.getChild("damage");
+
+                    produce = damage.getChild("produce").getValue(String.class);
+                    if(damage.childExists("base")) {
+                        IImmutableVariable baseDamage = damage.getChild("base");
+                        for(DamageCategory c : DamageCategory.values()) {
+                            if(baseDamage.childExists(c.toString())) {
+                                int base = baseDamage.getChild(c.toString()).getValue(Integer.class);
+                                baseDamageMapping.put(c, base);
+                            }
+                        }
+                    }
+
+                    if(damage.childExists("multiplier")) {
+                        IImmutableVariable multiplier = damage.getChild("multiplier");
+                        for(DamageSeverity s : DamageSeverity.values()) {
+                            if(multiplier.childExists(s.toString())) {
+                                int m = multiplier.getChild(s.toString()).getValue(Integer.class);
+                                damageMultiplierMapping.put(s, m);
+                            }
+                        }
+                    }
                 }
             } catch(ValueSerializationException | NoSuchChildVariableException e)
             {

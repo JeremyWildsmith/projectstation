@@ -2,9 +2,7 @@ package com.jevaengine.spacestation.entity.projectile;
 
 import com.jevaengine.spacestation.DamageDescription;
 import com.jevaengine.spacestation.entity.IDamageConsumer;
-import com.jevaengine.spacestation.entity.Infrastructure;
 import io.github.jevaengine.math.Vector3F;
-import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
@@ -17,13 +15,13 @@ import io.github.jevaengine.world.entity.WorldAssociationException;
 import io.github.jevaengine.world.physics.*;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+import io.github.jevaengine.world.search.RadialSearchFilter;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LaserProjectile implements IProjectile {
-    private static final AtomicInteger m_unnamedCount = new AtomicInteger(0);
-
+    private static final float DAMAGE_DEPTH = 0.001f;
     private final int m_maxLife;
 
     private int m_life = 0;
@@ -49,9 +47,13 @@ public class LaserProjectile implements IProjectile {
 
     private final DamageDescription m_damageDescription;
 
-    public LaserProjectile(String name, ISceneModel model, DamageDescription damageDescription, float speed, int maxLife) {
+    private final float m_impactRadius;
+    private boolean isCollidable = true;
+
+    public LaserProjectile(String name, ISceneModel model, DamageDescription damageDescription, float impactRadius, float speed, int maxLife) {
         m_name = name;
         m_model = model;
+        m_impactRadius = impactRadius;
         m_damageDescription = damageDescription;
         m_maxLife = maxLife;
         m_speed = speed;
@@ -62,6 +64,11 @@ public class LaserProjectile implements IProjectile {
         };
 
         m_bridge = new EntityBridge(this);
+    }
+
+    @Override
+    public void setCollidable(boolean collidable) {
+        isCollidable = collidable;
     }
 
     public void setIgnore(IEntity ignore) {
@@ -206,10 +213,22 @@ public class LaserProjectile implements IProjectile {
     private class ContactObserver implements IPhysicsBodyContactObserver {
         @Override
         public void onBeginContact(IImmutablePhysicsBody other) {
+
+            if(!isCollidable)
+                return;
+
+            float bulletDepth = other.getLocation().z;
             if(!other.isSensor() && other.getOwner() != m_ignore && other.isCollidable()) {
-                if(other instanceof IDamageConsumer) {
-                    ((IDamageConsumer) other).consume(m_damageDescription);
+
+                RadialSearchFilter<IDamageConsumer> search = new RadialSearchFilter<>(other.getLocation().getXy(), m_impactRadius);
+                IDamageConsumer[] consumers = m_world.getEntities().search(IDamageConsumer.class, search);
+
+                for(IDamageConsumer c : consumers) {
+                    float delta = Math.abs(c.getBody().getLocation().z - bulletDepth);
+                    if(delta <= DAMAGE_DEPTH)
+                        c.consume(m_damageDescription);
                 }
+
                 m_world.removeEntity(LaserProjectile.this);
             }
         }

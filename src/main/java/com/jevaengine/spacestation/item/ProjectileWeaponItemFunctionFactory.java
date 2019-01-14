@@ -11,14 +11,9 @@ import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemFactory;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.world.Direction;
-import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
-import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
-import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory;
-import io.github.jevaengine.world.scene.model.NullSceneModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +50,7 @@ public class ProjectileWeaponItemFunctionFactory implements IItemFunctionFactory
 
         @Override
         public IItem.IWieldTarget[] getWieldTargets() {
-            return new UsrWieldTarget[] {UsrWieldTarget.LeftHand};
+            return new SpaceCharacterWieldTarget[] {SpaceCharacterWieldTarget.LeftHand};
         }
 
         @Override

@@ -6,6 +6,7 @@
 package com.jevaengine.spacestation.ui.playing;
 
 import com.jevaengine.spacestation.entity.IInteractableEntity;
+import com.jevaengine.spacestation.item.SpaceCharacterWieldTarget;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.joystick.InputMouseEvent.MouseButton;
@@ -14,7 +15,6 @@ import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemSlot;
-import io.github.jevaengine.rpg.item.usr.UsrWieldTarget;
 import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.Timer;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
@@ -139,7 +139,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 						}
 					}
 				} else if(event.keyCode == KeyEvent.VK_R) {
-					IItemSlot slot = m_character.getLoadout().getSlot(UsrWieldTarget.LeftHand);
+					IItemSlot slot = m_character.getLoadout().getSlot(SpaceCharacterWieldTarget.LeftHand);
 
 					if(slot.isEmpty())
 						return;

@@ -34,10 +34,13 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jevaengine.spacestation.entity.Infrastructure.IRubbleProducer;
+
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -398,10 +401,23 @@ public class StationEntityFactory implements IEntityFactory {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
 				try {
-					InfrastructureDeclaration decl = auxConfig.getValue(InfrastructureDeclaration.class);
+					final InfrastructureDeclaration decl = auxConfig.getValue(InfrastructureDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity, decl.baseDamageMapping, decl.damageMultiplierMapping, decl.hitpoints, decl.hitpointsAnimationMapping);
+					IRubbleProducer rubbleProducer = null;
+					if(decl.produce != null) {
+						rubbleProducer = () -> {
+							try {
+								IItem item = entityFactory.m_itemFactory.create(new URI(decl.produce));
+								return new ItemDrop(item);
+							} catch (ItemContructionException | URISyntaxException ex) {
+								m_logger.error("Unable to produce infrastructure rubble.", ex);
+								return null;
+							}
+						};
+					}
+
+					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity, decl.baseDamageMapping, decl.damageMultiplierMapping, decl.hitpoints, decl.hitpointsAnimationMapping, rubbleProducer);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -544,7 +560,7 @@ public class StationEntityFactory implements IEntityFactory {
 					LaserProjectileDeclaration decl = auxConfig.getValue(LaserProjectileDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
 
-					return new LaserProjectile(instanceName, model, decl.damage, decl.speed, decl.life);
+					return new LaserProjectile(instanceName, model, decl.damage, decl.impactRadius, decl.speed, decl.life);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new EntityConstructionException(e);
 				}
@@ -607,6 +623,7 @@ public class StationEntityFactory implements IEntityFactory {
 		public float speed;
 		public int life;
 		public DamageDescription damage;
+		public float impactRadius;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException {
@@ -614,6 +631,7 @@ public class StationEntityFactory implements IEntityFactory {
 			target.addChild("speed").setValue(speed);
 			target.addChild("life").setValue(life);
 			target.addChild("damage").setValue(damage);
+			target.addChild("impactRadius").setValue(impactRadius);
 		}
 
 		@Override
@@ -623,6 +641,7 @@ public class StationEntityFactory implements IEntityFactory {
 				speed = source.getChild("speed").getValue(Double.class).floatValue();
 				life = source.getChild("life").getValue(Integer.class);
 				damage = source.getChild("damage").getValue(DamageDescription.class);
+				impactRadius = source.getChild("impactRadius").getValue(Double.class).floatValue();
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}
@@ -676,6 +695,7 @@ public class StationEntityFactory implements IEntityFactory {
 		public boolean isAirTight = false;
 		public boolean isTransparent = false;
 		public float heatConductivity = 0;
+		private String produce = null;
 
 		private int hitpoints = 0;
 
@@ -712,6 +732,9 @@ public class StationEntityFactory implements IEntityFactory {
 
 				if(source.childExists("damage")) {
 					IImmutableVariable damage = source.getChild("damage");
+
+					if(damage.childExists("produce"))
+						produce = damage.getChild("produce").getValue(String.class);
 
 					if(damage.childExists("base")) {
 						IImmutableVariable baseDamage = damage.getChild("base");

@@ -33,10 +33,6 @@ import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IItemFunction;
 import io.github.jevaengine.rpg.item.IItem.NullItemFunction;
 import io.github.jevaengine.rpg.item.IItemFactory;
-import io.github.jevaengine.rpg.item.usr.UsrArmorItemFunction;
-import io.github.jevaengine.rpg.item.usr.UsrArmorItemFunction.UsrArmorItemAttribute;
-import io.github.jevaengine.rpg.item.usr.UsrWeaponItemFunction;
-import io.github.jevaengine.rpg.item.usr.UsrWeaponItemFunction.UsrWeaponAttribute;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -78,7 +74,7 @@ public final class StationItemFactory implements IItemFactory {
 
 			if (itemDecl.function != null) {
 				String functionName = itemDecl.function;
-				for (IItemFunction functions[] : new IItemFunction[][]{UsrWeaponItemFunction.values(), UsrArmorItemFunction.values()}) {
+				for (IItemFunction functions[] : new IItemFunction[][]{SpaceArmorItemFunction.values()}) {
 					for (IItemFunction f : functions) {
 						if (f.getName().equals(functionName)) {
 							function = f;
@@ -155,6 +151,7 @@ public final class StationItemFactory implements IItemFactory {
 				attributes = new AttributeSet();
 				IImmutableVariable attributesVar = source.getChild("attributes");
 
+				/*
 				for (String attributeName : attributesVar.getChildren()) {
 					for (IAttributeIdentifier attributeIdentifiers[] : new IAttributeIdentifier[][]{UsrWeaponAttribute.values(), UsrArmorItemAttribute.values()}) {
 						for (IAttributeIdentifier attributeIdentifier : attributeIdentifiers) {
@@ -163,7 +160,7 @@ public final class StationItemFactory implements IItemFactory {
 							}
 						}
 					}
-				}
+				}*/
 
 				if(source.childExists("parameters")) {
 					parameters = source.getChild("parameters");

@@ -74,7 +74,9 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 	private final Map<DamageSeverity, Integer> m_damageMultiplier;
 	private final Map<Integer, String> m_hitpointsAnimationMapping;
 
-	public Infrastructure(String name, IAnimationSceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, int hitpoints, Map<Integer, String> hitpointsAnimation) {
+	private final IRubbleProducer m_rubbleProducer;
+
+	public Infrastructure(String name, IAnimationSceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, int hitpoints, Map<Integer, String> hitpointsAnimation, @Nullable IRubbleProducer rubbleProducer) {
 		m_name = name;
 		m_isTransparent = isTransparent;
 		m_isAirTight = isAirTight;
@@ -88,6 +90,7 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 		m_baseDamage = baseDamage;
 		m_damageMultiplier = damageMultiplier;
 		m_hitpoints = hitpoints;
+		m_rubbleProducer = rubbleProducer;
 		if (!isTraversable) {
 			m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
 			m_physicsBodyDescription.collisionExceptions = new Class[] {
@@ -103,9 +106,12 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 
 	private void updateAnimation() {
 		String animation = null;
+		int min = Integer.MAX_VALUE;
 		for(Map.Entry<Integer, String> a : m_hitpointsAnimationMapping.entrySet()) {
-			if(m_hitpoints <= a.getKey())
+			if(m_hitpoints <= a.getKey() && a.getKey() < min) {
 				animation = a.getValue();
+				min = a.getKey();
+			}
 		}
 
 		if(animation != null && m_model.hasAnimation(animation)) {
@@ -217,6 +223,21 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 		m_hitpoints = Math.max(0, m_hitpoints - hitpoints);
 
 		updateAnimation();
+
+
+		if(m_hitpoints == 0) {
+
+			if(m_rubbleProducer != null) {
+				IEntity rubble = m_rubbleProducer.produce();
+
+				if (rubble != null) {
+					m_world.addEntity(rubble);
+					rubble.getBody().setLocation(m_body.getLocation());
+				}
+			}
+
+			m_world.removeEntity(this);
+		}
 	}
 
 	@Override
@@ -261,5 +282,9 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 	@Override
 	public IEntityTaskModel getTaskModel() {
 		return new NullEntityTaskModel();
+	}
+
+	public interface IRubbleProducer {
+		@Nullable IEntity produce();
 	}
 }
