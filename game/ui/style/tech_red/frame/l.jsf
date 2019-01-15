@@ -1,0 +1,20 @@
+{
+  "scale" : 1.0,
+  "animations" : [ {
+    "frames" : [ {
+      "region" : {
+        "height" : 5,
+        "width" : 5,
+        "y" : 6,
+        "x" : 0
+      },
+      "delay" : 10000,
+      "anchor" : {
+        "y" : 0,
+        "x" : 0
+      }
+    } ],
+    "name" : "idle"
+  } ],
+  "texture" : "texture.png"
+}
