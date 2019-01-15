@@ -40,6 +40,10 @@ public class CameraBehaviorInjector extends WindowBehaviourInjector {
 
 
 	private Set<Vector2D> getObstructionMap() {
+
+		if(m_player.getWorld() == null)
+			return new HashSet<>();
+
 		Set<Vector2D> obstructionMap = new HashSet<>();
 		Infrastructure[] entities = m_player.getWorld().getEntities().search(Infrastructure.class, new RadialSearchFilter<>(m_player.getBody().getLocation().getXy(), 50f));
 		Door[] doors = m_player.getWorld().getEntities().search(Door.class, new RadialSearchFilter<>(m_player.getBody().getLocation().getXy(), 50f));
