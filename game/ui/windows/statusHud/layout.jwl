@@ -1,0 +1,175 @@
+{
+  "controls": [
+    {
+      "name": "health",
+      "location": {
+        "x": 30,
+        "y": 5
+      },
+      "type": "valueGuage",
+      "config": {
+        "bounds": {
+          "width": 40,
+          "height": 10
+        }
+      },
+	  "style": "file:///ui/style/tech_red/tech.juis"
+    },
+	{
+      "name": "heart",
+      "location": {
+        "x": 5,
+        "y": 5
+      },
+      "type": "icon",
+      "config": {
+        "texture": "heart.png"
+      }
+    },
+	{
+      "name": "bleeding",
+      "location": {
+        "x": 25,
+        "y": 30
+      },
+      "type": "icon",
+      "config": {
+        "texture": "blood/bleeding.png"
+      }
+    },
+	
+	
+	{
+      "name": "full",
+      "location": {
+        "x": 25,
+        "y": 296
+      },
+      "type": "icon",
+      "config": {
+        "texture": "hunger/full.png"
+      }
+    },
+	{
+      "name": "hungry",
+      "location": {
+        "x": 25,
+        "y": 296
+      },
+      "type": "icon",
+      "config": {
+        "texture": "hunger/hungry.png"
+      }
+    },
+	{
+      "name": "starving",
+      "location": {
+        "x": 25,
+        "y": 296
+      },
+      "type": "icon",
+      "config": {
+        "texture": "hunger/hungry_crit.png"
+      }
+    },
+
+
+	{
+      "name": "suffocating",
+      "location": {
+        "x": 25,
+        "y": 72
+      },
+      "type": "icon",
+      "config": {
+        "texture": "suffocating/suffocating.png"
+      }
+    },
+	{
+      "name": "toxic",
+      "location": {
+        "x": 25,
+        "y": 114
+      },
+      "type": "icon",
+      "config": {
+        "texture": "toxic/toxic.png"
+      }
+    },
+	{
+      "name": "sick",
+      "location": {
+        "x": 25,
+        "y": 156
+      },
+      "type": "icon",
+      "config": {
+        "texture": "sick/sick.png"
+      }
+    },
+	
+	
+	{
+      "name": "cold",
+      "location": {
+        "x": 25,
+        "y": 198
+      },
+      "type": "icon",
+      "config": {
+        "texture": "temperature/cold.png"
+      }
+    },
+	{
+      "name": "freezing",
+      "location": {
+        "x": 25,
+        "y": 198
+      },
+      "type": "icon",
+      "config": {
+        "texture": "temperature/cold_crit.png"
+      }
+    },
+	{
+      "name": "hot",
+      "location": {
+        "x": 25,
+        "y": 198
+      },
+      "type": "icon",
+      "config": {
+        "texture": "temperature/hot.png"
+      }
+    },
+	{
+      "name": "burning",
+      "location": {
+        "x": 25,
+        "y": 198
+      },
+      "type": "icon",
+      "config": {
+        "texture": "temperature/hot_crit.png"
+      }
+    },
+	
+	
+
+	{
+      "name": "stunned",
+      "location": {
+        "x": 25,
+        "y": 254
+      },
+      "type": "icon",
+      "config": {
+        "texture": "stunned/stunned.png"
+      }
+    }
+  ],
+  "bounds": {
+    "width": 80,
+    "height": 200
+  }
+}
