@@ -27,7 +27,7 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
     public NetworkValve(String name, IAnimationSceneModel model, int ipAddress, boolean isOpen) {
         super(name, true, ipAddress);
         m_model = model;
-        m_isOpen = false;
+        m_isOpen = isOpen;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
 
         for(ILiquidCarrier c : connections) {
             if(c.getNetwork() != this.getNetwork() && c.isFreeFlow()) {
-                links.put(this.getBody().getLocation().getXy().round(), c.getNetwork());
+                links.put(c.getBody().getLocation().getXy().round(), c.getNetwork());
             }
         }
 
