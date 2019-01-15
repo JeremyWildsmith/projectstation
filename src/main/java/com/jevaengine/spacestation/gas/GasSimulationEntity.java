@@ -212,7 +212,7 @@ public class GasSimulationEntity implements IEntity {
             try {
                 long lastUpdate = System.currentTimeMillis();
                 while (!Thread.interrupted()) {
-                    Thread.yield();
+                    Thread.sleep(1);
                     long currentMillis = System.currentTimeMillis();
                     int elapsed = (int) (currentMillis - lastUpdate);
                     if (elapsed <= 50)
