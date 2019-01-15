@@ -47,10 +47,10 @@ public final class CharacterStatusHudFactory {
 		m_windowFactory = windowFactory;
 	}
 
-	public StatusHud create(IRpgCharacter owner) throws WindowConstructionException {
+	public StatusHud create(IImmutableAttributeSet attributes) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(HUD_WINDOW, new StatusHudBehaviourInjector(observers, owner));
+		Window window = m_windowFactory.create(HUD_WINDOW, new StatusHudBehaviourInjector(observers, attributes));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -116,13 +116,13 @@ public final class CharacterStatusHudFactory {
 
 	private class StatusHudBehaviourInjector extends WindowBehaviourInjector {
 
-		private final IRpgCharacter m_owner;
+		private final IImmutableAttributeSet m_attributes;
 
 		private final Observers m_observers;
 		
-		public StatusHudBehaviourInjector(final Observers observers, final IRpgCharacter owner) {
+		public StatusHudBehaviourInjector(final Observers observers, final IImmutableAttributeSet attributes) {
 			m_observers = observers;
-			m_owner = owner;
+			m_attributes = attributes;
 		}
 
 		@Override
@@ -133,11 +133,11 @@ public final class CharacterStatusHudFactory {
 			timer.getObservers().add(new Timer.ITimerObserver() {
 				@Override
 				public void update(int deltaTime) {
-					IImmutableAttributeSet set = m_owner.getAttributes();
+
 					float ratio = 0;
 
-					if(set.has(SpaceCharacterAttribute.MaxHitpoints))
-						ratio = set.get(SpaceCharacterAttribute.EffectiveHitpoints).get() / set.get(SpaceCharacterAttribute.MaxHitpoints).get();
+					if(m_attributes.has(SpaceCharacterAttribute.MaxHitpoints))
+						ratio = m_attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).get() / m_attributes.get(SpaceCharacterAttribute.MaxHitpoints).get();
 
 					guage.setValue(ratio);
 				}
