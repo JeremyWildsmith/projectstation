@@ -216,7 +216,7 @@ public class Main implements WindowListener
 				
 				@Override
 				public IControlFactory get() {
-					IControlFactory baseFactory = new RpgControlFactory(new DefaultControlFactory(configurationFactory), configurationFactory);
+					IControlFactory baseFactory = new RpgControlFactory(new DefaultControlFactory(graphicFactory, configurationFactory), configurationFactory);
 					return new StationControlFactory(baseFactory, configurationFactory, graphicFactory);
 				}
 			});
