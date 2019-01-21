@@ -7,10 +7,7 @@ package com.jevaengine.spacestation.entity.atmos;
 
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
-import com.jevaengine.spacestation.gas.GasSimulation;
-import com.jevaengine.spacestation.gas.GasSimulationEntity;
-import com.jevaengine.spacestation.gas.GasSimulationNetwork;
-import com.jevaengine.spacestation.gas.GasType;
+import com.jevaengine.spacestation.gas.*;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
@@ -119,7 +116,7 @@ public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 		if(m_pendingGas.isEmpty())
 			return;
 
-		GasSimulation.GasMetaData data = new GasSimulation.GasMetaData(m_pendingGas, 0);
+		GasMetaData data = new GasMetaData(m_pendingGas, 0);
 		Vector2D loc = this.getBody().getLocation().getXy().round();
 		m_sim.produce(m_simNetwork, loc, data);
 		m_pendingGas.clear();

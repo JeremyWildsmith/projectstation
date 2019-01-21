@@ -5,10 +5,7 @@ import com.jevaengine.spacestation.entity.network.protocols.BinarySignalProtocol
 import com.jevaengine.spacestation.entity.network.protocols.MeasurementProtocol;
 import com.jevaengine.spacestation.entity.network.protocols.PingProtocol;
 import com.jevaengine.spacestation.entity.power.IDevice;
-import com.jevaengine.spacestation.gas.GasSimulation;
-import com.jevaengine.spacestation.gas.GasSimulationEntity;
-import com.jevaengine.spacestation.gas.GasSimulationNetwork;
-import com.jevaengine.spacestation.gas.GasType;
+import com.jevaengine.spacestation.gas.*;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -79,7 +76,7 @@ public class NetworkAirQualitySensor extends NetworkDevice {
 
     private boolean isIdeal() {
         Vector2D location = getTestLocation();
-        GasSimulation.GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, location);
+        GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, location);
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, location);
 
         if(Math.abs(IDEAL_PRESSURE - sample.calculatePressure(sampleVolume)) > IDEAL_PRESSURE * PERCENT_TOLERANCE)
@@ -109,7 +106,7 @@ public class NetworkAirQualitySensor extends NetworkDevice {
 
         Vector2D testLocation = getTestLocation();
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, testLocation);
-        GasSimulation.GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, testLocation);
+        GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, testLocation);
 
         int[] percentOxygen = MeasurementProtocol.getParts(sample.getPercentContent(GasType.Oxygen) * 100);
         int[] pressure = MeasurementProtocol.getParts(sample.calculatePressure(sampleVolume) / 1000.0f);

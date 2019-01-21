@@ -31,7 +31,7 @@ public class Benchmark {
             }
         }
 
-        GasSimulation sim = new GasSimulation(new GasSimulation.WorldMapReader() {
+        GasSimulation sim = new GasSimulation(new GasSimulationWorldMapReader() {
             @Override
             public Set<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> s) {
                 return new HashSet<>();
@@ -43,7 +43,7 @@ public class Benchmark {
             }
 
             @Override
-            public GasSimulation.WorldMapReader duplicate() {
+            public GasSimulationWorldMapReader duplicate() {
                 return this;
             }
 
@@ -91,7 +91,7 @@ public class Benchmark {
                     Map<GasType, Float> gas = new HashMap<>();
                     gas.put(GasType.Oxygen, (float) (7.0F + Math.random() * 50));
                     float temperature = (float) (250 + 100 * Math.random());
-                    sim.produce(new Vector2D(x, y), new GasSimulation.GasMetaData(gas, temperature));
+                    sim.produce(new Vector2D(x, y), new GasMetaData(gas, temperature));
                 }
             }
         }

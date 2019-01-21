@@ -159,7 +159,7 @@ public class Playing implements IState {
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
-			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player);
+			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes());
 			int y = context.getWindowManager().getResolution().y / 2 - hud.getBounds().height;
 			hud.setMovable(false);
 			hud.setTopMost(true);

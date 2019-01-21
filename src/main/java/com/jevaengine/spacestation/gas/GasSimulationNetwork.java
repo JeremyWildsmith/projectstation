@@ -14,23 +14,23 @@ import java.util.*;
 
 public enum GasSimulationNetwork {
     PipeA((World world) -> {
-        return new PipeNetworkWorldReader(world, "PipeA");
+        return new PipeNetworkWorldReader(world, "PipeA", true);
     }),
     PipeB((World world) -> {
-        return new PipeNetworkWorldReader(world, "PipeB");
+        return new PipeNetworkWorldReader(world, "PipeB", true);
     }),
     PipeC((World world) -> {
-        return new PipeNetworkWorldReader(world, "PipeC");
+        return new PipeNetworkWorldReader(world, "PipeC", true);
     }),
     PipeD((World world) -> {
-        return new PipeNetworkWorldReader(world, "PipeD");
+        return new PipeNetworkWorldReader(world, "PipeD", true);
     }),
     Environment((World world) -> {
-        return new EnvironmentWorldReader(world, "Environment");
+        return new EnvironmentWorldReader(world, "Environment", true);
     });
 
     private interface WorldMapReaderFactory {
-        GasSimulation.WorldMapReader create(World world);
+        GasSimulationWorldMapReader create(World world);
     }
 
     public static final float ENVIRONMENT_UNIT_VOLUME = 1.0f;
@@ -41,11 +41,11 @@ public enum GasSimulationNetwork {
         this.factory = factory;
     }
 
-    public GasSimulation.WorldMapReader createReader(World world) {
+    public GasSimulationWorldMapReader createReader(World world) {
         return factory.create(world);
     }
 
-    private static class PipeNetworkWorldReader implements GasSimulation.WorldMapReader, BasicDevice.IDeviceConnectionListener, ILiquidCarrier.ILiquidCarrierObserver, World.IWorldObserver {
+    private static class PipeNetworkWorldReader implements GasSimulationWorldMapReader, BasicDevice.IDeviceConnectionListener, ILiquidCarrier.ILiquidCarrierObserver, World.IWorldObserver {
         private final World world;
         private boolean isDirty = true;
 
@@ -56,26 +56,32 @@ public enum GasSimulationNetwork {
 
         private final GasSimulationNetwork network;
 
-        public PipeNetworkWorldReader(PipeNetworkWorldReader reader) {
+        private PipeNetworkWorldReader(PipeNetworkWorldReader reader, boolean observe) {
             isDirty = false;
             world = reader.world;
             pipeMap = new HashSet(reader.pipeMap);
             airTight = new HashSet(reader.airTight);
             volumeMap = new HashMap<>(reader.volumeMap);
             network = reader.network;
+
+            if(observe)
+                world.getObservers().add(this);
         }
 
-        @Override
-        public synchronized GasSimulation.WorldMapReader duplicate() {
-            return new PipeNetworkWorldReader(this);
-        }
-
-        public PipeNetworkWorldReader(World world, String network) {
+        private PipeNetworkWorldReader(World world, String network, boolean observe) {
             this.world = world;
             pipeMap = new HashSet<>();
             airTight = new HashSet<>();
             volumeMap = new HashMap<>();
             this.network = GasSimulationNetwork.valueOf(network);
+
+            if(observe)
+                world.getObservers().add(this);
+        }
+
+        @Override
+        public synchronized GasSimulationWorldMapReader duplicate() {
+            return new PipeNetworkWorldReader(this, false);
         }
 
         @Override
@@ -105,14 +111,18 @@ public enum GasSimulationNetwork {
 
         @Override
         public void addedEntity(IEntity e) {
-            isDirty = true;
-            e.getObservers().add(this);
+            if (e instanceof ILiquidCarrier) {
+                isDirty = true;
+                e.getObservers().add(this);
+            }
         }
 
         @Override
         public void removedEntity(Vector3F loc, IEntity e) {
-            isDirty = true;
-            e.getObservers().remove(this);
+            if (e instanceof ILiquidCarrier) {
+                isDirty = true;
+                e.getObservers().remove(this);
+            }
         }
 
         @Override
@@ -223,7 +233,7 @@ public enum GasSimulationNetwork {
         }
     }
 
-    private static class EnvironmentWorldReader implements GasSimulation.WorldMapReader, World.IWorldObserver, Door.IDoorObserver, ILiquidCarrier.ILiquidCarrierObserver {
+    private static class EnvironmentWorldReader implements GasSimulationWorldMapReader, World.IWorldObserver, Door.IDoorObserver, ILiquidCarrier.ILiquidCarrierObserver {
         private final World world;
         private boolean isDirty = true;
 
@@ -235,18 +245,29 @@ public enum GasSimulationNetwork {
 
         private final GasSimulationNetwork network;
 
-        public EnvironmentWorldReader(EnvironmentWorldReader reader) {
+        private EnvironmentWorldReader(EnvironmentWorldReader reader, boolean observe) {
             isDirty = false;
             world = reader.world;
             isAirTightMap = new HashMap(reader.isAirTightMap);
             isBlockingMap = new HashMap(reader.isBlockingMap);
             heatConductivityMap = new HashMap<>(reader.heatConductivityMap);
             network = reader.network;
+
+            if(observe)
+                reader.world.getObservers().add(this);
+        }
+
+        private EnvironmentWorldReader(World world, String network, boolean observe) {
+            this.world = world;
+            this.network = GasSimulationNetwork.valueOf(network);
+
+            if(observe)
+                world.getObservers().add(this);
         }
 
         @Override
-        public synchronized GasSimulation.WorldMapReader duplicate() {
-            return new EnvironmentWorldReader(this);
+        public synchronized GasSimulationWorldMapReader duplicate() {
+            return new EnvironmentWorldReader(this, false);
         }
 
         @Override
@@ -256,19 +277,16 @@ public enum GasSimulationNetwork {
             }
         }
 
-        public EnvironmentWorldReader(World world, String network) {
-            this.world = world;
-            this.network = GasSimulationNetwork.valueOf(network);
-        }
-
         @Override
         public void addedEntity(IEntity e) {
-            isDirty = true;
+            if(e instanceof Infrastructure || e instanceof Door || e instanceof ILiquidCarrier)
+                isDirty = true;
         }
 
         @Override
         public void removedEntity(Vector3F loc, IEntity e) {
-            isDirty = true;
+            if(e instanceof Infrastructure || e instanceof Door || e instanceof ILiquidCarrier)
+                isDirty = true;
         }
 
         @Override

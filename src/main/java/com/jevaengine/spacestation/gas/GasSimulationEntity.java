@@ -1,5 +1,6 @@
 package com.jevaengine.spacestation.gas;
 
+import com.jevaengine.spacestation.entity.Infrastructure;
 import io.github.jevaengine.math.*;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
@@ -32,7 +33,7 @@ public class GasSimulationEntity implements IEntity {
 
     private HashMap<String, Integer> flags = new HashMap<>();
 
-    private WorldObserver m_worldObserver = new WorldObserver();
+    //private WorldObserver m_worldObserver = new WorldObserver();
 
     private Map<GasSimulationNetwork, GasSimulation> simulation = new HashMap<>();
     private Map<GasSimulationNetwork, GasSimulation> cachedSimulation = new HashMap<>();
@@ -49,12 +50,12 @@ public class GasSimulationEntity implements IEntity {
         gasSimulationThread.setPriority(Thread.MIN_PRIORITY);
     }
 
-    public GasSimulation.GasMetaData consume(GasSimulationNetwork network, Vector2D location, float volume) {
+    public GasMetaData consume(GasSimulationNetwork network, Vector2D location, float volume) {
         synchronized (cachedSimulation) {
             GasSimulation sim = cachedSimulation.get(network);
 
             if (sim == null)
-                return new GasSimulation.GasMetaData();
+                return new GasMetaData();
 
             synchronized (queuedActions) {
                 final float volumeData = volume;
@@ -68,7 +69,7 @@ public class GasSimulationEntity implements IEntity {
         }
     }
 
-    public void produce(GasSimulationNetwork network, Vector2D location, GasSimulation.GasMetaData gas) {
+    public void produce(GasSimulationNetwork network, Vector2D location, GasMetaData gas) {
         synchronized (cachedSimulation) {
             GasSimulation sim = cachedSimulation.get(network);
 
@@ -76,7 +77,7 @@ public class GasSimulationEntity implements IEntity {
                 return;
 
             synchronized (queuedActions) {
-                final GasSimulation.GasMetaData gasData = new GasSimulation.GasMetaData(gas);
+                final GasMetaData gasData = new GasMetaData(gas);
                 final Vector2D locationData = new Vector2D(location);
                 queuedActions.get(network).add((GasSimulation s) -> {
                     s.produce(locationData, gasData);
@@ -87,12 +88,12 @@ public class GasSimulationEntity implements IEntity {
         }
     }
 
-    public GasSimulation.GasMetaData sample(GasSimulationNetwork network, Vector2D location) {
+    public GasMetaData sample(GasSimulationNetwork network, Vector2D location) {
         synchronized (cachedSimulation) {
             GasSimulation sim = cachedSimulation.get(network);
 
             if (sim == null)
-                return new GasSimulation.GasMetaData();
+                return new GasMetaData();
 
             return sim.sample(location);
         }
@@ -125,13 +126,13 @@ public class GasSimulationEntity implements IEntity {
 
 
         for(GasSimulationNetwork n : GasSimulationNetwork.values()){
-            GasSimulation.WorldMapReader reader = n.createReader(m_world);
+            GasSimulationWorldMapReader reader = n.createReader(m_world);
             simulation.put(n, new GasSimulation(reader, m_defaultTemperature));
             cachedSimulation.put(n, new GasSimulation(reader, m_defaultTemperature));
             queuedActions.put(n, new ArrayList<>());
         }
 
-        m_world.getObservers().add(m_worldObserver);
+        //m_world.getObservers().add(m_worldObserver);
 
         if(!gasSimulationThread.isAlive())
             gasSimulationThread.start();
@@ -140,7 +141,7 @@ public class GasSimulationEntity implements IEntity {
 
     @Override
     public void disassociate() {
-        m_world.getObservers().remove(m_worldObserver);
+        //m_world.getObservers().remove(m_worldObserver);
         m_world = null;
         gasSimulationThread.interrupt();
     }
@@ -194,16 +195,21 @@ public class GasSimulationEntity implements IEntity {
     @Override
     public void dispose() { }
 
+    /*
     private class WorldObserver implements World.IWorldObserver {
         @Override
         public void addedEntity(IEntity e) { }
 
         @Override
         public void removedEntity(Vector3F loc, IEntity e) {
-            for(GasSimulation s : simulation.values())
+            for(GasSimulation s : simulation.values()) {
+                if(e instanceof Infrastructure && simulation.get(GasSimulationNetwork.Environment) == s) {
+                    int i = 0;
+                }
                 s.removedEntity(loc);
+            }
         }
-    }
+    }*/
 
     private class GasSimulationThread implements Runnable {
         private final Logger logger = LoggerFactory.getLogger(GasSimulationThread.class);
@@ -215,7 +221,7 @@ public class GasSimulationEntity implements IEntity {
                     Thread.sleep(1);
                     long currentMillis = System.currentTimeMillis();
                     int elapsed = (int) (currentMillis - lastUpdate);
-                    if (elapsed <= 50)
+                    if (elapsed <= 5)
                         continue;
 
                     lastUpdate = currentMillis;
@@ -258,17 +264,17 @@ public class GasSimulationEntity implements IEntity {
 
         @Override
         public Collection<ISceneModelComponent> getComponents(Matrix3X3 projection) {
-            List<ISceneModelComponent> c = new ArrayList<>();
+            /*List<ISceneModelComponent> c = new ArrayList<>();
             Vector3D translation = projection.dot(new Vector3F(1, 1, 0)).round();
 
-            HashMap<Vector2D, GasSimulation.GasMetaData> gas = null;
-            GasSimulation.WorldMapReader reader = null;
+            HashMap<Vector2D, GasMetaData> gas = null;
+            GasSimulationWorldMapReader reader = null;
             synchronized (cachedSimulation) {
                 gas = cachedSimulation.get(GasSimulationNetwork.Environment).getGasMap();
                 reader = cachedSimulation.get(GasSimulationNetwork.Environment).getReader();
             }
 
-            for(Map.Entry<Vector2D, GasSimulation.GasMetaData> v : gas.entrySet()) {
+            for(Map.Entry<Vector2D, GasMetaData> v : gas.entrySet()) {
                 if (v.getValue().getTotalMols() < 0.00001f)
                     continue;
 
@@ -282,7 +288,9 @@ public class GasSimulationEntity implements IEntity {
                 }
             }
 
-            return c;
+            return c;*/
+
+            return new ArrayList<>();
         }
 
         @Override

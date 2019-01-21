@@ -2,6 +2,7 @@ package com.jevaengine.spacestation.entity.atmos;
 
 import com.jevaengine.spacestation.entity.WiredDevice;
 import com.jevaengine.spacestation.entity.power.IDevice;
+import com.jevaengine.spacestation.gas.GasMetaData;
 import com.jevaengine.spacestation.gas.GasSimulation;
 import com.jevaengine.spacestation.gas.GasSimulationEntity;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
@@ -136,14 +137,14 @@ public class LiquidPump extends WiredDevice implements ILiquidCarrier {
         GasSimulationNetwork sourceNetwork = src.getNetwork();
         GasSimulationNetwork destNetwork = dest.getNetwork();
 
-        GasSimulation.GasMetaData destData = gasSim.sample(destNetwork, destLocation);
+        GasMetaData destData = gasSim.sample(destNetwork, destLocation);
 
         float destVolume = gasSim.getVolume(destNetwork, destLocation);
 
         float attemptConsumeLitres = volumePerSecond * delta / 1000.0f;
 
         if(outputPressure < 0 || destData.calculatePressure(destVolume) < outputPressure) {
-            GasSimulation.GasMetaData sample = gasSim.consume(sourceNetwork, sourceLocation, attemptConsumeLitres);
+            GasMetaData sample = gasSim.consume(sourceNetwork, sourceLocation, attemptConsumeLitres);
 
             if(sample.getTotalMols() > 0)
                 gasSim.produce(destNetwork, destLocation, sample);

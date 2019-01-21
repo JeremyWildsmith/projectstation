@@ -6,9 +6,9 @@ public interface IGasSimulation {
 
     float getVolume(Vector2D location);
 
-    GasSimulation.GasMetaData consume(Vector2D location, float mols);
+    GasMetaData consume(Vector2D location, float mols);
 
-    GasSimulation.GasMetaData sample(Vector2D location);
+    GasMetaData sample(Vector2D location);
 
-    void produce(Vector2D location, GasSimulation.GasMetaData gas);
+    void produce(Vector2D location, GasMetaData gas);
 }

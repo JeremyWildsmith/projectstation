@@ -26,7 +26,7 @@ public class Functionality {
             }
         }
 
-        GasSimulation sim = new GasSimulation(new GasSimulation.WorldMapReader() {
+        GasSimulation sim = new GasSimulation(new GasSimulationWorldMapReader() {
             @Override
             public Set<Vector2D> syncWithWorld(Map<GasSimulationNetwork, GasSimulation> n) {
                 return new HashSet<>();
@@ -38,7 +38,7 @@ public class Functionality {
             }
 
             @Override
-            public GasSimulation.WorldMapReader duplicate() {
+            public GasSimulationWorldMapReader duplicate() {
                 return this;
             }
 
@@ -94,7 +94,7 @@ public class Functionality {
                         Map<GasType, Float> gas = new HashMap<>();
                         gas.put(GasType.Oxygen, 1f);
                         float temperature = 250;
-                        sim.produce(new Vector2D(x, y), new GasSimulation.GasMetaData(gas, temperature));
+                        sim.produce(new Vector2D(x, y), new GasMetaData(gas, temperature));
                     }
             }
         }
@@ -104,7 +104,7 @@ public class Functionality {
                 updateIterations++;
                 TimeUnit.MILLISECONDS.sleep(10);
                 long s = System.nanoTime();
-                int cycles = sim.update(GasSimulation.NORMALIZE_INTERVAL);
+                int cycles = sim.update(10);
                 System.out.println((System.nanoTime() - s) / 1000000);
                 System.out.println("Cycles: " + cycles);
                 System.out.println("UI: " + updateIterations);
@@ -112,7 +112,7 @@ public class Functionality {
                 if(updateIterations == 200) {
                     HashMap<GasType, Float> gas = new HashMap<>();
                     gas.put(GasType.Oxygen, 400.0f);
-                    sim.produce(new Vector2D(1,1), new GasSimulation.GasMetaData(gas, 0));
+                    sim.produce(new Vector2D(1,1), new GasMetaData(gas, 0));
                 }
 
                 System.out.println("====================");
@@ -125,7 +125,7 @@ public class Functionality {
                             i++;
                         }
                         float locationVolume = sim.getVolume(new Vector2D(x,y));
-                        GasSimulation.GasMetaData data =  sim.sample(new Vector2D(x, y));
+                        GasMetaData data =  sim.sample(new Vector2D(x, y));
                         float pressure = data.calculatePressure(locationVolume);
 
                         System.out.printf("%-3.2f | ", pressure / 1000.0f);
