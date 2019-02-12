@@ -19,6 +19,8 @@ import java.util.Map;
 
 public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier {
 
+    private final int STABLE_DECISION_PERIOD = 5000;
+
     private IAnimationSceneModel m_model;
     private boolean m_isOpen;
     private float m_collapsePressure;
@@ -26,6 +28,10 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
     private GasSimulationEntity m_sim;
 
     private final GasSimulationNetwork m_simNetwork = GasSimulationNetwork.PipeA;
+
+    private int lastDecisionMade = 0;
+
+    private boolean decision = false;
 
     public PressureCollapseValve(String name, IAnimationSceneModel model, float collapsePressure) {
         super(name, true);
@@ -119,6 +125,8 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
 
     @Override
     public void update(int delta) {
+        lastDecisionMade += delta;
+
         if(m_world != getWorld())
         {
             m_world = getWorld();
@@ -142,10 +150,26 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
             float pressureA = m_sim.sample(networkA, locationA).calculatePressure(aVol);
             float pressureB = m_sim.sample(networkB, locationB).calculatePressure(bVol);
 
-            if(Math.abs(pressureA - pressureB) > m_collapsePressure)
-                open();
-            else
-                close();
-        }
+            boolean open = Math.abs(pressureA - pressureB) > m_collapsePressure;
+
+            if(open != decision) {
+                lastDecisionMade = 0;
+                decision = open;
+            }
+
+            if(decision != m_isOpen && (decision == true || lastDecisionMade >= STABLE_DECISION_PERIOD)) {
+                if (decision) {
+                    if (!m_isOpen)
+                        System.out.println("Open");
+                    open();
+
+                } else {
+                    if (m_isOpen)
+                        System.out.println("Close");
+                    close();
+                }
+            }
+        } else
+            lastDecisionMade = 0;
     }
 }
