@@ -37,6 +37,9 @@ public class StationAssetStreamFactory implements IAssetStreamFactory
 	
 	private File resolvePath(String relativePath)
 	{
+		if(relativePath.startsWith("/"))
+			relativePath = "." + relativePath;
+
 		File file = new File(m_assetSource, relativePath);
 			
 		if(file.exists())
@@ -63,10 +66,7 @@ public class StationAssetStreamFactory implements IAssetStreamFactory
 			}
 			else
 			{
-				if(!new File(path.getPath()).isAbsolute())
-					return new FileInputStream(resolvePath(path.getPath()));
-				else
-					return new FileInputStream(new File(path));
+				return new FileInputStream(resolvePath(path.getPath()));
 			}
 		} catch (FileNotFoundException ex)
 		{
