@@ -4,7 +4,7 @@
   "worldHeight" : 100,
   "entities" : [ {
     "auxConfig" : {
-      "volumePerSecond" : 10,
+      "volumePerSecond" : 0.5,
       "pressure" : -1
     },
     "name" : "Unna",
