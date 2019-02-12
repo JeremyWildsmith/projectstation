@@ -22,7 +22,8 @@ public class NetworkAirQualitySensor extends NetworkDevice {
 
     private final float IDEAL_PRESSURE = 102000;
     private final float IDEAL_PERCENT_OXYGEN = 0.2F;
-    private final float PERCENT_TOLERANCE = 0.1f;
+    private final float IDEAL_PERCENT_OXYGEN_TOLERANCE = 0.05f;
+    private final float IDEAL_PRESSURE_TOLERANCE = 20000;
 
     private boolean m_invertBinarySignal;
 
@@ -79,10 +80,10 @@ public class NetworkAirQualitySensor extends NetworkDevice {
         GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, location);
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, location);
 
-        if(Math.abs(IDEAL_PRESSURE - sample.calculatePressure(sampleVolume)) > IDEAL_PRESSURE * PERCENT_TOLERANCE)
+        if(Math.abs(IDEAL_PRESSURE - sample.calculatePressure(sampleVolume)) > IDEAL_PRESSURE_TOLERANCE)
             return false;
 
-        if(Math.abs(IDEAL_PERCENT_OXYGEN - sample.getPercentContent(GasType.Oxygen)) > IDEAL_PERCENT_OXYGEN * PERCENT_TOLERANCE)
+        if(Math.abs(IDEAL_PERCENT_OXYGEN - sample.getPercentContent(GasType.Oxygen)) > IDEAL_PERCENT_OXYGEN_TOLERANCE)
             return false;
 
         return true;
