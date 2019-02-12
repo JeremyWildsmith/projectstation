@@ -158,7 +158,7 @@ public final class GasDebugFactory {
 									Vector2D origin = new Vector2D(bounds.width / 2, bounds.height / 2);
 
 									Vector2D offset = new Vector2D(xOffset * xSide,yOffset* ySide);
-
+									int yAdd = xOffset % 2 == 0 ? 2 : -2;
 									if(offset.isZero())
 										g.setColor(Color.red);
 									else
@@ -176,7 +176,7 @@ public final class GasDebugFactory {
 									//String s = String.format("%.3f", sim.sample(m_network, testLocation).temperature);
 									AffineTransform t = g.getTransform();
 									g.setTransform(AffineTransform.getScaleInstance(0.8f, 0.8));
-									g.drawString(s, (x + renderLocation.x) / .8F, (y + renderLocation.y) / .8F);
+									g.drawString(s, (x + renderLocation.x) / .8F, (y + renderLocation.y + yAdd) / .8F);
 									g.setTransform(t);
 								}
 							}
