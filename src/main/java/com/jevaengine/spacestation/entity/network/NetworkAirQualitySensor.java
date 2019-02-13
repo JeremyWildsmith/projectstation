@@ -79,8 +79,9 @@ public class NetworkAirQualitySensor extends NetworkDevice {
         Vector2D location = getTestLocation();
         GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, location);
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, location);
+        float sampleTemperature = m_simulation.getTemperature(location);
 
-        if(Math.abs(IDEAL_PRESSURE - sample.calculatePressure(sampleVolume)) > IDEAL_PRESSURE_TOLERANCE)
+        if(Math.abs(IDEAL_PRESSURE - sample.calculatePressure(sampleVolume, sampleTemperature)) > IDEAL_PRESSURE_TOLERANCE)
             return false;
 
         if(Math.abs(IDEAL_PERCENT_OXYGEN - sample.getPercentContent(GasType.Oxygen)) > IDEAL_PERCENT_OXYGEN_TOLERANCE)
@@ -107,10 +108,11 @@ public class NetworkAirQualitySensor extends NetworkDevice {
 
         Vector2D testLocation = getTestLocation();
         float sampleVolume = m_simulation.getVolume(GasSimulationNetwork.Environment, testLocation);
+        float sampleTemperature = m_simulation.getTemperature(testLocation);
         GasMetaData sample = m_simulation.sample(GasSimulationNetwork.Environment, testLocation);
 
         int[] percentOxygen = MeasurementProtocol.getParts(sample.getPercentContent(GasType.Oxygen) * 100);
-        int[] pressure = MeasurementProtocol.getParts(sample.calculatePressure(sampleVolume) / 1000.0f);
+        int[] pressure = MeasurementProtocol.getParts(sample.calculatePressure(sampleVolume, sampleTemperature) / 1000.0f);
 
         NetworkPacket packet = MeasurementProtocol.encode(new MeasurementProtocol.MeasurementSignal("kPa", pressure[0], pressure[1]));
         packet.RecieverAddress = reciever;

@@ -168,12 +168,13 @@ public final class GasDebugFactory {
 									Vector2D testLocation = m_follow.getBody().getLocation().getXy().round().add(offset);
 
 									float volume = sim.getVolume(m_network, testLocation);
+									float temperature = sim.getTemperature(testLocation);
 									//Pressure
-									String s = String.format("%.3f", sim.sample(m_network, testLocation).calculatePressure(volume) / 1000);
+									String s = String.format("%.3f", sim.sample(m_network, testLocation).calculatePressure(volume, temperature) / 1000);
 									//Mols
 									//String s = String.format("%.3f", sim.sample(m_network, testLocation).getTotalMols());
 									//Temperature
-									//String s = String.format("%.3f", sim.sample(m_network, testLocation).temperature);
+									//String s = String.format("%.3f", temperature);
 									AffineTransform t = g.getTransform();
 									g.setTransform(AffineTransform.getScaleInstance(0.8f, 0.8));
 									g.drawString(s, (x + renderLocation.x) / .8F, (y + renderLocation.y + yAdd) / .8F);

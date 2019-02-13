@@ -231,6 +231,11 @@ public enum GasSimulationNetwork {
                     return volumeMap.get(location);
             }
         }
+
+        @Override
+        public float getTemperature(Vector2D location) {
+            return 200;
+        }
     }
 
     private static class EnvironmentWorldReader implements GasSimulationWorldMapReader, World.IWorldObserver, Door.IDoorObserver, ILiquidCarrier.ILiquidCarrierObserver {
@@ -433,6 +438,11 @@ public enum GasSimulationNetwork {
         @Override
         public float getVolume(Vector2D location) {
             return ENVIRONMENT_UNIT_VOLUME;
+        }
+
+        @Override
+        public float getTemperature(Vector2D location) {
+            return 200;
         }
     }
 

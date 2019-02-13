@@ -8,28 +8,18 @@ public class GasMetaData {
     private static final float GAS_CONSTANT = 8.31F;
 
     public final Map<GasType, Float> amount;
-    public final float temperature;
 
     public GasMetaData() {
-        this(0);
+        this(new HashMap<>());
     }
 
-    public GasMetaData(float temperature) {
-        this(new HashMap<>(), temperature);
-    }
-
-    public GasMetaData(Map<GasType, Float> amount, float temperature) {
-        if (temperature < 0)
-            throw new IllegalArgumentException();
-
+    public GasMetaData(Map<GasType, Float> amount) {
         this.amount = new HashMap<>(amount);
 
         for (Float f : this.amount.values()) {
             if (f < 0)
                 throw new IllegalArgumentException();
         }
-
-        this.temperature = temperature;
     }
 
     public void validate() {
@@ -37,14 +27,10 @@ public class GasMetaData {
             if (f < 0 || Float.isNaN(f) || Float.isInfinite(f))
                 throw new RuntimeException("Gas Metadata validation failed.");
         }
-
-        if (temperature < 0 || Float.isNaN(temperature) || Float.isInfinite(temperature))
-            throw new RuntimeException("Gas Metadata validation failed.");
     }
 
     public GasMetaData(GasMetaData gas) {
         this.amount = new HashMap<>(gas.amount);
-        this.temperature = gas.temperature;
     }
 
     public GasMetaData add(GasMetaData g) {
@@ -59,7 +45,7 @@ public class GasMetaData {
             sum.put(gas.getKey(), current + gas.getValue());
         }
 
-        return new GasMetaData(sum, g.temperature + this.temperature);
+        return new GasMetaData(sum);
     }
 
     public GasMetaData add(GasType type, Float mols) {
@@ -72,17 +58,13 @@ public class GasMetaData {
     }
 
     public GasMetaData consume(float contentsFraction) {
-        return consume(contentsFraction, contentsFraction);
-    }
-
-    public GasMetaData consume(float contentsFraction, float temperatureFraction) {
         HashMap<GasType, Float> sum = new HashMap<GasType, Float>();
 
         for (Map.Entry<GasType, Float> gas : amount.entrySet()) {
             sum.put(gas.getKey(), gas.getValue() * contentsFraction);
         }
 
-        return new GasMetaData(sum, temperature * temperatureFraction);
+        return new GasMetaData(sum);
     }
 
     public float getTotalMols() {
@@ -109,11 +91,12 @@ public class GasMetaData {
         return flowRate;
     }
 
-    public float calculatePressure(float volume) {
+    public float calculatePressure(float volume, float temperature) {
         if (volume <= 0.0001f)
             throw new IllegalArgumentException();
 
         float pressure = getTotalMols() * GAS_CONSTANT * temperature / volume;
+
         return pressure;
     }
 
@@ -126,7 +109,7 @@ public class GasMetaData {
 
         return quantity / totalMols;
     }
-
+/*
     public float getPercentContent(GasType g, boolean airBorne, float volume) {
         float quantity = amount.containsKey(g) ? amount.get(g) : 0;
         float totalMols = 0;
@@ -213,5 +196,5 @@ public class GasMetaData {
             return null;
 
         return new Color(r, g, b, a);
-    }
+    }*/
 }

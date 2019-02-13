@@ -40,7 +40,7 @@ public class VoidGasSimulationCluster implements IGasSimulationCluster {
 
     @Override
     public GasMetaData getTotalGas() {
-        return new GasMetaData(VOID_TEMPERATURE);
+        return new GasMetaData();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class VoidGasSimulationCluster implements IGasSimulationCluster {
         HashMap<Vector2D, GasMetaData> g = new HashMap<>();
 
         for(Vector2D v : locations) {
-            g.put(v, new GasMetaData(VOID_TEMPERATURE));
+            g.put(v, new GasMetaData());
         }
 
         return g;

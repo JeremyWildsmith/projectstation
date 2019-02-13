@@ -146,9 +146,11 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
 
             float aVol = m_sim.getVolume(networkA, locationA);
             float bVol = m_sim.getVolume(networkB, locationB);
+            float aTemp = m_sim.getTemperature(locationA);
+            float bTemp = m_sim.getTemperature(locationB);
 
-            float pressureA = m_sim.sample(networkA, locationA).calculatePressure(aVol);
-            float pressureB = m_sim.sample(networkB, locationB).calculatePressure(bVol);
+            float pressureA = m_sim.sample(networkA, locationA).calculatePressure(aVol, aTemp);
+            float pressureB = m_sim.sample(networkB, locationB).calculatePressure(bVol, bTemp);
 
             boolean open = Math.abs(pressureA - pressureB) > m_collapsePressure;
 

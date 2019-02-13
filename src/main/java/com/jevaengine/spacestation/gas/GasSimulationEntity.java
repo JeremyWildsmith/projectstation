@@ -110,6 +110,18 @@ public class GasSimulationEntity implements IEntity {
         }
     }
 
+    public float getTemperature(Vector2D location) {
+        /*synchronized (cachedSimulation) {
+            GasSimulation sim = cachedSimulation.get(network);
+
+            if (sim == null)
+                return GasSimulationNetwork.ENVIRONMENT_UNIT_VOLUME;
+
+            return sim.getVolume(location);
+        }*/
+        return m_defaultTemperature;
+    }
+
     @Override
     public World getWorld() {
         return m_world;

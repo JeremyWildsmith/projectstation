@@ -140,10 +140,11 @@ public class LiquidPump extends WiredDevice implements ILiquidCarrier {
         GasMetaData destData = gasSim.sample(destNetwork, destLocation);
 
         float destVolume = gasSim.getVolume(destNetwork, destLocation);
+        float destTemp = gasSim.getTemperature(destLocation);
 
         float attemptConsumeLitres = volumePerSecond * delta / 1000.0f;
 
-        if(outputPressure < 0 || destData.calculatePressure(destVolume) < outputPressure) {
+        if(outputPressure < 0 || destData.calculatePressure(destVolume, destTemp) < outputPressure) {
             GasMetaData sample = gasSim.consume(sourceNetwork, sourceLocation, attemptConsumeLitres);
 
             if(sample.getTotalMols() > 0)

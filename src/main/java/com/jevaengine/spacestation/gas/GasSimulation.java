@@ -106,12 +106,13 @@ public class GasSimulation implements IGasSimulation {
                     joinedConnection = true;
                     gasMappings.put(location, c);
                     ownerCluster = c;
+                    c.produce(new GasMetaData());
                     break;
                 }
             }
 
             if(!joinedConnection) {
-                GasSimulationCluster c = new GasSimulationCluster(world, location, new GasMetaData(defaultTemperature));
+                GasSimulationCluster c = new GasSimulationCluster(world, location, new GasMetaData());
                 gasMappings.put(location, c);
                 ownerCluster = c;
             }
@@ -139,12 +140,16 @@ public class GasSimulation implements IGasSimulation {
         return world.getVolume(location);
     }
 
+    public float getTemperature(Vector2D location) {
+        return world.getTemperature(location);
+    }
+
     public GasMetaData consume(Vector2D location, float mols) {
         if (Float.isNaN(mols))
             throw new IllegalArgumentException();
 
         if (!gasMappings.containsKey(location))
-            return new GasMetaData(defaultTemperature);
+            return new GasMetaData();
 
         IGasSimulationCluster c = gasMappings.get(location);
         activeLastPass.put(c, 0);
@@ -168,7 +173,7 @@ public class GasSimulation implements IGasSimulation {
 
     public GasMetaData sample(Vector2D location) {
         if (!gasMappings.containsKey(location))
-            return new GasMetaData(defaultTemperature);
+            return new GasMetaData();
 
         IGasSimulationCluster cluster = gasMappings.get(location);
 
@@ -200,8 +205,8 @@ public class GasSimulation implements IGasSimulation {
 
         answerMatrix[0] = totalMols;
 
-        float sourceTemperatureVolumeRation = GAS_CONSTANT * source.getTotalGas().temperature / source.getVolume();
-        float destTemperatureVolumeRation = GAS_CONSTANT * dest.getTotalGas().temperature / dest.getVolume();
+        float sourceTemperatureVolumeRation = GAS_CONSTANT * source.getAverageTemperature() / source.getVolume();
+        float destTemperatureVolumeRation = GAS_CONSTANT * dest.getAverageTemperature() / dest.getVolume();
 
         if (sourceTemperatureVolumeRation == 0 || destTemperatureVolumeRation == 0)
             return 0;
@@ -389,11 +394,11 @@ public class GasSimulation implements IGasSimulation {
             float destGiveRatio = calculateGive(sourceCluster, destCluster);
             float sourceGiveRatio = 1.0f - destGiveRatio;
 
-            sourceCluster.setTotalGas(total.consume(sourceGiveRatio, 0.5f));
+            sourceCluster.setTotalGas(total.consume(sourceGiveRatio));
             //v.getValue().gasMappings.put(v.getKey().source, total.consume(sourceGiveRatio, 0.5f));
             v.getValue().activeLastPass.put(sourceCluster, 0);
 
-            destCluster.setTotalGas(total.consume(destGiveRatio, 0.5f));
+            destCluster.setTotalGas(total.consume(destGiveRatio));
             //gasMappings.put(v.getKey().dest, total.consume(destGiveRatio, 0.5f));
             activeLastPass.put(destCluster, 0);
         }

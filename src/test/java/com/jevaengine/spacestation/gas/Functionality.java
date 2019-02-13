@@ -83,6 +83,11 @@ public class Functionality {
 
                 return heatConductivity[location.x][location.y];
             }
+
+            @Override
+            public float getTemperature(Vector2D location) {
+                return 200;
+            }
         }, 260);
 
         for(int y = 0; y < height; y++) {
@@ -93,8 +98,7 @@ public class Functionality {
                     if(x ==1 && y == 1) {
                         Map<GasType, Float> gas = new HashMap<>();
                         gas.put(GasType.Oxygen, 1f);
-                        float temperature = 250;
-                        sim.produce(new Vector2D(x, y), new GasMetaData(gas, temperature));
+                        sim.produce(new Vector2D(x, y), new GasMetaData(gas));
                     }
             }
         }
@@ -112,7 +116,7 @@ public class Functionality {
                 if(updateIterations == 200) {
                     HashMap<GasType, Float> gas = new HashMap<>();
                     gas.put(GasType.Oxygen, 400.0f);
-                    sim.produce(new Vector2D(1,1), new GasMetaData(gas, 0));
+                    sim.produce(new Vector2D(1,1), new GasMetaData(gas));
                 }
 
                 System.out.println("====================");
@@ -125,8 +129,9 @@ public class Functionality {
                             i++;
                         }
                         float locationVolume = sim.getVolume(new Vector2D(x,y));
+                        float locationTemp = sim.getTemperature(new Vector2D(x,y));
                         GasMetaData data =  sim.sample(new Vector2D(x, y));
-                        float pressure = data.calculatePressure(locationVolume);
+                        float pressure = data.calculatePressure(locationVolume, locationTemp);
 
                         System.out.printf("%-3.2f | ", pressure / 1000.0f);
                         //Moles

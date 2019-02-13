@@ -19,4 +19,6 @@ public interface GasSimulationWorldMapReader {
     GasSimulationWorldMapReader duplicate();
 
     Map<GasSimulationNetwork.ConnectedLinkPair, GasSimulation> getLinks();
+
+    float getTemperature(Vector2D location);
 }

@@ -15,8 +15,6 @@ public interface IGasSimulationCluster {
     float getVolume();
     float getAverageTemperature();
 
-
-
     GasMetaData getTotalGas();
     void setTotalGas(GasMetaData gas);
 

@@ -36,11 +36,18 @@ public class GasSimulationCluster implements IGasSimulationCluster {
         if(locations.isEmpty())
             return 0;
 
-        return gas.temperature * 1.0f / locations.size();
+        float total = 0;
+
+        for(Vector2D l : locations) {
+            total += world.getTemperature(l);
+        }
+
+        return total / locations.size();
     }
 
     private void recalculateProperties() {
         isAirTight = true;
+        volume = 0;
         for(Vector2D v : locations) {
             volume += world.getVolume(v);
 
@@ -57,7 +64,7 @@ public class GasSimulationCluster implements IGasSimulationCluster {
         if(volume <= 0)
             return 0;
 
-        return gas.calculatePressure(volume);
+        return gas.calculatePressure(volume, getAverageTemperature());
     }
 
     @Override
@@ -99,7 +106,7 @@ public class GasSimulationCluster implements IGasSimulationCluster {
         if(!locations.contains(location))
             throw new RuntimeException("Location does not exist in this cluster.");
 
-        return gas.consume(1.0f / locations.size(), 1.0f / locations.size());
+        return gas.consume(1.0f / locations.size());
     }
 
     @Override
@@ -176,7 +183,7 @@ public class GasSimulationCluster implements IGasSimulationCluster {
         if (canidateClusters.isEmpty() || initialGas.getTotalMols() < ACTIVE_THRESHOLD)
             return 0;
 
-        GasMetaData totalGas = new GasMetaData(0);
+        GasMetaData totalGas = new GasMetaData();
 
         canidateClusters.add(this);
         for (IGasSimulationCluster e : canidateClusters) {
@@ -211,8 +218,8 @@ public class GasSimulationCluster implements IGasSimulationCluster {
             if (currentVolume <= 0 || nextVolume <= 0)
                 throw new IllegalArgumentException();
 
-            float currentTemperatureVolumeRation = GAS_CONSTANT * current.getTotalGas().temperature / currentVolume;
-            float nextTemperatureVolumeRation = GAS_CONSTANT * next.getTotalGas().temperature / nextVolume;
+            float currentTemperatureVolumeRation = GAS_CONSTANT * current.getAverageTemperature() / currentVolume;
+            float nextTemperatureVolumeRation = GAS_CONSTANT * next.getAverageTemperature() / nextVolume;
             coefficientMatrix[row][col] = currentTemperatureVolumeRation;
             coefficientMatrix[row][col + 1] = -nextTemperatureVolumeRation;
             col++;
@@ -235,8 +242,7 @@ public class GasSimulationCluster implements IGasSimulationCluster {
 
             molsDistributed += Math.abs(e.getTotalGas().getTotalMols() - amountNeeded);
 
-            GasMetaData result = e.getTotalGas().consume(0, 1);
-            result = result.add(totalGas.consume(amountNeeded / totalGas.getTotalMols(), 0));
+            GasMetaData result = totalGas.consume(amountNeeded / totalGas.getTotalMols());
             e.setTotalGas(result);
         }
 
@@ -254,8 +260,8 @@ public class GasSimulationCluster implements IGasSimulationCluster {
 
         float amountConsume = Math.min(1.0F, mols / total);
 
-        GasMetaData consumed = current.consume(amountConsume, 1.0F);
-        gas = current.consume(1 - amountConsume, 1.0F);
+        GasMetaData consumed = current.consume(amountConsume);
+        gas = current.consume(1 - amountConsume);
 
         gas.validate();
 

@@ -116,7 +116,7 @@ public class LiquidTank extends WiredDevice implements ILiquidCarrier {
 		if(m_pendingGas.isEmpty())
 			return;
 
-		GasMetaData data = new GasMetaData(m_pendingGas, 0);
+		GasMetaData data = new GasMetaData(m_pendingGas);
 		Vector2D loc = this.getBody().getLocation().getXy().round();
 		m_sim.produce(m_simNetwork, loc, data);
 		m_pendingGas.clear();

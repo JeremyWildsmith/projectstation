@@ -79,6 +79,11 @@ public class Benchmark {
 
                 return heatConductivity[location.x][location.y];
             }
+
+            @Override
+            public float getTemperature(Vector2D location) {
+                return 200;
+            }
         }, 260);
 
         for(int y = 0; y < height; y++) {
@@ -90,8 +95,7 @@ public class Benchmark {
 
                     Map<GasType, Float> gas = new HashMap<>();
                     gas.put(GasType.Oxygen, (float) (7.0F + Math.random() * 50));
-                    float temperature = (float) (250 + 100 * Math.random());
-                    sim.produce(new Vector2D(x, y), new GasMetaData(gas, temperature));
+                    sim.produce(new Vector2D(x, y), new GasMetaData(gas));
                 }
             }
         }
