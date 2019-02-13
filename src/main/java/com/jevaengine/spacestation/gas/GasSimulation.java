@@ -443,4 +443,8 @@ public class GasSimulation implements IGasSimulation {
             s.locationChanged(location);
         }
     }
+
+    public Collection<IGasSimulationCluster> getClusters() {
+        return gasMappings.values();
+    }
 }

@@ -159,6 +159,12 @@ public class Playing implements IState {
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
+			GasClusterMapDebugFactory.GasClusterMapDebug clusterDebug = new GasClusterMapDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
+			clusterDebug.setMovable(true);
+			clusterDebug.setTopMost(true);
+			clusterDebug.setVisible(true);
+			clusterDebug.setLocation(new Vector2D(0, 0));
+
 			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes());
 			int y = context.getWindowManager().getResolution().y / 2 - hud.getBounds().height;
 			hud.setMovable(false);

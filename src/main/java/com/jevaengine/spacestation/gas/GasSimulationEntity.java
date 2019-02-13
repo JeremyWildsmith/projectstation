@@ -192,6 +192,15 @@ public class GasSimulationEntity implements IEntity {
             s.syncGameLoop(simulation);
     }
 
+    public Collection<IGasSimulationCluster> getClusters(GasSimulationNetwork network) {
+        synchronized (cachedSimulation) {
+            if (!cachedSimulation.containsKey(network))
+                return new ArrayList<>();
+
+            return cachedSimulation.get(network).getClusters();
+        }
+    }
+
     @Override
     public void dispose() { }
 
