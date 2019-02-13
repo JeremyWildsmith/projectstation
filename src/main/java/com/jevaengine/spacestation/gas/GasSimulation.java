@@ -83,7 +83,7 @@ public class GasSimulation implements IGasSimulation {
 
         Set<IGasSimulationCluster> connections = new HashSet<>();
         Set<Vector2D> missingConnections = new HashSet<>();
-        for (Direction d : Direction.ALL_DIRECTIONS) {
+        for (Direction d : Direction.HV_DIRECTIONS) {
             Vector2D v = location.add(d.getDirectionVector());
             if(world.isConnected(v, location)) {
                 if (gasMappings.containsKey(v))
