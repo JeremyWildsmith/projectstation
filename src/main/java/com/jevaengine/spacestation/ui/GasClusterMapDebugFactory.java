@@ -224,6 +224,8 @@ public final class GasClusterMapDebugFactory {
 							Vector2D start = cluster.getKey().getLocations()[0];
 							start = start.multiply(BOUNDS).add(new Vector2D(x, y)).add(new Vector2D((int)(BOUNDS / 2), (int)(BOUNDS / 2)));
 
+							g.drawString(String.format("%.2f", cluster.getKey().getVolume()), start.x, start.y);
+
 							for(IGasSimulationCluster child : cluster.getKey().getConnections()) {
 								if(child.getLocations().length <= 0 || !colouring.containsKey(child))
 									continue;
