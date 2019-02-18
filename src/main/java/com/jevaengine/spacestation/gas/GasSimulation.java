@@ -88,8 +88,10 @@ public class GasSimulation implements IGasSimulation {
             Map<Vector2D, GasMetaData> components = c.explode();
 
             for(Vector2D v : components.keySet()) {
-                gasMappings.get(v).disconnect();
-                gasMappings.remove(v);
+                if(gasMappings.containsKey(v)) {
+                    gasMappings.get(v).disconnect();
+                    gasMappings.remove(v);
+                }
             }
             c.disconnect();
 
