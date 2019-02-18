@@ -28,6 +28,7 @@ import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.Label;
+import io.github.jevaengine.ui.Timer;
 import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.entity.IEntity;
@@ -123,6 +124,10 @@ public final class GasClusterMapDebugFactory {
 		private final IEntity m_follow;
 		private final GasSimulationNetwork m_network;
 
+		private static final int UPDATE_INTERVAL = 2000;
+		private int lastUpdate = 0;
+		Map<IGasSimulationCluster, Color> colouring = new HashMap<>();
+
 		public GasClusterMapDebugBehaviorInjector(final GasSimulationNetwork network, final Observers observers, IEntity follow) {
 			m_observers = observers;
 			m_follow = follow;
@@ -173,7 +178,21 @@ public final class GasClusterMapDebugFactory {
 		protected void doInject() throws NoSuchControlException {
 			final Viewport displayView = getControl(Viewport.class, "displayView");
 			final Label desc = getControl(Label.class, "description");
+			final Timer timer = new Timer();
 			desc.setText("Network: " + m_network.name());
+
+			addControl(timer);
+			timer.getObservers().add(new Timer.ITimerObserver() {
+				@Override
+				public void update(int deltaTime) {
+					lastUpdate += deltaTime;
+
+					if(lastUpdate > UPDATE_INTERVAL) {
+						colouring = getClusterColouring();
+						lastUpdate = 0;
+					}
+				}
+			});
 
 			displayView.setView(new IRenderable() {
 				@Override
@@ -199,7 +218,6 @@ public final class GasClusterMapDebugFactory {
 					g.clipRect(displayPos.x, displayPos.y, renderBounds.width, renderBounds.height);
 					g.translate(-offset.x, -offset.y);
 
-					Map<IGasSimulationCluster, Color> colouring = getClusterColouring();
 					for(Map.Entry<IGasSimulationCluster, Color> cluster : colouring.entrySet()) {
 						g.setColor(cluster.getValue());
 
@@ -239,47 +257,6 @@ public final class GasClusterMapDebugFactory {
 
 					g.translate(offset.x, offset.y);
 					g.setClip(oldClip);
-/*
-					g.setColor(Color.black);
-					g.fillRect(x, y, displayView.getBounds().width, displayView.getBounds().height);
-					Rect2D bounds = displayView.getBounds();
-
-					g.setColor(Color.WHITE);
-
-					final int SPACING = 40;
-
-					for(int xSide = 1; xSide >= -1; xSide -=2){
-						for(int ySide = 1; ySide >= -1; ySide -=2){
-							for(int xOffset = 0; xOffset * SPACING < bounds.width/2; xOffset++){
-								for(int yOffset = 0; yOffset * SPACING < bounds.height/2; yOffset++){
-									Vector2D origin = new Vector2D(bounds.width / 2, bounds.height / 2);
-
-									Vector2D offset = new Vector2D(xOffset * xSide,yOffset* ySide);
-									int yAdd = xOffset % 2 == 0 ? 2 : -2;
-									if(offset.isZero())
-										g.setColor(Color.red);
-									else
-										g.setColor(Color.white);
-
-									Vector2D renderLocation = origin.add(offset.multiply(SPACING));
-									Vector2D testLocation = m_follow.getBody().getLocation().getXy().round().add(offset);
-
-									float volume = sim.getVolume(m_network, testLocation);
-									//Pressure
-									String s = String.format("%.3f", sim.sample(m_network, testLocation).calculatePressure(volume) / 1000);
-									//Mols
-									//String s = String.format("%.3f", sim.sample(m_network, testLocation).getTotalMols());
-									//Temperature
-									//String s = String.format("%.3f", sim.sample(m_network, testLocation).temperature);
-									AffineTransform t = g.getTransform();
-									g.setTransform(AffineTransform.getScaleInstance(0.8f, 0.8));
-									g.drawString(s, (x + renderLocation.x) / .8F, (y + renderLocation.y + yAdd) / .8F);
-									g.setTransform(t);
-								}
-							}
-						}
-					}
-					g.setColor(Color.white);*/
 				}
 			});
 		}
