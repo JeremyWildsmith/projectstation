@@ -209,7 +209,26 @@ public class GasSimulationEntity implements IEntity {
             if (!cachedSimulation.containsKey(network))
                 return new ArrayList<>();
 
-            return cachedSimulation.get(network).getClusters();
+//            return cachedSimulation.get(network).getClusters();
+
+            Collection<IGasSimulationCluster> clusters = cachedSimulation.get(network).getClusters();
+
+            HashMap<IGasSimulationCluster, IGasSimulationCluster> translation = new HashMap<>();
+
+            GasSimulationWorldMapReader world = cachedSimulation.get(network).getReader().duplicate();
+            for(IGasSimulationCluster c : clusters) {
+                IGasSimulationCluster duplicate = c.duplicate(world, false);
+                duplicate.disconnect();
+                translation.put(c, duplicate);
+            }
+
+            for(Map.Entry<IGasSimulationCluster, IGasSimulationCluster> e : translation.entrySet()) {
+                for(IGasSimulationCluster connection : e.getKey().getConnections()) {
+                    e.getValue().connect(translation.get(connection));
+                }
+            }
+
+            return translation.values();
         }
     }
 

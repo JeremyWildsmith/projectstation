@@ -40,9 +40,32 @@ public class GasSimulation implements IGasSimulation {
 
     public GasSimulation(GasSimulation sim) {
         this.defaultTemperature = sim.defaultTemperature;
-        this.gasMappings = new HashMap<>(sim.gasMappings);
         this.world = sim.world.duplicate();
         voidCluster = new VoidGasSimulationCluster(sim.world);
+
+        //We need to duplicate gas mappings via deep copy, to prevent threading issues.
+        HashMap<IGasSimulationCluster, IGasSimulationCluster> translation = new HashMap<>();
+
+        for(IGasSimulationCluster c : sim.gasMappings.values()) {
+            IGasSimulationCluster duplicate = c.duplicate(this.world, false);
+            translation.put(c, duplicate);
+        }
+
+        for(Map.Entry<IGasSimulationCluster, IGasSimulationCluster> e : translation.entrySet()) {
+            for(IGasSimulationCluster connection : e.getKey().getConnections()) {
+                IGasSimulationCluster translated = translation.get(connection);
+
+                if(translated != null)
+                    e.getValue().connect(translated);
+                else
+                    throw new RuntimeException("Unaccounted for cluster. Error in simulation detected.");
+            }
+        }
+
+        for(Map.Entry<Vector2D, IGasSimulationCluster> e : sim.gasMappings.entrySet()) {
+            this.gasMappings.put(new Vector2D(e.getKey()), translation.get(e.getValue()));
+        }
+
     }
 
     public GasSimulation(GasSimulationWorldMapReader world, float defaultTemperature) {
@@ -65,6 +88,7 @@ public class GasSimulation implements IGasSimulation {
             Map<Vector2D, GasMetaData> components = c.explode();
 
             for(Vector2D v : components.keySet()) {
+                gasMappings.get(v).disconnect();
                 gasMappings.remove(v);
             }
             c.disconnect();
@@ -376,8 +400,6 @@ public class GasSimulation implements IGasSimulation {
 
                 if(gasMappings.containsKey(v))
                     activeLastPass.put(gasMappings.get(v), 0);
-
-
             }
 
             queueAsyncActivate.clear();
