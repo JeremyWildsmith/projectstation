@@ -274,4 +274,24 @@ public class GasSimulationCluster implements IGasSimulationCluster {
         this.gas = this.gas.add(gas);
         this.gas.validate();
     }
+
+
+    @Override
+    public IGasSimulationCluster duplicate(GasSimulationWorldMapReader world, boolean keepConnections) {
+        GasSimulationCluster duplicate = null;
+
+        duplicate = new GasSimulationCluster(world);
+
+        duplicate.gas = new GasMetaData(this.gas);
+        duplicate.volume = volume;
+        duplicate.isAirTight = isAirTight;
+        duplicate.locations.addAll(locations);
+
+        if(keepConnections) {
+            for (IGasSimulationCluster c : connections)
+                duplicate.connect(c);
+        }
+
+        return duplicate;
+    }
 }

@@ -39,5 +39,6 @@ public interface IGasSimulationCluster {
 
     GasSimulationWorldMapReader getWorld();
 
+    IGasSimulationCluster duplicate(GasSimulationWorldMapReader world, boolean keepConnections);
 
 }

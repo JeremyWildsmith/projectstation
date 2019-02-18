@@ -125,4 +125,16 @@ public class VoidGasSimulationCluster implements IGasSimulationCluster {
     public float getAverageTemperature() {
         return VOID_TEMPERATURE;
     }
+
+    @Override
+    public IGasSimulationCluster duplicate(GasSimulationWorldMapReader world, boolean keepConnections) {
+        VoidGasSimulationCluster duplicate = new VoidGasSimulationCluster(world);
+
+        if(keepConnections) {
+            for (IGasSimulationCluster c : connections)
+                duplicate.connect(c);
+        }
+
+        return duplicate;
+    }
 }
