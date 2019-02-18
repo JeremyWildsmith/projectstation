@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier {
 
-    private final int STABLE_DECISION_PERIOD = 5000;
+    private final int STABLE_DECISION_PERIOD = 2000;
 
     private IAnimationSceneModel m_model;
     private boolean m_isOpen;
@@ -161,13 +161,8 @@ public class PressureCollapseValve extends WiredDevice implements ILiquidCarrier
 
             if(decision != m_isOpen && (decision == true || lastDecisionMade >= STABLE_DECISION_PERIOD)) {
                 if (decision) {
-                    if (!m_isOpen)
-                        System.out.println("Open");
                     open();
-
                 } else {
-                    if (m_isOpen)
-                        System.out.println("Close");
                     close();
                 }
             }
