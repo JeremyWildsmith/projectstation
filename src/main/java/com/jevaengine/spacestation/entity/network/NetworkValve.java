@@ -37,11 +37,12 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
 
     @Override
     public Map<Vector2D, GasSimulationNetwork> getLinks() {
-        List<ILiquidCarrier> connections = getConnections(ILiquidCarrier.class);
+
         HashMap<Vector2D, GasSimulationNetwork> links = new HashMap<>();
 
-        for(ILiquidCarrier c : connections) {
-            if(c.getNetwork() != this.getNetwork() && c.isFreeFlow()) {
+        List<ILiquidCarrier> connections = getConnections(ILiquidCarrier.class);
+        for (ILiquidCarrier c : connections) {
+            if (c.getNetwork() != this.getNetwork() && c.isFreeFlow()) {
                 links.put(c.getBody().getLocation().getXy().round(), c.getNetwork());
             }
         }
@@ -90,9 +91,10 @@ public class NetworkValve extends NetworkDevice implements ILiquidCarrier {
         BinarySignalProtocol.BinarySignal signal = BinarySignalProtocol.decode(p);
 
         if(signal != null) {
-            m_isOpen = signal.signal;
-            m_observers.raise(ILiquidCarrierObserver.class).freeFlowChanged();
-            m_observers.raise(ILiquidCarrierObserver.class).linksChanged();
+            if (m_isOpen != signal.signal) {
+                m_isOpen = signal.signal;
+                m_observers.raise(ILiquidCarrierObserver.class).freeFlowChanged();
+            }
         }
     }
 
