@@ -128,7 +128,7 @@ public enum GasSimulationNetwork {
         @Override
         public Map<ConnectedLinkPair, GasSimulation> getLinks() {
             synchronized (links) {
-                return links;
+                return new HashMap<>(links);
             }
         }
 
@@ -171,7 +171,7 @@ public enum GasSimulationNetwork {
 
                         for (ILiquidCarrier c : e.getConnections(ILiquidCarrier.class)) {
 
-                            if (c.getNetwork() != this.network || !e.isFreeFlow())
+                            if (c.getNetwork() != this.network || !c.isFreeFlow())
                                 continue;
 
                             Vector2D connectionLocation = c.getBody().getLocation().getXy().round();
@@ -187,6 +187,7 @@ public enum GasSimulationNetwork {
             }
 
             synchronized (links) {
+                links.clear();
                 for (ILiquidCarrier e : pipeEntities) {
                     Vector2D location = e.getBody().getLocation().getXy().round();
 
