@@ -27,6 +27,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "bleeding",
       "location": {
         "x": 25,
@@ -40,6 +41,7 @@
 	
 	
 	{
+	  "visible": false,
       "name": "full",
       "location": {
         "x": 25,
@@ -51,6 +53,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "hungry",
       "location": {
         "x": 25,
@@ -62,6 +65,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "starving",
       "location": {
         "x": 25,
@@ -75,6 +79,7 @@
 
 
 	{
+	  "visible": false,
       "name": "suffocating",
       "location": {
         "x": 25,
@@ -86,6 +91,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "toxic",
       "location": {
         "x": 25,
@@ -97,6 +103,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "sick",
       "location": {
         "x": 25,
@@ -110,6 +117,7 @@
 	
 	
 	{
+	  "visible": false,
       "name": "cold",
       "location": {
         "x": 25,
@@ -121,6 +129,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "freezing",
       "location": {
         "x": 25,
@@ -132,6 +141,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "hot",
       "location": {
         "x": 25,
@@ -143,6 +153,7 @@
       }
     },
 	{
+	  "visible": false,
       "name": "burning",
       "location": {
         "x": 25,
@@ -157,6 +168,7 @@
 	
 
 	{
+	  "visible": false,
       "name": "stunned",
       "location": {
         "x": 25,
