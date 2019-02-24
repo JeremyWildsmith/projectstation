@@ -7,14 +7,15 @@ import java.awt.*;
 import java.util.NoSuchElementException;
 
 public enum GasType {
-    Oxygen("O", 1000F, 15.999F, true),
-    Nitrogen("N", 1000F, 15.999F, true),
-    CarbonDioxide("CO2", 0.7F, 44.09F, true),
-    Water("H2O", 0.7F, 18.02F, false, new Color(44,145,195), 1, 30, 20000, 0.1f);
+    Oxygen("O", 1000F, 15.999F, 1.429F, true),
+    Nitrogen("N", 1000F, 15.999F, 1.251f, true),
+    CarbonDioxide("CO2", 0.7F, 44.09F, 1.98f, true),
+    Water("H2O", 0.7F, 18.02F, 1.0f, false, new Color(44,145,195), 1, 30, 20000, 0.1f);
 
     private final String name;
     private final float flowRatio;
     private final float atomicMass;
+    private final float density; //grams per litre
 
     private Color baseColor = null;
     private float minColourMols = 0;
@@ -23,14 +24,15 @@ public enum GasType {
     private float liquidPressure = 0;
     private final boolean isAirborne;
 
-    GasType(String name, float flowRatio, float atomicMass, boolean isAirborne) {
+    GasType(String name, float flowRatio, float atomicMass, float density, boolean isAirborne) {
         this.name = name;
         this.flowRatio = flowRatio;
         this.atomicMass = atomicMass;
         this.isAirborne = isAirborne;
+        this.density = density;
     }
 
-    GasType(String name, float flowRatio, float atomicMass, boolean isAirborne, Color color, float minColourMols, float maxColourMols, float liquidPressure, float opacityVariance) {
+    GasType(String name, float flowRatio, float atomicMass, float density, boolean isAirborne, Color color, float minColourMols, float maxColourMols, float liquidPressure, float opacityVariance) {
         this.name = name;
         this.flowRatio = flowRatio;
         this.atomicMass = atomicMass;
@@ -40,6 +42,11 @@ public enum GasType {
         this.opacityVariance = opacityVariance;
         this.isAirborne = isAirborne;
         this.liquidPressure = liquidPressure;
+        this.density = density;
+    }
+
+    public float getDensity() {
+        return density;
     }
 
     public boolean isAirborne(float pressure) {

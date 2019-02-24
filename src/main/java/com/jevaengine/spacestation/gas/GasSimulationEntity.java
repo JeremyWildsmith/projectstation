@@ -54,6 +54,14 @@ public class GasSimulationEntity implements IEntity {
         synchronized (cachedSimulation) {
             GasSimulation sim = cachedSimulation.get(network);
 
+            //p = m / v
+            //m = pv
+            GasMetaData data = sim.sample(location);
+            if(data.getTotalMols() <= 0)
+                return new GasMetaData();
+
+            float molsToConsume = data.getDensity() * volume / data.getMolarMass();
+
             if (sim == null)
                 return new GasMetaData();
 
@@ -61,11 +69,11 @@ public class GasSimulationEntity implements IEntity {
                 final float volumeData = volume;
                 final Vector2D locationData = new Vector2D(location);
                 queuedActions.get(network).add((GasSimulation s) -> {
-                    s.consume(locationData, volumeData);
+                    s.consume(locationData, molsToConsume);
                 });
             }
 
-            return sim.consume(location, volume);
+            return sim.consume(location, molsToConsume);
         }
     }
 

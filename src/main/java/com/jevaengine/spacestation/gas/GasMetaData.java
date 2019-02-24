@@ -67,6 +67,27 @@ public class GasMetaData {
         return new GasMetaData(sum);
     }
 
+    public float getDensity() {
+        float density = 0;
+
+        for(Map.Entry<GasType, Float> e : this.amount.entrySet()) {
+            density += (e.getValue() / getTotalMols()) * e.getKey().getDensity();
+        }
+
+        return density;
+    }
+
+
+    public float getMolarMass() {
+        float mass = 0;
+
+        for(Map.Entry<GasType, Float> e : this.amount.entrySet()) {
+            mass += (e.getValue() / getTotalMols()) * e.getKey().getAtomicMass();
+        }
+
+        return mass;
+    }
+
     public float getTotalMols() {
         float total = 0;
 
