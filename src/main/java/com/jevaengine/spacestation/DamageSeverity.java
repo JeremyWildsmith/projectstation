@@ -10,6 +10,14 @@ public enum DamageSeverity implements Serializable {
     VerySerious(4),
     Critical(5);
 
+    public static final DamageSeverity[] ASCENDING_SEVERITY = {
+            DamageSeverity.VeryMinor,
+            DamageSeverity.Minor,
+            DamageSeverity.Serious,
+            DamageSeverity.VerySerious,
+            DamageSeverity.Critical,
+    };
+
     private final int rating;
 
     DamageSeverity(int rating) {
@@ -19,5 +27,4 @@ public enum DamageSeverity implements Serializable {
     public boolean isAtLeast(DamageSeverity severity) {
         return rating >= severity.rating;
     }
-
 }

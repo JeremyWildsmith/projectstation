@@ -15,7 +15,8 @@ public enum SpaceCharacterAttribute implements IImmutableAttributeSet.IAttribute
     Speed(10, "Speed", "Movement speed"),
     EffectiveHitpoints(100, "Hitpoints", "The effective hitpoints."),
     MaxHitpoints(100, "Max Hitpoints", "The number of hitpoints if no damaged was endured."),
-    TemperatureKelvn(310, "Body Temperature", "Body temperature");
+    TemperatureKelvn(310, "Body Temperature", "Body temperature"),
+    BreathVolumeMl(500, "Breath Volume", "Volume of air consumed in one breath.");
 
     private final int defaultValue;
     private final String name;

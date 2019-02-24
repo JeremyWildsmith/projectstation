@@ -9,6 +9,12 @@ import java.util.Map;
 public class DamageDescription implements ISerializable, Serializable {
     private Map<DamageCategory, DamageSeverity> damageSeverityMapping = new HashMap<>();
 
+    public DamageDescription(Map<DamageCategory, DamageSeverity> desc) {
+        damageSeverityMapping = new HashMap<>(desc);
+    }
+
+    public DamageDescription() {
+    }
 
     public DamageSeverity getDamageSeverity(DamageCategory category) {
         if(!damageSeverityMapping.containsKey(category))

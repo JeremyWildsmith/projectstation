@@ -18,7 +18,10 @@
  */
 package com.jevaengine.spacestation.ui;
 
+import com.jevaengine.spacestation.entity.character.IImmutableSymptomBody;
 import com.jevaengine.spacestation.entity.character.SpaceCharacterAttribute;
+import com.jevaengine.spacestation.entity.character.symptoms.ISymptomDetails;
+import com.jevaengine.spacestation.entity.character.symptoms.Suffocation;
 import com.jevaengine.spacestation.item.SpaceCharacterWieldTarget;
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Rect2D;
@@ -47,10 +50,10 @@ public final class CharacterStatusHudFactory {
 		m_windowFactory = windowFactory;
 	}
 
-	public StatusHud create(IImmutableAttributeSet attributes) throws WindowConstructionException {
+	public StatusHud create(IImmutableAttributeSet attributes, IImmutableSymptomBody symptoms) throws WindowConstructionException {
 		Observers observers = new Observers();
 		
-		Window window = m_windowFactory.create(HUD_WINDOW, new StatusHudBehaviourInjector(observers, attributes));
+		Window window = m_windowFactory.create(HUD_WINDOW, new StatusHudBehaviourInjector(observers, attributes, symptoms));
 		m_windowManager.addWindow(window);
 
 		window.center();
@@ -117,18 +120,20 @@ public final class CharacterStatusHudFactory {
 	private class StatusHudBehaviourInjector extends WindowBehaviourInjector {
 
 		private final IImmutableAttributeSet m_attributes;
-
+		private final IImmutableSymptomBody m_symptoms;
 		private final Observers m_observers;
 		
-		public StatusHudBehaviourInjector(final Observers observers, final IImmutableAttributeSet attributes) {
+		public StatusHudBehaviourInjector(final Observers observers, final IImmutableAttributeSet attributes, IImmutableSymptomBody symptoms) {
 			m_observers = observers;
 			m_attributes = attributes;
+			m_symptoms = symptoms;
 		}
 
 		@Override
 		protected void doInject() throws NoSuchControlException {
 			final ValueGuage guage = getControl(ValueGuage.class, "health");
 			final Timer timer = new Timer();
+			final Icon suffocating = getControl(Icon.class, "suffocating");
 			addControl(timer);
 			timer.getObservers().add(new Timer.ITimerObserver() {
 				@Override
@@ -140,6 +145,14 @@ public final class CharacterStatusHudFactory {
 						ratio = m_attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).get() / m_attributes.get(SpaceCharacterAttribute.MaxHitpoints).get();
 
 					guage.setValue(ratio);
+
+					suffocating.setVisible(false);
+
+					for (ISymptomDetails d : m_symptoms.getSymptoms()) {
+						if (d instanceof Suffocation) {
+							suffocating.setVisible(true);
+						}
+					}
 				}
 			});
 		}

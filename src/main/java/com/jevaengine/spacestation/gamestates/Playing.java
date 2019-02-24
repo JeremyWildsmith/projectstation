@@ -21,6 +21,7 @@ package com.jevaengine.spacestation.gamestates;
 import com.jevaengine.spacestation.IState;
 import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
+import com.jevaengine.spacestation.entity.character.SpaceCharacter;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import com.jevaengine.spacestation.ui.*;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
@@ -63,7 +64,7 @@ public class Playing implements IState {
 
 	private final Logger m_logger = LoggerFactory.getLogger(Playing.class);
 
-	private IRpgCharacter m_player = new NullRpgCharacter();
+	private SpaceCharacter m_player = null;
 
 	private Hud m_hud;
 	private LoadoutHud m_loadoutHud;
@@ -90,12 +91,13 @@ public class Playing implements IState {
 			FollowCamera camera = new FollowCamera(sceneBufferFactory);
 			camera.setZoom(CAMERA_ZOOM);
 
-			IRpgCharacter playerEntityBuffer = m_world.getEntities().getByName(IRpgCharacter.class, "player");
+			SpaceCharacter playerEntityBuffer = m_world.getEntities().getByName(SpaceCharacter.class, "player");
 
 			if (playerEntityBuffer != null) {
 				m_player = playerEntityBuffer;
 			} else {
-				m_logger.error("Character entity was not placed in world. Using null character entity instead.");
+				m_logger.error("Character entity was not placed in world.");
+				return;
 			}
 
 			camera.attach(m_world);
@@ -123,7 +125,7 @@ public class Playing implements IState {
 												  m_loadoutHud.getLocation().y));
 
 
-
+/*
 			//Gas Simulation Debug
 			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeB);
 			debug.setMovable(true);
@@ -164,8 +166,9 @@ public class Playing implements IState {
 			clusterDebug.setTopMost(true);
 			clusterDebug.setVisible(true);
 			clusterDebug.setLocation(new Vector2D(0, 0));
+*/
 
-			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes());
+			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes(), m_player);
 			int y = context.getWindowManager().getResolution().y / 2 - hud.getBounds().height;
 			hud.setMovable(false);
 			hud.setTopMost(true);
