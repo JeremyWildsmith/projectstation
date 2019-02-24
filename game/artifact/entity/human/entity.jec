@@ -28,10 +28,11 @@
 	  "Action": 3.0,
     	  "Speed": 6.0,
     	  "Hits" : 10.0,
-    	  "Max Hits": 10.0,
+    	  "Max Hits": 500.0,
     	  "View Distance": 3.0,
     	  "Field Of View": 1.04719755,
-    	  "Allegiance": 2.0
+    	  "Allegiance": 2.0,
+	  "Breath Volume": 500
     	  },
       "statusStyle": "file:///ui/style/status/style.juis",
       "collisionRadius" : 0.8,
@@ -41,13 +42,13 @@
 			"Burn": 1,
 			"Electrical": 2,
 			"Toxin": 1,
-			"Suffocate": 2
+			"Suffocation": 2
 		},
 		"multiplier": {
 			"Minor": 2,
-			"Serious": 20,
-			"VerySerious": 40,
-			"Critical": 60
+			"Serious": 4,
+			"VerySerious": 5,
+			"Critical": 6
 		},
 		"produce": "file:///item/bloodyCorpse/item.jitm"
 	  }
