@@ -48,7 +48,7 @@ import java.net.URI;
 
 public class MainMenu implements IState
 {
-	private static final URI ENTRY_MAP = URI.create("file:///world/firstStationRework.jmp_singleplayer");
+	private static final URI ENTRY_MAP = URI.create("file:///world/singleplayer/firstStationRework.jmp");
 	private static final URI MENU_MAP = URI.create("file:///world/mainMenu.jmp");
 	private static final Vector3F OBSERVER_LOCATION = new Vector3F(17.5f, 20, 2);
 	private static final float CAMERA_ZOOM = 2.5f;
