@@ -72,24 +72,24 @@ public class SpaceMovementResolverFactory implements IMovementResolverFactory
 		if(!attributes.has(SpaceCharacterAttribute.EffectiveHitpoints))
 			m_logger.error("Character does not have a hits attribute. Assuming default hits.");
 		
-		return new UsrMovementResolver(host, model, attributes.get(SpaceCharacterAttribute.Speed), attributes.get(SpaceCharacterAttribute.EffectiveHitpoints), walkAction, idleAction, dieAction);
+		return new SpaceMovementResolver(host, model, attributes.get(SpaceCharacterAttribute.Speed), walkAction, idleAction, dieAction);
 	}
 	
-	private static final class UsrMovementResolver implements IMovementResolver
+	private static final class SpaceMovementResolver implements IMovementResolver
 	{
+		private final IRpgCharacter m_host;
 		private final VelocityLimitSteeringDriver m_driver;
 
 		private final IImmutableAttribute m_speed;
-		private final IImmutableAttribute m_health;
 		private final IActionSceneModelAction m_walkAction;
 		private final IActionSceneModelAction m_idleAction;
 		private final IActionSceneModelAction m_dieAction;
 		private final LinkedList<IMovementDirector> m_queue = new LinkedList<>();
 		
-		public UsrMovementResolver(IRpgCharacter host, final ISceneModel model, IImmutableAttribute speed, IImmutableAttribute health, IActionSceneModelAction walkAction, IActionSceneModelAction idleAction, IActionSceneModelAction dieAction)
+		public SpaceMovementResolver(IRpgCharacter host, final ISceneModel model, IImmutableAttribute speed, IActionSceneModelAction walkAction, IActionSceneModelAction idleAction, IActionSceneModelAction dieAction)
 		{
+			m_host = host;
 			m_speed = speed;
-			m_health = health;
 			m_walkAction = walkAction;
 			m_idleAction = idleAction;
 			m_dieAction = dieAction;
@@ -159,7 +159,7 @@ public class SpaceMovementResolverFactory implements IMovementResolverFactory
 		@Override
 		public void update(int deltaTime)
 		{
-			if(m_health.isZero())
+			if(m_host.getStatusResolver().isDead())
 			{
 				if(!(m_dieAction.isActive() || m_dieAction.isQueued()))
 				{

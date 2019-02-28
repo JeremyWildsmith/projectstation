@@ -66,7 +66,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-public final class SpaceCharacterFactory implements IRpgCharacterFactory
+public class SpaceCharacterFactory implements IRpgCharacterFactory
 {
     private final Logger m_logger = LoggerFactory.getLogger(SpaceCharacterFactory.class);
     private final IItemFactory m_itemFactory;
@@ -240,7 +240,7 @@ public final class SpaceCharacterFactory implements IRpgCharacterFactory
         return new IAllegianceResolverFactory.NullAllegianceResolverFactory();
     }
 
-    protected IStatusResolverFactory createStatusResolverFactory(URI configContext, UsrCharacterDeclaration characterDecl) throws URISyntaxException, UIStyleConstructionException {
+    protected ISpaceCharacterStatusResolverFactory createStatusResolverFactory(URI configContext, UsrCharacterDeclaration characterDecl) throws URISyntaxException, UIStyleConstructionException {
         return new SpaceCharacterStatusResolverFactory();
     }
 

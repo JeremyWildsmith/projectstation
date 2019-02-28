@@ -42,7 +42,7 @@ public class Suffocation implements ISymptom {
         last_impact -= INTERVAL;
 
         Map<DamageCategory, DamageSeverity> desc = new HashMap<>();
-        desc.put(DamageCategory.Suffocation, severity);
+        //desc.put(DamageCategory.Suffocation, severity);
 
         return new DamageDescription(desc);
     }

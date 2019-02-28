@@ -25,19 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SpaceCharacter extends DefaultRpgCharacter implements IDamageConsumer, IImmutableSymptomBody {
-    private static final int BREATH_INTERVAL = 1500;
-    private int lastBreath = 0;
-
+public class SpaceCharacter extends DefaultRpgCharacter implements IDamageConsumer {
     private final Map<DamageCategory, Integer> baseDamage;
     private final Map<DamageSeverity, Integer> damageMultiplier;
     private final AttributeSet attributes;
     private final ICorpseProducer corpseProducer;
-    private final List<ISymptom> symptoms = new ArrayList<>();
 
     private GasSimulationEntity sim = null;
 
-    public SpaceCharacter(IScriptBuilder scriptBuilder, IDialogueRouteFactory dialogueRotueFactory, AttributeSet attributes, IStatusResolverFactory statusResolver, IDialogueResolverFactory dialogueResolver, IMovementResolverFactory movementResolver, IVisionResolverFactory visionResolver, IAllegianceResolverFactory allegianceResolver, ILoadout loadout, IItemStore inventory, IActionSceneModel model, PhysicsBodyDescription physicsBodyDescription, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, ICorpseProducer corpseProducer, String name) {
+    public SpaceCharacter(IScriptBuilder scriptBuilder, IDialogueRouteFactory dialogueRotueFactory, AttributeSet attributes, ISpaceCharacterStatusResolverFactory statusResolver, IDialogueResolverFactory dialogueResolver, IMovementResolverFactory movementResolver, IVisionResolverFactory visionResolver, IAllegianceResolverFactory allegianceResolver, ILoadout loadout, IItemStore inventory, IActionSceneModel model, PhysicsBodyDescription physicsBodyDescription, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, ICorpseProducer corpseProducer, String name) {
         super(scriptBuilder, dialogueRotueFactory, attributes, statusResolver, dialogueResolver, movementResolver, visionResolver, allegianceResolver, loadout, inventory, model, physicsBodyDescription, name);
         this.baseDamage = baseDamage;
         this.damageMultiplier = damageMultiplier;
@@ -50,32 +46,9 @@ public class SpaceCharacter extends DefaultRpgCharacter implements IDamageConsum
         }
     }
 
-    private List<ISymptom> getActiveSymptoms() {
-        List<ISymptom> active = new ArrayList<>();
-
-        active.addAll(symptoms);
-
-        for(ISymptom s : symptoms) {
-            if(!active.contains(s))
-                continue;
-
-            for(int i = 0; i < active.size(); i++) {
-                if(s != active.get(i) && s.overrides(active.get(i))) {
-                    active.remove(i);
-                    i--;
-                }
-            }
-        }
-
-        return active;
-    }
-
-    public List<ISymptomDetails> getSymptoms() {
-        List<ISymptomDetails> details = new ArrayList<>();
-
-        details.addAll(getActiveSymptoms());
-
-        return details;
+    @Override
+    public ISpaceCharacterStatusResolver getStatusResolver() {
+        return (ISpaceCharacterStatusResolver)super.getStatusResolver();
     }
 
     @Override
@@ -103,45 +76,6 @@ public class SpaceCharacter extends DefaultRpgCharacter implements IDamageConsum
         }
     }
 
-    private void affectedBySymptom(ISymptom symptom) {
-        for (ISymptom active : symptoms) {
-            if(active.tryConsume(symptom))
-                return;
-        }
-
-        symptoms.add(symptom);
-    }
-
-    private void tryBreath() {
-        //If not able to breath, add suffocation damage
-        float breathVolume = this.attributes.get(SpaceCharacterAttribute.BreathVolumeMl).get() / 1000.0f;
-
-        Vector2D location = getBody().getLocation().getXy().round();
-        GasMetaData consumed = sim.consume(GasSimulationNetwork.Environment, location, breathVolume);
-
-        for(ISymptom s : SymptomsDetector.getToxicitySymptoms(consumed)) {
-            affectedBySymptom(s);
-        }
-    }
-
-    private void processSymptoms(int deltaTime) {
-        List<ISymptom> active = getActiveSymptoms();
-
-        List<ISymptom> remove = new ArrayList<>();
-
-        for(ISymptom s : symptoms) {
-            if(active.contains(s))
-                consume(s.getImpact(deltaTime), s.isRecovery());
-            else
-                s.elapseIneffective(deltaTime);
-
-            if(s.isGone())
-                remove.add(s);
-        }
-
-        symptoms.removeAll(remove);
-    }
-
     @Override
     public void update(int delta) {
         super.update(delta);
@@ -149,15 +83,6 @@ public class SpaceCharacter extends DefaultRpgCharacter implements IDamageConsum
         if(sim == null) {
             sim = getWorld().getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
         }
-
-        lastBreath += delta;
-
-        if(lastBreath >= BREATH_INTERVAL) {
-            tryBreath();
-            lastBreath = 0;
-        }
-
-        processSymptoms(delta);
 
         if(getStatusResolver().isDead()) {
             IEntity corpse = corpseProducer.produce();

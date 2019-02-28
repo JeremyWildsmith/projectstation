@@ -1,6 +1,13 @@
 package com.jevaengine.spacestation.entity.character;
 
 import com.jevaengine.spacestation.DamageCategory;
+import com.jevaengine.spacestation.DamageSeverity;
+import com.jevaengine.spacestation.entity.character.symptoms.ISymptom;
+import com.jevaengine.spacestation.entity.character.symptoms.ISymptomDetails;
+import com.jevaengine.spacestation.gas.GasMetaData;
+import com.jevaengine.spacestation.gas.GasSimulationEntity;
+import com.jevaengine.spacestation.gas.GasSimulationNetwork;
+import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IStatusResolver;
@@ -9,23 +16,102 @@ import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-public class SpaceCharacterStatusResolverFactory implements IStatusResolverFactory {
-    public SpaceCharacterStatusResolverFactory() {
-    }
+
+public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatusResolverFactory {
 
     @Override
-    public IStatusResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model) {
-        return new SpaceCharacterStatusResolver(host, attributes);
+    public ISpaceCharacterStatusResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model) {
+        if(!(host instanceof SpaceCharacter))
+            throw new RuntimeException("Can only be applied to space character.");
+
+        return new SpaceCharacterStatusResolver((SpaceCharacter)host, attributes);
     }
 
-    private class SpaceCharacterStatusResolver implements IStatusResolver {
-        private final IRpgCharacter host;
+    public class SpaceCharacterStatusResolver implements ISpaceCharacterStatusResolver {
+        private final SpaceCharacter host;
         private final AttributeSet attributes;
 
-        public SpaceCharacterStatusResolver(IRpgCharacter character, AttributeSet attributes) {
-            this.host = character;
+        private static final int BREATH_INTERVAL = 1500;
+
+        private int lastBreath = 0;
+
+        private final List<ISymptom> symptoms = new ArrayList<>();
+        private GasSimulationEntity sim = null;
+
+        public SpaceCharacterStatusResolver(SpaceCharacter host, AttributeSet attributes) {
+            this.host = host;
             this.attributes = attributes;
+        }
+
+        private List<ISymptom> getActiveSymptoms() {
+            List<ISymptom> active = new ArrayList<>();
+
+            active.addAll(symptoms);
+
+            for(ISymptom s : symptoms) {
+                if(!active.contains(s))
+                    continue;
+
+                for(int i = 0; i < active.size(); i++) {
+                    if(s != active.get(i) && s.overrides(active.get(i))) {
+                        active.remove(i);
+                        i--;
+                    }
+                }
+            }
+
+            return active;
+        }
+
+        public List<ISymptomDetails> getSymptoms() {
+            List<ISymptomDetails> details = new ArrayList<>();
+
+            details.addAll(getActiveSymptoms());
+
+            return details;
+        }
+
+        private void affectedBySymptom(ISymptom symptom) {
+            for (ISymptom active : symptoms) {
+                if(active.tryConsume(symptom))
+                    return;
+            }
+
+            symptoms.add(symptom);
+        }
+
+        private void tryBreath() {
+            //If not able to breath, add suffocation damage
+            float breathVolume = this.attributes.get(SpaceCharacterAttribute.BreathVolumeMl).get() / 1000.0f;
+
+            Vector2D location = host.getBody().getLocation().getXy().round();
+            GasMetaData consumed = sim.consume(GasSimulationNetwork.Environment, location, breathVolume);
+
+            for(ISymptom s : SymptomsDetector.getToxicitySymptoms(consumed)) {
+                affectedBySymptom(s);
+            }
+        }
+
+        private void processSymptoms(int deltaTime) {
+            List<ISymptom> active = getActiveSymptoms();
+
+            List<ISymptom> remove = new ArrayList<>();
+
+            for(ISymptom s : symptoms) {
+                if(active.contains(s))
+                    host.consume(s.getImpact(deltaTime), s.isRecovery());
+                else
+                    s.elapseIneffective(deltaTime);
+
+                if(s.isGone())
+                    remove.add(s);
+            }
+
+            symptoms.removeAll(remove);
         }
 
         public void updateEffectiveHitpoints() {
@@ -60,6 +146,19 @@ public class SpaceCharacterStatusResolverFactory implements IStatusResolverFacto
 
         @Override
         public void update(int deltaTime) {
+            if(sim == null) {
+                sim = host.getWorld().getEntities().getByName(GasSimulationEntity.class, GasSimulationEntity.INSTANCE_NAME);
+            }
+
+            lastBreath += deltaTime;
+
+            if(lastBreath >= BREATH_INTERVAL) {
+                tryBreath();
+                lastBreath = 0;
+            }
+
+            processSymptoms(deltaTime);
+
             updateEffectiveHitpoints();
         }
 
