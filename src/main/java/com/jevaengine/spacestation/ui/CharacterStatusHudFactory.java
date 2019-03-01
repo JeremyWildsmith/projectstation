@@ -149,7 +149,7 @@ public final class CharacterStatusHudFactory {
 					suffocating.setVisible(false);
 
 					for (ISymptomDetails d : m_symptoms.getSymptoms()) {
-						if (d instanceof Suffocation) {
+						if (d.getName().equals(Suffocation.NAME)) {
 							suffocating.setVisible(true);
 						}
 					}

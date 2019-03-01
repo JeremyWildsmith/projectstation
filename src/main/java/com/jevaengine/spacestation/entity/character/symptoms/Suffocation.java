@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Suffocation implements ISymptom {
+    public static String NAME = "Suffocation";
+
     private final int INTERVAL = 2000;
     private final int PERIOD = 10000;
 
@@ -29,6 +31,11 @@ public class Suffocation implements ISymptom {
     }
 
     @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
     public DamageDescription getImpact(int deltaTime) {
         if(affect_period <= 0)
             return new DamageDescription();
@@ -42,7 +49,7 @@ public class Suffocation implements ISymptom {
         last_impact -= INTERVAL;
 
         Map<DamageCategory, DamageSeverity> desc = new HashMap<>();
-        //desc.put(DamageCategory.Suffocation, severity);
+        desc.put(DamageCategory.Suffocation, severity);
 
         return new DamageDescription(desc);
     }

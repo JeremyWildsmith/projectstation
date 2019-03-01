@@ -23,6 +23,11 @@ public class RecoveringSuffocation implements ISymptom {
     }
 
     @Override
+    public String getName() {
+        return "Recovering Suffocation";
+    }
+
+    @Override
     public DamageDescription getImpact(int deltaTime) {
         if(affect_period <= 0)
             return new DamageDescription();

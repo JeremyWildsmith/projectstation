@@ -41,6 +41,7 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
 
         private final List<ISymptom> symptoms = new ArrayList<>();
         private GasSimulationEntity sim = null;
+        private final Observers m_observers = new Observers();
 
         public SpaceCharacterStatusResolver(SpaceCharacter host, AttributeSet attributes) {
             this.host = host;
@@ -75,6 +76,26 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
             return details;
         }
 
+        public void addSymptom(ISymptom symtom) {
+            affectedBySymptom(symtom);
+        }
+
+        public void removeSymptom(String name) {
+            ISymptom remove = null;
+
+            for(ISymptom s : symptoms) {
+                if(s.getName().equals(name)) {
+                    remove = s;
+                    break;
+                }
+            }
+
+            if(remove != null) {
+                symptoms.remove(remove);
+                m_observers.raise(ISpaceCharacterStatusObserver.class).lostSymptom(remove);
+            }
+        }
+
         private void affectedBySymptom(ISymptom symptom) {
             for (ISymptom active : symptoms) {
                 if(active.tryConsume(symptom))
@@ -82,6 +103,7 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
             }
 
             symptoms.add(symptom);
+            m_observers.raise(ISpaceCharacterStatusObserver.class).affectedBySymptom(symptom);
         }
 
         private void tryBreath() {
@@ -112,10 +134,15 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
             }
 
             symptoms.removeAll(remove);
+
+            for(ISymptom s : remove) {
+                m_observers.raise(ISpaceCharacterStatusObserver.class).lostSymptom(s);
+            }
         }
 
         public void updateEffectiveHitpoints() {
             float hitpoints = attributes.get(SpaceCharacterAttribute.MaxHitpoints).get();
+            float current = attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).get();
 
             for(DamageCategory cat : DamageCategory.values()) {
                 hitpoints -= attributes.get(cat.getAffectedAttribute()).get();
@@ -124,6 +151,10 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
             hitpoints = Math.max(0, hitpoints);
 
             attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).set(hitpoints);
+
+            if(Math.abs(current - hitpoints) > 0.01f) {
+                m_observers.raise(ISpaceCharacterStatusObserver.class).effectiveHitpointsChanged(hitpoints);
+            }
         }
 
         public boolean isCritical() {
@@ -141,7 +172,7 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
 
         @Override
         public IObserverRegistry getObservers() {
-            return new Observers();
+            return m_observers;
         }
 
         @Override
@@ -168,3 +199,4 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
         }
     }
 }
+
