@@ -1,0 +1,119 @@
+{
+  "defaultStyle": "frame",
+  "componentStyles": [    
+  {
+      "components": [
+        "panel"
+      ],
+      "defaultStateStyle": {
+        "font" : {
+          "font" : "file:///ui/font/space/small/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        },
+        "frame": {
+          "bottomRight": "frame/br.jsf",
+          "topLeft": "frame/tl.jsf",
+          "right": "frame/r.jsf",
+          "bottom": "frame/b.jsf",
+          "left": "frame/l.jsf",
+          "topRight": "frame/tr.jsf",
+          "fill": "frame/f.jsf",
+          "bottomLeft": "frame/bl.jsf",
+          "top": "frame/t.jsf"
+        }
+      }
+    },
+    {
+      "components": [
+        "frame"
+      ],
+      "defaultStateStyle": {
+        "font" : {
+          "font" : "file:///ui/font/space/small/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        },
+        "frame": {
+          "bottomRight": "frame/br.jsf",
+          "topLeft": "frame/tl.jsf",
+          "right": "frame/r.jsf",
+          "bottom": "frame/b.jsf",
+          "left": "frame/l.jsf",
+          "topRight": "frame/tr.jsf",
+          "fill": "frame/f.jsf",
+          "bottomLeft": "frame/bl.jsf",
+          "top": "frame/t.jsf"
+        }
+      }
+    },
+    {
+      "components": [
+        "textArea"
+      ],
+      "defaultStateStyle": {
+        "font" : {
+          "font" : "file:///ui/font/space/xsmall/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        },
+        "frame": {
+          "bottomRight": "frame/br.jsf",
+          "topLeft": "frame/tl.jsf",
+          "right": "frame/r.jsf",
+          "bottom": "frame/b.jsf",
+          "left": "frame/l.jsf",
+          "topRight": "frame/tr.jsf",
+          "fill": "frame/f.jsf",
+          "bottomLeft": "frame/bl.jsf",
+          "top": "frame/t.jsf"
+        }
+      }
+    },
+    {
+      "components" : [
+        "button"
+      ],
+      "defaultStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/space/small/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 200,
+            "z" : 200
+          }
+        }
+      },
+      "enterStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/space/small/font.juif",
+          "color" : {
+            "x" : 255,
+            "y" : 255,
+            "z" : 255
+          }
+        }
+      },
+      "activatedStateStyle" : {
+        "font" : {
+          "font" : "file:///ui/font/space/small/font.juif",
+          "color" : {
+            "x" : 200,
+            "y" : 20,
+            "z" : 20
+          }
+        },
+        "audioEnter" : "audio/down.wav"
+      }
+    }
+  ]
+}

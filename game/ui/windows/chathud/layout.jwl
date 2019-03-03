@@ -1,0 +1,67 @@
+{
+  "controls": [
+	{
+      "type": "label",
+      "name": "desc",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "text": "Player Chat"
+      }
+    },
+	{
+      "type": "textArea",
+      "name": "log",
+      "location": {
+        "x": 10,
+        "y": 40
+      },
+      "config": {
+        "text": "",
+		"bounds": {
+			"width": 430,
+			"height": 120
+		},
+		"allowEdit": false
+      }
+    },
+	{
+      "type": "textArea",
+      "name": "message",
+      "location": {
+        "x": 10,
+        "y": 170
+      },
+      "config": {
+        "text": "",
+		"bounds": {
+			"width": 350,
+			"height": 20
+		},
+		"multiline": false
+      }
+    },
+	{
+      "type": "button",
+      "name": "send",
+      "location": {
+        "x": 370,
+        "y": 170
+      },
+      "config": {
+        "text": "Send",
+		"bounds": {
+			"width": 70,
+			"height": 20
+		}
+      }
+    }
+  ],
+  "bounds": {
+    "width": 450,
+    "height": 200
+  },
+  "style": "file:///ui/style/chathud/style.juis"
+}

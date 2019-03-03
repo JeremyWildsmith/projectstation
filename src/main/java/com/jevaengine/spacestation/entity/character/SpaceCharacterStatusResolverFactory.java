@@ -161,10 +161,6 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
             return attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).isZero();
         }
 
-        public boolean isBleeding() {
-            return false;
-        }
-
         @Override
         public boolean isDead() {
             return attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).isZero();
