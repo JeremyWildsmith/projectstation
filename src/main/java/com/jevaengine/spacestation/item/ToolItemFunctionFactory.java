@@ -79,8 +79,10 @@ public class ToolItemFunctionFactory implements IItemFunctionFactory {
                 if(top == null || !top.hasInfrastructureType(above))
                     return;
 
-                if(destroy)
+                if(destroy) {
+                    top.releaseConsumed();
                     world.removeEntity(top);
+                }
 
                 IItem item = itemFactory.create(new URI(give));
                 IEntity itemDrop = new ItemDrop(item);

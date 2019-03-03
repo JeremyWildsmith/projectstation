@@ -44,6 +44,9 @@ public class SpaceStationFactory extends DefaultWorldFactory {
     protected World createBaseWorld(float friction, float metersPerUnit, float logicPerUnit, int worldWidthTiles, int worldHeightTiles, IWeatherFactory.IWeather weather, @Nullable URI worldScript) {
         World world = super.createBaseWorld(friction, metersPerUnit, logicPerUnit, worldWidthTiles, worldHeightTiles, weather, worldScript);
         world.addEntity(new GasSimulationEntity(SPACE_TEMPERATURE));
+        System.gc();
+        System.runFinalization();
+        Thread.yield();
         return world;
     }
 }

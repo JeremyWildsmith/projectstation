@@ -4,6 +4,7 @@
 	  "type": ["girder"],
 	  "heatConductivity": 1.0,
 	  "hitpoints": 50,
+	  "consumes": false,
 	  "damage": {
 		"base": {
 			"Brute": 2,

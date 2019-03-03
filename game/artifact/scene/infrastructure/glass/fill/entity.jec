@@ -6,6 +6,7 @@
 	  "heatConductivity": 1.0,
 	  "isTransparent": true,
 	  "hitpoints": 50,
+	  "consumes": false,
 	  "damage": {
 		"base": {
 			"Brute": 2,

@@ -417,7 +417,7 @@ public class StationEntityFactory implements IEntityFactory {
 						};
 					}
 
-					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity, decl.baseDamageMapping, decl.damageMultiplierMapping, decl.hitpoints, decl.hitpointsAnimationMapping, rubbleProducer);
+					return new Infrastructure(instanceName, model, true, !decl.blocking, decl.type, decl.isAirTight, decl.isTransparent, decl.heatConductivity, decl.baseDamageMapping, decl.damageMultiplierMapping, decl.hitpoints, decl.hitpointsAnimationMapping, rubbleProducer, decl.consumes);
 				} catch (ValueSerializationException | SceneModelConstructionException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
@@ -696,6 +696,7 @@ public class StationEntityFactory implements IEntityFactory {
 		public boolean isTransparent = false;
 		public float heatConductivity = 0;
 		private String produce = null;
+		public boolean consumes = true;
 
 		private int hitpoints = 0;
 
@@ -729,6 +730,9 @@ public class StationEntityFactory implements IEntityFactory {
 					isAirTight = source.getChild("isAirTight").getValue(Boolean.class);
 				if(source.childExists("isTransparent"))
 					isTransparent = source.getChild("isTransparent").getValue(Boolean.class);
+
+				if(source.childExists("consumes"))
+					consumes = source.getChild("consumes").getValue(Boolean.class);
 
 				if(source.childExists("damage")) {
 					IImmutableVariable damage = source.getChild("damage");

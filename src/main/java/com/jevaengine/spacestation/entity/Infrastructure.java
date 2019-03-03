@@ -21,7 +21,9 @@ package com.jevaengine.spacestation.entity;
 import com.jevaengine.spacestation.DamageCategory;
 import com.jevaengine.spacestation.DamageDescription;
 import com.jevaengine.spacestation.DamageSeverity;
+import com.jevaengine.spacestation.entity.power.IDevice;
 import io.github.jevaengine.graphics.IGraphicShader;
+import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
@@ -32,14 +34,13 @@ import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityTaskModel;
 import io.github.jevaengine.world.entity.NullEntityTaskModel;
 import io.github.jevaengine.world.entity.WorldAssociationException;
-import io.github.jevaengine.world.physics.IPhysicsBody;
-import io.github.jevaengine.world.physics.NonparticipantPhysicsBody;
-import io.github.jevaengine.world.physics.NullPhysicsBody;
-import io.github.jevaengine.world.physics.PhysicsBodyDescription;
+import io.github.jevaengine.world.physics.*;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription.PhysicsBodyType;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+import io.github.jevaengine.world.search.ISearchFilter;
+import io.github.jevaengine.world.search.RadialSearchFilter;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -73,11 +74,15 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 	private final Map<DamageCategory, Integer> m_baseDamage;
 	private final Map<DamageSeverity, Integer> m_damageMultiplier;
 	private final Map<Integer, String> m_hitpointsAnimationMapping;
+	private final HashMap<Infrastructure, Float> m_consumed = new HashMap<>();
 
 	private final IRubbleProducer m_rubbleProducer;
 
-	public Infrastructure(String name, IAnimationSceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, int hitpoints, Map<Integer, String> hitpointsAnimation, @Nullable IRubbleProducer rubbleProducer) {
+	private boolean m_consumes;
+
+	public Infrastructure(String name, IAnimationSceneModel model, boolean isStatic, boolean isTraversable, String[] infrastructureTypes, boolean isAirTight, boolean isTransparent, float heatConductivity, Map<DamageCategory, Integer> baseDamage, Map<DamageSeverity, Integer> damageMultiplier, int hitpoints, Map<Integer, String> hitpointsAnimation, @Nullable IRubbleProducer rubbleProducer, boolean consumes) {
 		m_name = name;
+		m_consumes = consumes;
 		m_isTransparent = isTransparent;
 		m_isAirTight = isAirTight;
 		m_infrastructureType.addAll(Arrays.asList(infrastructureTypes));
@@ -102,6 +107,8 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 
 
 		m_bridge = new EntityBridge(this);
+		if(consumes)
+			getObservers().add(new MovementObserver());
 	}
 
 	private void updateAnimation() {
@@ -186,6 +193,7 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 
 	private void constructPhysicsBody() {
 		Direction dir = m_body.getDirection();
+		Vector3F oldPos = m_body.getLocation();
 		if (m_physicsBodyDescription == null)
 			m_body = new NonparticipantPhysicsBody(this, m_model.getAABB());
 		else {
@@ -193,14 +201,17 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 			m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 		}
 
+		m_body.setLocation(oldPos);
 		m_body.setDirection(dir);
 	}
 
 	private void destroyPhysicsBody() {
 		Direction dir = m_body.getDirection();
 
+		Vector3F loc = m_body.getLocation();
 		m_body.destory();
-		m_body = new NullPhysicsBody();
+		m_body = new NonparticipantPhysicsBody();
+		m_body.setLocation(loc);
 		m_body.setDirection(dir);
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);
 	}
@@ -235,7 +246,7 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 					rubble.getBody().setLocation(m_body.getLocation());
 				}
 			}
-
+			releaseConsumed();
 			m_world.removeEntity(this);
 		}
 	}
@@ -286,5 +297,101 @@ public final class Infrastructure implements IEntity, IDamageConsumer {
 
 	public interface IRubbleProducer {
 		@Nullable IEntity produce();
+	}
+
+	private HashMap<Infrastructure, Float> absorbChildren(Infrastructure i) {
+		HashMap<Infrastructure, Float> children = new HashMap<>();
+
+		children.putAll(i.m_consumed);
+		for(Infrastructure c : i.m_consumed.keySet()) {
+			children.putAll(absorbChildren(c));
+		}
+
+		i.m_consumed.clear();
+		return children;
+	}
+
+	public void releaseConsumed() {
+		if(m_consumed.isEmpty())
+			return;
+
+		//to prevent reconsuming
+		m_consumes = false;
+		Infrastructure top = null;
+		float depth = 0;
+
+		for(Map.Entry<Infrastructure, Float> e : m_consumed.entrySet()) {
+			if(top == null || depth < e.getValue()) {
+				depth = e.getValue();
+				top = e.getKey();
+			}
+		}
+
+		top.m_consumed.putAll(m_consumed);
+		top.m_consumed.remove(top);
+		m_consumed.clear();
+
+		m_world.addEntity(top);
+		Vector3F location = new Vector3F(getBody().getLocation());
+		location.z = depth;
+		top.getBody().setLocation(location);
+	}
+
+	private void tryConsumeInfrastructure() {
+		if(m_world == null || !m_consumes)
+			return;
+
+		ISearchFilter<Infrastructure> searchFilter = new RadialSearchFilter<>(getBody().getLocation().getXy(), 0.1F);
+		Infrastructure other[] = getWorld().getEntities().search(Infrastructure.class, searchFilter);
+		HashMap<Infrastructure, Float> canidates = new HashMap<>();
+
+		for (Infrastructure i : other) {
+			if(!i.m_consumes)
+				continue;
+
+			float curDepth = getBody().getLocation().z;
+			float otherDepth = i.getBody().getLocation().z;
+
+			if(Math.abs(curDepth - otherDepth) < 0.0001f)
+				continue;
+			if(curDepth < otherDepth) {
+				i.tryConsumeInfrastructure();
+				return;
+			} else {
+				canidates.put(i, otherDepth);
+			}
+		}
+
+		HashMap<Infrastructure, Float> netCanidates = new HashMap<>(canidates);
+		for(Infrastructure i : canidates.keySet()) {
+			netCanidates.putAll(absorbChildren(i));
+			m_world.removeEntity(i);
+		}
+
+		m_consumed.putAll(netCanidates);
+	}
+	private class MovementObserver implements IPhysicsBodyOrientationObserver, IEntityBodyObserver, IEntityWorldObserver {
+		@Override
+		public void locationSet() {
+			tryConsumeInfrastructure();
+		}
+
+		@Override
+		public void directionSet() { }
+
+		@Override
+		public void bodyChanged(IPhysicsBody oldBody, IPhysicsBody newBody) {
+			newBody.getObservers().add(this);
+		}
+
+		@Override
+		public void enterWorld() {
+			Infrastructure.this.getBody().getObservers().add(this);
+		}
+
+		@Override
+		public void leaveWorld() {
+
+		}
 	}
 }

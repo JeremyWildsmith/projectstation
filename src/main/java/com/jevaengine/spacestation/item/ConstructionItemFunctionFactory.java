@@ -84,8 +84,10 @@ public class ConstructionItemFunctionFactory implements IItemFunctionFactory {
                     Infrastructure[] belowEntities = user.getWorld().getEntities().search(Infrastructure.class, new RadialSearchFilter<Infrastructure>(location.getXy(), 0.4F));
 
                     for(Infrastructure inf : belowEntities) {
-                        if (inf.getBody().getLocation().z < depth && inf.hasInfrastructureType(above))
+                        if (inf.getBody().getLocation().z < depth && inf.hasInfrastructureType(above)) {
+                            inf.releaseConsumed();
                             user.getWorld().removeEntity(inf);
+                        }
                     }
                 }
 
