@@ -714,7 +714,7 @@ public class StationEntityFactory implements IEntityFactory {
 			target.addChild("heatConductivity").setValue(heatConductivity);
 			target.addChild("isTransparent").setValue(isTransparent);
 			target.addChild("hitpoints").setValue(hitpoints);
-
+			target.addChild("consumes").setValue(consumes);
 		}
 
 		@Override

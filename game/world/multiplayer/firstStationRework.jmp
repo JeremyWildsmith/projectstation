@@ -2,7 +2,22 @@
   "worldWidth" : 400,
   "metersPerUnit" : 1.0,
   "worldHeight" : 400,
-  "entities" : [ {
+  "entities" : [
+    {
+      "auxConfig": {
+		"type": "character",
+		"spawnDepth": 2.0,
+		"config": "/artifact/entity/human/entity.jec"
+	  },
+      "name": "spawnController",
+      "location": {
+        "x": 14,
+        "y": 26,
+        "z": 1
+      },
+      "type": "randomSpawnController",
+      "direction": 8
+    }, {
     "auxConfig" : null,
     "name" : "Unnamed12",
     "location" : {
