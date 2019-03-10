@@ -14,6 +14,7 @@ import de.codesourcery.jasm16.emulator.devices.impl.DefaultClock;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultKeyboard;
 import de.codesourcery.jasm16.emulator.devices.impl.DefaultScreen;
 import de.codesourcery.jasm16.emulator.exceptions.EmulationErrorException;
+import de.codesourcery.jasm16.emulator.memory.IMemory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
@@ -49,8 +50,7 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 	private boolean m_isOn = false;
 	private boolean m_hasCrashed = false;
 
-	private final byte[] m_firmware;
-
+	private byte[] m_firmware;
 
 	public Dcpu(IAnimationSceneModel model, byte[] firmware, boolean isOn) {
 		this(Dcpu.class.getClass().getName() + m_unnamedEntityCount.getAndIncrement(), model, firmware, isOn);
@@ -120,6 +120,15 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 		clearDcpuConnections();
 	}
 
+	public void loadFirmware(byte[] firmware) {
+		m_firmware = firmware;
+		reset();
+	}
+
+	public DefaultScreen getScreenDevice() {
+		return m_screen;
+	}
+
 	public void crash() {
 		m_hasCrashed = true;
 	}
@@ -130,6 +139,7 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 			return;
 
 		m_keyboard.simulateKeyTyped(keyCode, keyChar);
+		m_observers.raise(IDcpuObserver.class).keySimulated(keyCode, keyChar);
 	}
 
 	public boolean isOn() {
@@ -213,6 +223,17 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 
 	@Override
 	public void update(int delta) {
+		HashMap<Integer, Integer> vramDelta = m_screen.getVramDelta();
+		HashMap<Integer, Integer> paletteDelta = m_screen.getPaletteDelta();
+		HashMap<Integer, Integer> fontDelta = m_screen.getFontDelta();
+
+		if(!fontDelta.isEmpty() || !paletteDelta.isEmpty() || !vramDelta.isEmpty()) {
+			m_observers.raise(IDcpuObserver.class).screenChanged(
+					vramDelta,
+					paletteDelta,
+					fontDelta);
+		}
+
 		List<IDcpuCompatibleDevice> connectedDevices = getConnectedDevices();
 
 		List<IDcpuCompatibleDevice> currentConnected = new ArrayList<>(m_hardwareConnections.keySet());
@@ -292,5 +313,10 @@ public final class Dcpu extends WiredDevice implements IPowerDevice, IInteractab
 	@Override
 	public int drawEnergy(List<IDevice> requested, int joules) {
 		return 0;
+	}
+
+	public interface IDcpuObserver {
+		void screenChanged(HashMap<Integer, Integer> vramDelta, HashMap<Integer, Integer> paletteDelta, HashMap<Integer, Integer> fontDelta);
+		void keySimulated(int keyCode, char keyChar);
 	}
 }
