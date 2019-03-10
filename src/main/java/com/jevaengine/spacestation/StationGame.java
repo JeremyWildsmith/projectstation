@@ -22,6 +22,7 @@ import com.jevaengine.spacestation.gamestates.MainMenu;
 import io.github.jevaengine.DefaultEngineThreadPool;
 import io.github.jevaengine.IEngineThreadPool;
 import io.github.jevaengine.audio.IAudioClipFactory;
+import io.github.jevaengine.config.IConfigurationFactory;
 import io.github.jevaengine.game.DefaultGame;
 import io.github.jevaengine.graphics.IFontFactory;
 import io.github.jevaengine.graphics.IRenderable;
@@ -63,11 +64,13 @@ public final class StationGame extends DefaultGame implements IStateContext
 	private final IParallelEntityFactory m_parallelEntityFactory;
 	private final IEffectMapFactory m_effectMapFactory;
 	private final IItemFactory m_itemFactory;
+	private final IConfigurationFactory m_configFactory;
 
-	public StationGame(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, Vector2D resolution)
+	public StationGame(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IWindowFactory windowFactory, IWorldFactory worldFactory, ISpriteFactory spriteFactory, IAudioClipFactory audioClipFactory, IConfigurationFactory configurationFactory, Vector2D resolution)
 	{
 		super(inputSource, resolution);
-	
+
+		m_configFactory = configurationFactory;
 		try
 		{
 			m_cursor = spriteFactory.create(URI.create("file:///ui/cursor.jsf"));
@@ -159,6 +162,11 @@ public final class StationGame extends DefaultGame implements IStateContext
 	@Override
 	public ISpriteFactory getSpriteFactory() {
 		return m_spriteFactory;
+	}
+
+	@Override
+	public IConfigurationFactory getConfigFactory() {
+		return m_configFactory;
 	}
 
 	public void setState(IState state)

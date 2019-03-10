@@ -20,6 +20,7 @@ package com.jevaengine.spacestation;
 
 import io.github.jevaengine.IEngineThreadPool;
 import io.github.jevaengine.audio.IAudioClipFactory;
+import io.github.jevaengine.config.IConfigurationFactory;
 import io.github.jevaengine.game.IGame;
 import io.github.jevaengine.game.IGameFactory;
 import io.github.jevaengine.game.IRenderer;
@@ -52,10 +53,12 @@ public final class StationGameFactory implements IGameFactory
 	private final IFontFactory m_fontFactory;
 
 	private final IItemFactory m_itemFactory;
+	private final IConfigurationFactory m_configFactory;
 
 	@Inject
-	public StationGameFactory(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IRenderer renderer, ISpriteFactory spriteFactory, IWindowFactory windowFactory, IWorldFactory worldFactory, IEngineThreadPool engineThreadPool, IAudioClipFactory audioClipFactory)
+	public StationGameFactory(IItemFactory itemFactory, IFontFactory fontFactory, IPhysicsWorldFactory physicsWorldFactory, IEngineThreadPool threadPool, IEffectMapFactory effectMapFactory, IEntityFactory entityFactory, IInputSource inputSource, IRenderer renderer, ISpriteFactory spriteFactory, IWindowFactory windowFactory, IWorldFactory worldFactory, IEngineThreadPool engineThreadPool, IAudioClipFactory audioClipFactory, IConfigurationFactory configurationFactory)
 	{
+		m_configFactory = configurationFactory;
 		m_itemFactory = itemFactory;
 		m_fontFactory = fontFactory;
 		m_physicsWorldFactory = physicsWorldFactory;
@@ -73,6 +76,6 @@ public final class StationGameFactory implements IGameFactory
 	
 	public IGame create()
 	{
-		return new StationGame(m_itemFactory, m_fontFactory, m_physicsWorldFactory, m_threadPool, m_effectMapFactory, m_entityFactory, m_inputSource, m_windowFactory, m_worldFactory, m_spriteFactory, m_audioClipFactory, m_renderer.getResolution());
+		return new StationGame(m_itemFactory, m_fontFactory, m_physicsWorldFactory, m_threadPool, m_effectMapFactory, m_entityFactory, m_inputSource, m_windowFactory, m_worldFactory, m_spriteFactory, m_audioClipFactory, m_configFactory, m_renderer.getResolution());
 	}
 }

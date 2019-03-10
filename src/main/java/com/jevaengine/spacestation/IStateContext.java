@@ -19,6 +19,7 @@
 package com.jevaengine.spacestation;
 
 import io.github.jevaengine.audio.IAudioClipFactory;
+import io.github.jevaengine.config.IConfigurationFactory;
 import io.github.jevaengine.graphics.IFontFactory;
 import io.github.jevaengine.graphics.ISpriteFactory;
 import io.github.jevaengine.rpg.item.IItemFactory;
@@ -53,4 +54,6 @@ public interface IStateContext
 	IEffectMapFactory getEffectMapFactory();
 
 	IItemFactory getItemFactory();
+
+	IConfigurationFactory getConfigFactory();
 }

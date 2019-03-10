@@ -1,0 +1,15 @@
+{
+  "port": 7345,
+  "hostname": "127.0.0.1",
+  "name": "jeremy-station",
+  "description": "This is the station hosted by default",
+  "max_players": 30,
+  "master": {
+    "host": "127.0.0.1",
+    "port": 3333
+  },
+  "master_list": {
+    "host": "127.0.0.1",
+    "port": 8080
+  }
+}
