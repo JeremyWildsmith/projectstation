@@ -4,6 +4,7 @@
   "name": "jeremy-station",
   "description": "This is the station hosted by default",
   "max_players": 30,
+  "world": "file:///world/multiplayer/firstStationRework.jmp",
   "master": {
     "host": "127.0.0.1",
     "port": 3333
