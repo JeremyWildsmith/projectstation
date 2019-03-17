@@ -104,7 +104,6 @@ public class CameraBehaviorInjector extends WindowBehaviourInjector {
 		addControl(lightingUpdateTimer);
 		demoWorldView.setCamera(m_camera);
 		m_camera.addEffect(new LightingMap(visible));
-		addControl(new Timer());
 	}
 
 	private static final class LightingMap implements ISceneBuffer.ISceneBufferEffect {
