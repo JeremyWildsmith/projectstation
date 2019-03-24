@@ -1,0 +1,10 @@
+{
+  "name": "Brown Shoes",
+  "model": "model.jmf",
+  "icon" : "icon.png",
+  "function": "Shoes",
+  "description": "Some brown shoes.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  }
+}

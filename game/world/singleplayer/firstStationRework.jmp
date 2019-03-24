@@ -11,7 +11,7 @@
       "z" : 2.0
     },
     "type" : "character",
-    "config" : "/artifact/entity/human/entity.jec",
+    "config" : "/artifact/entity/human/engineer/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,
@@ -22,7 +22,7 @@
       "z" : 2.0
     },
     "type" : "character",
-    "config" : "/artifact/entity/human/entity.jec",
+    "config" : "/artifact/entity/human/engineer/entity.jec",
     "direction" : 8
   }, {
     "auxConfig" : null,

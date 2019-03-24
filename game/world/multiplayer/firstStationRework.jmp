@@ -7,7 +7,7 @@
       "auxConfig": {
 		"type": "character",
 		"spawnDepth": 2.0,
-		"config": "/artifact/entity/human/entity.jec"
+		"config": "/artifact/entity/human/engineer/entity.jec"
 	  },
       "name": "spawnController",
       "location": {

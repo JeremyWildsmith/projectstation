@@ -1,0 +1,73 @@
+{
+  "style": "file:///ui/style/selectclass/style.juis",
+  "bounds": {
+    "width": 300,
+    "height": 200
+  },
+  "controls": [
+    {
+      "type": "label",
+      "name": "lblTitle",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "text": "Role Selection"
+      }
+    },
+    {
+      "type": "worldView",
+      "name": "worldView",
+      "location": {
+        "x": 10,
+        "y": 50
+      },
+      "config": {
+        "bounds" : {
+          "width" : 80,
+          "height" : 100
+        },
+		"transparentBackground": true
+      }
+    },
+	{
+      "type": "textArea",
+      "name": "description",
+      "location": {
+        "x": 100,
+        "y": 50
+      },
+      "config": {
+        "text": "",
+		"bounds": {
+			"width": 190,
+			"height": 100
+		},
+		"allowEdit": false
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnNext",
+      "location": {
+        "x": 10,
+        "y": 170
+      },
+      "config": {
+        "text": "Change"
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnConfirm",
+      "location": {
+        "x": 230,
+        "y": 170
+      },
+      "config": {
+        "text": "Okay"
+      }
+    }
+  ]
+}

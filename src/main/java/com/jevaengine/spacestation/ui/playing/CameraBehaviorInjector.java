@@ -38,7 +38,6 @@ public class CameraBehaviorInjector extends WindowBehaviourInjector {
 		m_player = player;
 	}
 
-
 	private Set<Vector2D> getObstructionMap() {
 
 		if(m_player.getWorld() == null)

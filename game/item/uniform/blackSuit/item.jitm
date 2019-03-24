@@ -1,0 +1,10 @@
+{
+  "name": "Black Suit",
+  "model": "model.jmf",
+  "icon" : "icon.png",
+  "function": "Uniform",
+  "description": "A black suit for business people.",
+  "attributes": {
+    "Defence Bonus": 0.0
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Engineer",
+    "description": "A station engineer. Try not to break things.",
+    "demo": "file:///artifact/entity/human/engineer/entity.jec"
+  },
+  {
+    "name": "Visitor",
+    "description": "A visitor, waiting for his departure to planet earth.",
+    "demo": "file:///artifact/entity/human/bob/entity.jec"
+  }
+]

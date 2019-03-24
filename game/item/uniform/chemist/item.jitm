@@ -3,7 +3,7 @@
   "model": "model.jmf",
   "icon" : "icon.png",
   "function": "Uniform",
-  "description": "A unifrom for chemists.",
+  "description": "A uniform for chemists.",
   "attributes": {
     "Defence Bonus": 0.0
   }
