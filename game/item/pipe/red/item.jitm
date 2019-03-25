@@ -1,0 +1,18 @@
+{
+  "name": "Red Pipe",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A red pipe.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "plating",
+			"depth": -0.3,
+			"entity": "liquidPipe",
+			"config": "file:///artifact/entity/pipe/red/entity.jec"
+		}
+	]
+  }
+}

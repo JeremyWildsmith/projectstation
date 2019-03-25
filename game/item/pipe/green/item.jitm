@@ -1,0 +1,18 @@
+{
+  "name": "Green Pipe",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A green pipe.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "plating",
+			"depth": -0.2,
+			"entity": "liquidPipe",
+			"config": "file:///artifact/entity/pipe/green/entity.jec"
+		}
+	]
+  }
+}
