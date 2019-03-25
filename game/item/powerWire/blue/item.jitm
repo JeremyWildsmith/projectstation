@@ -9,9 +9,9 @@
 	"rules": [
 		{
 			"above": "plating",
-			"depth": -0.93,
+			"depth": -0.7,
 			"entity": "powerWire",
-			"config": "file:///artifact/entity/blueWire/entity.jec"
+			"config": "file:///artifact/entity/powerWire/blue/entity.jec"
 		}
 	]
   }

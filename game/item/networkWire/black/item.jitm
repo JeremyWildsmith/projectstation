@@ -1,0 +1,18 @@
+{
+  "name": "Black Network Wire",
+  "icon" : "icon.png",
+  "function": "Construction",
+  "description": "A black network wire.",
+  "attributes": {
+  },
+  "parameters": {
+	"rules": [
+		{
+			"above": "plating",
+			"depth": -0.6,
+			"entity": "networkWire",
+			"config": "file:///artifact/entity/networkWire/black/entity.jec"
+		}
+	]
+  }
+}
