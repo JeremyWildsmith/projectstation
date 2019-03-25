@@ -1,0 +1,12 @@
+{
+	"classDescriptions": "./characterClasses.json",
+	"spawnDepth": 2.0,
+	"spawnZones": {
+		"Visitor": "visitors",
+		"Engineer": "engineers"
+	},
+	"spawnLimits": {
+		"Visitor": 100,
+		"Engineer": 5
+	}
+}
