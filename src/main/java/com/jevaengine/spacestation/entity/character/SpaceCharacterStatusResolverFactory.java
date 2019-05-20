@@ -148,7 +148,7 @@ public class SpaceCharacterStatusResolverFactory implements ISpaceCharacterStatu
                 hitpoints -= attributes.get(cat.getAffectedAttribute()).get();
             }
 
-            hitpoints = Math.max(0, hitpoints);
+            hitpoints = Math.max(10, hitpoints);
 
             attributes.get(SpaceCharacterAttribute.EffectiveHitpoints).set(hitpoints);
 

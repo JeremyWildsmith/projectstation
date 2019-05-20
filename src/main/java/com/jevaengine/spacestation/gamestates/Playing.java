@@ -56,7 +56,7 @@ public class Playing implements IState {
 
 	private static final URI LEM_DISPLAY_WINDOW = URI.create("file:///ui/windows/dcpu/lem/layout.jwl");
 
-	private static final float CAMERA_ZOOM = 2.5f;
+	private static final float CAMERA_ZOOM = 0.5f;
 
 	private IStateContext m_context;
 	private final World m_world;

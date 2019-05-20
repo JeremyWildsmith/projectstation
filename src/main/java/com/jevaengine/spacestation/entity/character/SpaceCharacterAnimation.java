@@ -3,7 +3,8 @@ package com.jevaengine.spacestation.entity.character;
 
 public enum SpaceCharacterAnimation
 {
-    Idle("idle");
+    Idle("idle"),
+    Walk("walk");
     private final String m_name;
 
     private SpaceCharacterAnimation(String name)

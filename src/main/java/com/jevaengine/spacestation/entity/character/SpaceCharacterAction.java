@@ -14,7 +14,7 @@ public enum SpaceCharacterAction
 {
     Die("die", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, false)),
     Attack("attack", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, false)),
-    Walk("walk", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true)),
+    Walk("walk", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Walk, true)),
     Idle("idle", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true)),
     Flinch("flinch", new SimpleActionBehaviorBuilder(SpaceCharacterAnimation.Idle, true));
 

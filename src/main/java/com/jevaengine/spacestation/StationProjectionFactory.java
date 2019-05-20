@@ -27,8 +27,8 @@ public class StationProjectionFactory implements IOrthographicProjectionFactory
 	
 	public StationProjectionFactory()
 	{
-		m_projectionMatrix = new Matrix3X3(32F, 0F, 0, 
-											0F, 32F, 0F,
+		m_projectionMatrix = new Matrix3X3(31F, -31F, 0,
+											16F, 16F, -1F,
 											0, 0, 1);
 	}
 
