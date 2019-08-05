@@ -49,6 +49,7 @@ import java.net.URI;
 public class MainMenu implements IState
 {
 	private static final URI ENTRY_MAP = URI.create("file:///world/singleplayer/firstStationRework.jmp");
+	private static final URI GALAXY_MAP = URI.create("file:///world/singleplayer/space.jmp");
 	private static final URI MENU_MAP = URI.create("file:///world/mainMenu.jmp");
 	private static final Vector3F OBSERVER_LOCATION = new Vector3F(17.5f, 20, 2);
 	private static final float CAMERA_ZOOM = 2.5f;
@@ -142,7 +143,7 @@ public class MainMenu implements IState
 						public void done(FutureResult<World, WorldConstructionException> world) {
 							try
 							{
-								m_context.setState(new Playing(world.get()));
+								m_context.setState(new Playing(world.get(), m_context.getWorldFactory().create(GALAXY_MAP)));
 							} catch (WorldConstructionException e)
 							{
 								m_logger.error("Unable to enter playing state due to error in loading world", e);

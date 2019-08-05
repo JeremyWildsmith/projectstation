@@ -1,0 +1,38 @@
+{
+      "inventorySize" : 0,
+      "model" : "model.jmf",
+      "blood" : "file:///particle/blood/particle.jpar",
+      "items" : [
+	  ],
+      "loadout" : { 
+      },
+      "wieldTargets" : [ ],
+      "attributes" : {
+	  "Action": 3.0,
+    	  "Speed": 6.0,
+    	  "Hits" : 10.0,
+    	  "Max Hits": 10.0,
+    	  "View Distance": 3.0,
+    	  "Field Of View": 1.04719755,
+    	  "Allegiance": 2.0
+    	  },
+      "statusStyle": "file:///ui/style/status/style.juis",
+      "collisionRadius" : 0.8,
+	  "damage": {
+		"base": {
+			"Brute": 1,
+			"Burn": 1,
+			"Electrical": 2,
+			"Toxin": 1,
+			"Suffocate": 2
+		},
+		"multiplier": {
+			"Minor": 2,
+			"Serious": 20,
+			"VerySerious": 40,
+			"Critical": 60
+		},
+		"produce": "file:///item/bloodyCorpse/item.jitm"
+	  }
+	  
+}

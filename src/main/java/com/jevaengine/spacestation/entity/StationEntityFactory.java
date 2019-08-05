@@ -191,6 +191,19 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
+		Planet(Planet.class, "planet", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					PlanetDeclaration decl = auxConfig.getValue(PlanetDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new Planet(instanceName, model);
+				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
 		NetworkWire(com.jevaengine.spacestation.entity.network.NetworkWire.class, "networkWire", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
@@ -598,6 +611,25 @@ public class StationEntityFactory implements IEntityFactory {
 	}
 
 	public static final class WireDeclaration implements ISerializable {
+
+		public String model;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+	public static final class PlanetDeclaration implements ISerializable {
 
 		public String model;
 

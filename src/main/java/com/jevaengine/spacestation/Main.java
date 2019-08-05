@@ -160,11 +160,11 @@ public class Main implements WindowListener
 		@Override
 		protected void configure()
 		{
+			bind(IAudioClipFactory.class).toInstance(new NullAudioClipFactory());
 			bind(IRouteFactory.class).to(AStarRouteFactory.class);
 			bind(IInputSource.class).toInstance(FrameInputSource.create(m_frame));
 			bind(IGameFactory.class).to(StationGameFactory.class);
 			bind(IRpgCharacterFactory.class).to(SpaceCharacterFactory.class);
-			bind(IAudioClipFactory.class).toInstance(new NullAudioClipFactory());
 			bind(IEntityFactory.class).toProvider(new Provider<IEntityFactory>() {
 				@Inject
 				private IScriptBuilderFactory scriptBuilderFactory;
