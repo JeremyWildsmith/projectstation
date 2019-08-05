@@ -1,0 +1,62 @@
+{
+  "controls": [
+	{
+      "type": "label",
+      "name": "errTxt",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "text": ""
+      }
+    },
+	{
+      "type": "label",
+      "name": "desc",
+      "location": {
+        "x": 10,
+        "y": 40
+      },
+      "config": {
+        "text": "IP Address:"
+      }
+    },
+	{
+      "type": "textArea",
+      "name": "ipAddress",
+      "location": {
+        "x": 10,
+        "y": 70
+      },
+      "config": {
+        "text": "0.0.0.0",
+		"bounds": {
+			"width": 350,
+			"height": 20
+		},
+		"multiline": false
+      }
+    },
+	{
+      "type": "button",
+      "name": "save",
+      "location": {
+        "x": 290,
+        "y": 120
+      },
+      "config": {
+        "text": "Save",
+		"bounds": {
+			"width": 70,
+			"height": 20
+		}
+      }
+    }
+  ],
+  "bounds": {
+    "width": 370,
+    "height": 150
+  },
+  "style": "file:///ui/style/chathud/style.juis"
+}

@@ -28,6 +28,7 @@ import com.jevaengine.spacestation.ui.HudFactory.Hud;
 import com.jevaengine.spacestation.ui.InventoryHudFactory.InventoryHud;
 import com.jevaengine.spacestation.ui.LoadoutHudFactory.LoadoutHud;
 import com.jevaengine.spacestation.ui.playing.ConsoleInterfaceInteractionHandler;
+import com.jevaengine.spacestation.ui.playing.NetworkDeviceInteractionHandler;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory.PlayingWindow;
 import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector;
@@ -55,6 +56,7 @@ import java.net.URI;
 public class Playing implements IState {
 
 	private static final URI LEM_DISPLAY_WINDOW = URI.create("file:///ui/windows/dcpu/lem/layout.jwl");
+	private static final URI CONFIG_NETWORK_WINDOW = URI.create("file:///ui/windows/netconfig/layout.jwl");
 
 	private static final float CAMERA_ZOOM = 2.5f;
 
@@ -76,8 +78,10 @@ public class Playing implements IState {
 
 	private WorldInteractionBehaviorInjector.IInteractionHandler[] createInteractionHandlers() {
 		LemDisplayFactory lemDisplayFactory = new LemDisplayFactory(m_context.getWindowManager(), m_context.getWindowFactory(), LEM_DISPLAY_WINDOW);
+		ConfigureNetworkDisplayFactory netDisplayConfigFactory = new ConfigureNetworkDisplayFactory(m_context.getWindowManager(), m_context.getWindowFactory(), CONFIG_NETWORK_WINDOW);
 		return new WorldInteractionBehaviorInjector.IInteractionHandler[] {
-				new ConsoleInterfaceInteractionHandler(lemDisplayFactory)
+				new ConsoleInterfaceInteractionHandler(lemDisplayFactory),
+				new NetworkDeviceInteractionHandler(netDisplayConfigFactory)
 		};
 
 	}

@@ -15,16 +15,17 @@ import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemSlot;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Timer;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WorldView;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.search.RadialSearchFilter;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -45,14 +46,16 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 		m_handlers = interactionHandlers;
 	}
 
-	public IInteractionHandler getHandler(Class<?> clazz) {
+	public List<IInteractionHandler> getHandlers(Class<?> clazz) {
+		List<IInteractionHandler> handlers = new ArrayList<>();
+
 		for (IInteractionHandler h : m_handlers) {
-			if (clazz.isAssignableFrom(h.getHandleSubject())) {
-				return h;
+			if (h.getHandleSubject().isAssignableFrom(clazz)) {
+				handlers.add(h);
 			}
 		}
 
-		return null;
+		return handlers;
 	}
 
 	private boolean isInReach(IEntity entity) {
@@ -70,7 +73,11 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 		final WorldView demoWorldView = getControl(WorldView.class, "worldView");
 		final Timer timer = new Timer();
 		final Vector2D mouseLocation = new Vector2D();
+		final MenuStrip strip = new MenuStrip();
 
+		strip.setVisible(false);
+
+		addControl(strip);
 		addControl(timer);
 
 		timer.getObservers().add(new Timer.ITimerObserver() {
@@ -92,6 +99,8 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 			    mouseLocation.y = event.location.y;
 
 				if (event.type == InputMouseEvent.MouseEventType.MouseClicked) {
+					strip.setVisible(false);
+
 					final IEntity pickedInteraction = demoWorldView.pick(IEntity.class, event.location);
 
 					if (pickedInteraction == null) {
@@ -101,18 +110,31 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 					if(!isInReach(pickedInteraction))
 						return;
 
-					IInteractionHandler handler = getHandler(pickedInteraction.getClass());
+					List<IInteractionHandler> handlers = getHandlers(pickedInteraction.getClass());
 
-					if (handler != null) {
-						handler.handle(pickedInteraction, event.mouseButton == MouseButton.Right, m_interactionDistance);
-					} else {
+					if(handlers.isEmpty())
 						m_actionHandler.interactedWith(m_character, pickedInteraction);
+					else if (handlers.size() == 1)
+						handlers.get(0).handle(pickedInteraction, event.mouseButton == MouseButton.Right, m_interactionDistance);
+					else {
+						Map<String, IInteractionHandler> hanMapping = new HashMap<>();
+						for(IInteractionHandler h : handlers)
+							hanMapping.put(h.getInteractionName(), h);
+
+						strip.setContext(hanMapping.keySet().toArray(new String[0]), command -> {
+							hanMapping.get(command).handle(pickedInteraction, event.mouseButton == MouseButton.Right, m_interactionDistance);
+						});
+
+						strip.setLocation(event.location);
+						strip.setVisible(true);
+						//handler.handle(pickedInteraction, event.mouseButton == MouseButton.Right, m_interactionDistance);
 					}
 				}
 			}
 
 			@Override
 			public void keyEvent(InputKeyEvent event) {
+				strip.setVisible(false);
 				if (event.type != InputKeyEvent.KeyEventType.KeyTyped) {
 					return;
 				}
@@ -130,10 +152,8 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 						for (IInteractableEntity e : interactable) {
 							if (Direction.fromVector(e.getBody().getLocation().getXy().difference(playerPos)) == playerDirection) {
 
-								IInteractionHandler handler = getHandler(e.getClass());
-								if (handler != null)
-									handler.handle(e, false, m_interactionDistance);
-								else
+								List<IInteractionHandler> handlers = getHandlers(e.getClass());
+								if (handlers.isEmpty())
 									m_actionHandler.interactedWith(m_character, e);
 							}
 						}
@@ -169,6 +189,8 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 		IEntity getActiveInteraction();
 
 		void outOfReach();
+
+		String getInteractionName();
 	}
 
 	public interface IActionHandler {

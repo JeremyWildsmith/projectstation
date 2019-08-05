@@ -19,8 +19,12 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
         return m_ipAddress;
     }
 
-    public void setIp(int ipAddress) {
+    public final void setIp(int ipAddress) {
+        if(m_ipAddress == ipAddress)
+            return;
+
         m_ipAddress = ipAddress;
+        m_observers.raise(INetworkDeviceObserver.class).IpAddressChanged(ipAddress);
     }
 
     @Override
@@ -48,7 +52,7 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
         processPacket(packet);
     }
 
-    protected void transmitMessage(NetworkPacket packet) {
+    protected final void transmitMessage(NetworkPacket packet) {
         packet.SenderAddress = getIp();
         for(INetworkDataCarrier c : getConnections(INetworkDataCarrier.class)) {
             List<INetworkDataCarrier> carriers = new ArrayList<>();
@@ -56,6 +60,10 @@ public abstract class NetworkDevice extends WiredDevice implements INetworkDataC
 
             c.carry(carriers, packet);
         }
+    }
+
+    public interface INetworkDeviceObserver {
+        void IpAddressChanged(int ip);
     }
 
 

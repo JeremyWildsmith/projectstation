@@ -71,4 +71,9 @@ public class ConsoleInterfaceInteractionHandler implements IInteractionHandler {
 	public void outOfReach() {
 		cancelInteraction();
 	}
+
+	@Override
+	public String getInteractionName() {
+		return "Use Computer Interface";
+	}
 }
