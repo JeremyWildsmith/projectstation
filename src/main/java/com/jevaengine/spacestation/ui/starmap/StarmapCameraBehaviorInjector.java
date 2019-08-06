@@ -49,13 +49,13 @@ public class StarmapCameraBehaviorInjector extends WindowBehaviourInjector {
 		getControl(ToggleIcon.class, "zoomIn").getObservers().add(new ToggleIcon.IToggleIconObserver() {
 			@Override
 			public void toggled() {
-				m_camera.setZoom(Math.min(2, m_camera.getZoom() + 0.1f));
+				m_camera.setZoom(Math.min(2, m_camera.getZoom() * 2.0f));
 			}
 		});
 		getControl(ToggleIcon.class, "zoomOut").getObservers().add(new ToggleIcon.IToggleIconObserver() {
 			@Override
 			public void toggled() {
-				m_camera.setZoom(Math.max(0.1f, m_camera.getZoom() - 0.1f));
+				m_camera.setZoom(Math.max(1.0f / (float)Math.pow(2, 6), m_camera.getZoom() / 2.0f));
 			}
 		});
 	}

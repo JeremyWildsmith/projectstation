@@ -204,6 +204,19 @@ public class StationEntityFactory implements IEntityFactory {
 				}
 			}
 		}),
+		Wormhole(Wormhole.class, "wormhole", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					WormholeDeclaration decl = auxConfig.getValue(WormholeDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(decl.model));
+
+					return new Wormhole(instanceName, model, decl.link);
+				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
 		NetworkWire(com.jevaengine.spacestation.entity.network.NetworkWire.class, "networkWire", new EntityBuilder() {
 			@Override
 			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
@@ -642,6 +655,28 @@ public class StationEntityFactory implements IEntityFactory {
 		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
 			try {
 				model = source.getChild("model").getValue(String.class);
+			} catch (NoSuchChildVariableException ex) {
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+	public static final class WormholeDeclaration implements ISerializable {
+
+		public String model;
+		public String link;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException {
+			target.addChild("model").setValue(model);
+			target.addChild("link").setValue(link);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException {
+			try {
+				model = source.getChild("model").getValue(String.class);
+				link = source.getChild("link").getValue(String.class);
 			} catch (NoSuchChildVariableException ex) {
 				throw new ValueSerializationException(ex);
 			}

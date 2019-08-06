@@ -121,7 +121,7 @@ public class NavigateBehaviorInjector extends WindowBehaviourInjector {
 		demoWorldView.getObservers().add(new WorldView.IWorldViewInputObserver() {
 			@Override
 			public void mouseEvent(InputMouseEvent event) {
-				if(event.type != InputMouseEvent.MouseEventType.MouseClicked)
+				if(event.type != InputMouseEvent.MouseEventType.MouseClicked || event.mouseButton != InputMouseEvent.MouseButton.Left)
 					return;
 
 				Vector2F newDest = demoWorldView.translateScreenToWorld(new Vector2F(event.location).difference(demoWorldView.getLocation()));

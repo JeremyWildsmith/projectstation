@@ -1,13 +1,13 @@
 {
-  "worldWidth" : 50,
+  "worldWidth" : 500000000,
   "metersPerUnit" : 1.0,
-  "worldHeight" : 50,
+  "worldHeight" : 500000000,
   "entities" : [ {
     "auxConfig" : null,
     "name" : "player",
     "location" : {
-      "x" : 20.0,
-      "y" : 20.0,
+      "x" : 251.0,
+      "y" : 52.0,
       "z" : 2.0
     },
     "type" : "character",
@@ -17,12 +17,38 @@
     "auxConfig" : null,
     "name" : "Unnamed0",
     "location" : {
-      "x" : 28.0,
-      "y" : 23.0,
+      "x" : 240.0,
+      "y" : 58.0,
       "z" : 0.0
     },
     "type" : "planet",
     "config" : "/artifact/planet/xalrolla/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : {
+      "link" : "wht1"
+    },
+    "name" : "wht2",
+    "location" : {
+      "x" : 510.0,
+      "y" : 314.0,
+      "z" : 0.0
+    },
+    "type" : "wormhole",
+    "config" : "/artifact/wormhole/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : {
+      "link" : "wht2"
+    },
+    "name" : "wht1",
+    "location" : {
+      "x" : 228.0,
+      "y" : 73.0,
+      "z" : 0.0
+    },
+    "type" : "wormhole",
+    "config" : "/artifact/wormhole/entity.jec",
     "direction" : 8
   } ],
   "artifactImports" : [ ],
