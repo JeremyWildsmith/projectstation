@@ -1,0 +1,36 @@
+{
+  "defaultAnimation": "idle",
+  "animations": [
+    {
+      "name": "idle",
+      "sets": [
+        {
+          "directions": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "components": [
+            {
+              "sprite": "sprite.jsf",
+              "animation": "idle",
+              "bounds": {
+                "x": -6,
+                "y": -6,
+                "z": 0,
+                "width": 12,
+                "height": 12,
+                "depth": 0.01
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "worldWidth" : 50,
+  "metersPerUnit" : 1.0,
+  "worldHeight" : 50,
+  "entities" : [ {
+    "auxConfig" : null,
+    "name" : "player",
+    "location" : {
+      "x" : 20.0,
+      "y" : 20.0,
+      "z" : 2.0
+    },
+    "type" : "character",
+    "config" : "/artifact/ship/assaultboat/entity.jec",
+    "direction" : 8
+  }, {
+    "auxConfig" : null,
+    "name" : "Unnamed0",
+    "location" : {
+      "x" : 28.0,
+      "y" : 23.0,
+      "z" : 0.0
+    },
+    "type" : "planet",
+    "config" : "/artifact/planet/xalrolla/entity.jec",
+    "direction" : 8
+  } ],
+  "artifactImports" : [ ],
+  "logicPerUnit" : 1.0,
+  "zones" : [ ],
+  "friction" : 0.10000000149011612
+}

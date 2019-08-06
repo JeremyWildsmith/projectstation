@@ -73,21 +73,22 @@ public final class SimpleItemContainer extends Control {
 	@Override
 	public void render(Graphics2D g, int x, int y, float scale) {
 		m_background.render(g, x, y, scale);
-		
-		if(!m_loadoutSlot.isEmpty()) {
-			IImmutableGraphic itemGraphic = m_loadoutSlot.getItem().getIcon();
-			
-			if(itemGraphic == null)
-				return;
-			
-			int xOff = x + m_background.getBounds().width / 2;
-			int yOff = y + m_background.getBounds().width / 2;
-			
-			xOff += -itemGraphic.getBounds().width / 2;
-			yOff += -itemGraphic.getBounds().width / 2;
-			
-			itemGraphic.render(g, xOff, yOff, scale);
-		}
+
+		if(m_loadoutSlot == null || m_loadoutSlot.isEmpty())
+			return;
+
+		IImmutableGraphic itemGraphic = m_loadoutSlot.getItem().getIcon();
+
+		if(itemGraphic == null)
+			return;
+
+		int xOff = x + m_background.getBounds().width / 2;
+		int yOff = y + m_background.getBounds().width / 2;
+
+		xOff += -itemGraphic.getBounds().width / 2;
+		yOff += -itemGraphic.getBounds().width / 2;
+
+		itemGraphic.render(g, xOff, yOff, scale);
 	}
 	
 	public interface ISimpleItemContainerObserver {

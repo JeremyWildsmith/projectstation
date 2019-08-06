@@ -95,8 +95,8 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 		demoWorldView.getObservers().add(new WorldView.IWorldViewInputObserver() {
 			@Override
 			public void mouseEvent(InputMouseEvent event) {
-			    mouseLocation.x = event.location.x;
-			    mouseLocation.y = event.location.y;
+				mouseLocation.x = event.location.x;
+				mouseLocation.y = event.location.y;
 
 				if (event.type == InputMouseEvent.MouseEventType.MouseClicked) {
 					strip.setVisible(false);
@@ -112,9 +112,21 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 					List<IInteractionHandler> handlers = getHandlers(pickedInteraction.getClass());
 
-					if(handlers.isEmpty())
-						m_actionHandler.interactedWith(m_character, pickedInteraction);
-					else if (handlers.size() == 1)
+					if(handlers.isEmpty()) {
+						if(pickedInteraction instanceof IInteractableEntity &&
+								(((IInteractableEntity)pickedInteraction).getInteractions().length > 0) &&
+								event.mouseButton == MouseButton.Right)
+						{
+							IInteractableEntity interactable = (IInteractableEntity)pickedInteraction;
+							strip.setContext(interactable.getInteractions(), command -> {
+								m_actionHandler.interactedWith(m_character, pickedInteraction, command);
+							});
+
+							strip.setLocation(event.location);
+							strip.setVisible(true);
+						} else
+							m_actionHandler.interactedWith(m_character, pickedInteraction, null);
+					} else if (handlers.size() == 1)
 						handlers.get(0).handle(pickedInteraction, event.mouseButton == MouseButton.Right, m_interactionDistance);
 					else {
 						Map<String, IInteractionHandler> hanMapping = new HashMap<>();
@@ -146,7 +158,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 							new RadialSearchFilter<IInteractableEntity>(playerPos, m_interactionDistance));
 
 					if(interactable.length == 0) {
-						m_actionHandler.interactedWith(m_character, null);
+						m_actionHandler.interactedWith(m_character, null, null);
 					}
 					else {
 						for (IInteractableEntity e : interactable) {
@@ -154,7 +166,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 								List<IInteractionHandler> handlers = getHandlers(e.getClass());
 								if (handlers.isEmpty())
-									m_actionHandler.interactedWith(m_character, e);
+									m_actionHandler.interactedWith(m_character, e, null);
 							}
 						}
 					}
@@ -167,7 +179,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 					IItem item = slot.getItem();
 
 					Vector2F location = demoWorldView.translateScreenToWorld(new Vector2F(mouseLocation));
-                    IItem.ItemTarget target = new IItem.ItemTarget(location);
+					IItem.ItemTarget target = new IItem.ItemTarget(location);
 					IItem.ItemUseAbilityTestResults result = item.getFunction().testUseAbility(m_character, target, item.getAttributes());
 
 					if(result.isUseable()) {
@@ -195,7 +207,7 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 
 	public interface IActionHandler {
 		void handleUseItem(IRpgCharacter character, IItem item, IItem.ItemTarget target);
-		void interactedWith(IRpgCharacter character, @Nullable IEntity subject);
+		void interactedWith(IRpgCharacter character, @Nullable IEntity subject, @Nullable String action);
 	}
 
 	public static class DefaultActionHandler implements IActionHandler {
@@ -206,9 +218,12 @@ public class WorldInteractionBehaviorInjector extends WindowBehaviourInjector {
 		}
 
 		@Override
-		public void interactedWith(IRpgCharacter character, @Nullable IEntity subject) {
+		public void interactedWith(IRpgCharacter character, @Nullable IEntity subject, @Nullable String action) {
 			if(subject instanceof IInteractableEntity) {
-				((IInteractableEntity)subject).interactedWith(character);
+				if(action != null)
+					((IInteractableEntity)subject).interactWith(character, action);
+				else
+					((IInteractableEntity)subject).interactedWith(character);
 			}
 		}
 	}

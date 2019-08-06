@@ -1,0 +1,59 @@
+{
+  "style": "file:///ui/style/tech/tech.juis",
+  "bounds": {
+    "width": 400,
+    "height": 300
+  },
+  "controls": [
+    {
+      "type": "worldView",
+      "name": "worldView",
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "config": {
+        "bounds" : {
+          "width" : 380,
+          "height" : 280
+        }
+      }
+    },
+    {
+      "name": "zoomIn",
+      "location": {
+        "x": 15,
+        "y": 15
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "zoomIn.png",
+        "inactive": "zoomIn.png"
+      }
+    },
+    {
+      "name": "zoomOut",
+      "location": {
+        "x": 90,
+        "y": 15
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "zoomOut.png",
+        "inactive": "zoomOut.png"
+      }
+    },
+    {
+      "name": "fullscreen",
+      "location": {
+        "x": 340,
+        "y": 15
+      },
+      "type": "toggleIcon",
+      "config": {
+        "active": "min.png",
+        "inactive": "max.png"
+      }
+    }
+  ]
+}

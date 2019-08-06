@@ -1,0 +1,13 @@
+{
+	"phases": [{
+		"period": 1,
+		"length": 10000,
+		"underlay": "space.png"
+	},
+	{
+		"period": 1,
+		"length": 10000,
+		"underlay": "stars.png"
+	}
+	]
+}

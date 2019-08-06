@@ -1,5 +1,6 @@
 {
   "worldWidth" : 400,
+  "weather" : "/weather/galaxy/weather.jwe",
   "metersPerUnit" : 1.0,
   "worldHeight" : 400,
   "entities" : [ {

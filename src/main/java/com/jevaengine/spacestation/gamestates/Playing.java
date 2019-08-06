@@ -32,14 +32,9 @@ import com.jevaengine.spacestation.ui.playing.NetworkDeviceInteractionHandler;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory;
 import com.jevaengine.spacestation.ui.playing.PlayingWindowFactory.PlayingWindow;
 import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector;
-import io.github.jevaengine.audio.IAudioClipFactory;
-import io.github.jevaengine.graphics.ISpriteFactory;
+import com.jevaengine.spacestation.ui.starmap.StarmapWindowFactory;
 import io.github.jevaengine.math.Vector2D;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
-import io.github.jevaengine.rpg.entity.character.IRpgCharacter.NullRpgCharacter;
-import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.world.IParallelWorldFactory;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.scene.ISceneBufferFactory;
 import io.github.jevaengine.world.scene.TopologicalOrthographicProjectionSceneBufferFactory;
@@ -58,22 +53,27 @@ public class Playing implements IState {
 	private static final URI LEM_DISPLAY_WINDOW = URI.create("file:///ui/windows/dcpu/lem/layout.jwl");
 	private static final URI CONFIG_NETWORK_WINDOW = URI.create("file:///ui/windows/netconfig/layout.jwl");
 
-	private static final float CAMERA_ZOOM = 2.5f;
+	private static final float SHIP_CAMERA_ZOOM = 2.5f;
+	private static final float GALAXY_CAMERA_ZOOM = 1.0f;
 
 	private IStateContext m_context;
 	private final World m_world;
+	private final World m_galaxy;
+	private StarmapWindowFactory.StarmapWindow m_starmapWindow;
 	private PlayingWindow m_playingWindow;
 
 	private final Logger m_logger = LoggerFactory.getLogger(Playing.class);
 
 	private SpaceCharacter m_player = null;
+	private SpaceCharacter m_spaceship = null;
 
 	private Hud m_hud;
 	private LoadoutHud m_loadoutHud;
 	private InventoryHud m_inventoryHud;
 
-	public Playing(World world) {
+	public Playing(World world, World galaxy) {
 		m_world = world;
+		m_galaxy = galaxy;
 	}
 
 	private WorldInteractionBehaviorInjector.IInteractionHandler[] createInteractionHandlers() {
@@ -86,50 +86,7 @@ public class Playing implements IState {
 
 	}
 
-	@Override
-	public void enter(IStateContext context) {
-		m_context = context;
-		
-		try {
-			ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
-			FollowCamera camera = new FollowCamera(sceneBufferFactory);
-			camera.setZoom(CAMERA_ZOOM);
-
-			SpaceCharacter playerEntityBuffer = m_world.getEntities().getByName(SpaceCharacter.class, "player");
-
-			if (playerEntityBuffer != null) {
-				m_player = playerEntityBuffer;
-			} else {
-				m_logger.error("Character entity was not placed in world.");
-				return;
-			}
-
-			camera.attach(m_world);
-			camera.setTarget(m_player);
-
-			Vector2D resolution = context.getWindowManager().getResolution();
-			m_hud = new HudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, m_player.getInventory(), m_player.getLoadout());
-			m_hud.setTopMost(true);
-			m_hud.setMovable(false);
-			m_hud.center();
-			m_hud.setLocation(new Vector2D(m_hud.getLocation().x, resolution.y - m_hud.getBounds().height));
-			
-			m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory());
-			m_loadoutHud.setMovable(false);
-			m_loadoutHud.setTopMost(true);
-			m_loadoutHud.setVisible(false);
-			m_loadoutHud.center();
-			m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x, resolution.y - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
-			
-			m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory(), m_player);
-			m_inventoryHud.setMovable(false);
-			m_inventoryHud.setTopMost(true);
-			m_inventoryHud.setVisible(false);
-			m_inventoryHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x + m_loadoutHud.getBounds().width + 10,
-												  m_loadoutHud.getLocation().y));
-
-
-/*
+	private void initializeDebug(IStateContext context) throws WindowConstructionException {
 			//Gas Simulation Debug
 			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeB);
 			debug.setMovable(true);
@@ -152,49 +109,122 @@ public class Playing implements IState {
 			debug.setLocation(new Vector2D(0, 0));
 
 			//Gas Simulation Debug
-			debug = = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeD);
+			debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.PipeD);
 			debug.setMovable(true);
 			debug.setTopMost(true);
 			debug.setVisible(true);
 			debug.setLocation(new Vector2D(0, 0));
 
-*/
-			//Gas Simulation Debug
-			GasDebugFactory.GasDebug debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
-			debug.setMovable(true);
-			debug.setTopMost(true);
-			debug.setVisible(true);
-			debug.setLocation(new Vector2D(0, 0));
+		//Gas Simulation Debug
+		debug = new GasDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
+		debug.setMovable(true);
+		debug.setTopMost(true);
+		debug.setVisible(true);
+		debug.setLocation(new Vector2D(0, 0));
 
-			GasClusterMapDebugFactory.GasClusterMapDebug clusterDebug = new GasClusterMapDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
-			clusterDebug.setMovable(true);
-			clusterDebug.setTopMost(true);
-			clusterDebug.setVisible(true);
-			clusterDebug.setLocation(new Vector2D(0, 0));
+		GasClusterMapDebugFactory.GasClusterMapDebug clusterDebug = new GasClusterMapDebugFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, GasSimulationNetwork.Environment);
+		clusterDebug.setMovable(true);
+		clusterDebug.setTopMost(true);
+		clusterDebug.setVisible(true);
+		clusterDebug.setLocation(new Vector2D(0, 0));
 
+	}
 
-			CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes(), m_player.getStatusResolver());
-			int y = context.getWindowManager().getResolution().y / 2 - hud.getBounds().height;
-			hud.setMovable(false);
-			hud.setTopMost(true);
-			hud.setVisible(true);
-			hud.setLocation(new Vector2D(context.getWindowManager().getResolution().x - hud.getBounds().width - 20, y));
+	private void initializeGalaxy(IStateContext context) throws WindowConstructionException {
+		ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
+		FollowCamera camera = new FollowCamera(sceneBufferFactory);
+		camera.setZoom(GALAXY_CAMERA_ZOOM);
 
-			m_hud.getObservers().add(new HudFactory.IHudObserver() {
-				@Override
-				public void movementSpeedChanged(boolean isRunning) { }
+		SpaceCharacter playerEntityBuffer = m_galaxy.getEntities().getByName(SpaceCharacter.class, "player");
 
-				@Override
-				public void inventoryViewChanged(boolean isVisible) {
-					m_loadoutHud.setVisible(isVisible);
-					m_inventoryHud.setVisible(isVisible);
-				}
-			});
-			
-			m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), context.getWindowFactory()).create(camera, m_player, createInteractionHandlers());
-			m_playingWindow.center();
-			m_playingWindow.focus();
-			
+		if (playerEntityBuffer != null) {
+			m_spaceship = playerEntityBuffer;
+		} else {
+			m_logger.error("Character entity was not placed in world.");
+			return;
+		}
+
+		camera.attach(m_galaxy);
+		camera.setTarget(m_spaceship);
+
+		m_starmapWindow = new StarmapWindowFactory(context.getWindowManager(), context.getWindowFactory()).create(camera, m_spaceship, createInteractionHandlers());
+		Vector2D res = m_context.getWindowManager().getResolution();
+		m_starmapWindow.setLocation(new Vector2D(res.x - m_starmapWindow.getBounds().width - 20, 40));
+		m_starmapWindow.focus();
+		m_starmapWindow.setMovable(false);
+		m_starmapWindow.setTopMost(true);
+
+	}
+
+	private void initializeShip(IStateContext context) throws WindowConstructionException {
+		ISceneBufferFactory sceneBufferFactory = new TopologicalOrthographicProjectionSceneBufferFactory(new StationProjectionFactory().create());
+		FollowCamera camera = new FollowCamera(sceneBufferFactory);
+		camera.setZoom(SHIP_CAMERA_ZOOM);
+
+		SpaceCharacter playerEntityBuffer = m_world.getEntities().getByName(SpaceCharacter.class, "player");
+
+		if (playerEntityBuffer != null) {
+			m_player = playerEntityBuffer;
+		} else {
+			m_logger.error("Character entity was not placed in world.");
+			return;
+		}
+
+		camera.attach(m_world);
+		camera.setTarget(m_player);
+
+		Vector2D resolution = context.getWindowManager().getResolution();
+		m_hud = new HudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player, m_player.getInventory(), m_player.getLoadout());
+		m_hud.setTopMost(true);
+		m_hud.setMovable(false);
+		m_hud.center();
+		m_hud.setLocation(new Vector2D(m_hud.getLocation().x, resolution.y - m_hud.getBounds().height));
+
+		m_loadoutHud = new LoadoutHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory());
+		m_loadoutHud.setMovable(false);
+		m_loadoutHud.setTopMost(true);
+		m_loadoutHud.setVisible(false);
+		m_loadoutHud.center();
+		m_loadoutHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x, resolution.y - m_hud.getBounds().height - m_loadoutHud.getBounds().height));
+
+		m_inventoryHud = new InventoryHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getLoadout(), m_player.getInventory(), m_player);
+		m_inventoryHud.setMovable(false);
+		m_inventoryHud.setTopMost(true);
+		m_inventoryHud.setVisible(false);
+		m_inventoryHud.setLocation(new Vector2D(m_loadoutHud.getLocation().x + m_loadoutHud.getBounds().width + 10,
+		m_loadoutHud.getLocation().y));
+
+		CharacterStatusHudFactory.StatusHud hud = new CharacterStatusHudFactory(context.getWindowManager(), context.getWindowFactory()).create(m_player.getAttributes(), m_player.getStatusResolver());
+		int y = context.getWindowManager().getResolution().y / 2 - hud.getBounds().height + 100;
+		hud.setMovable(false);
+		hud.setTopMost(true);
+		hud.setVisible(true);
+		hud.setLocation(new Vector2D(context.getWindowManager().getResolution().x - hud.getBounds().width - 20, y));
+
+		m_hud.getObservers().add(new HudFactory.IHudObserver() {
+			@Override
+			public void movementSpeedChanged(boolean isRunning) { }
+
+			@Override
+			public void inventoryViewChanged(boolean isVisible) {
+				m_loadoutHud.setVisible(isVisible);
+				m_inventoryHud.setVisible(isVisible);
+			}
+		});
+
+		m_playingWindow = new PlayingWindowFactory(context.getWindowManager(), context.getWindowFactory()).create(camera, m_player, createInteractionHandlers());
+		m_playingWindow.center();
+		m_playingWindow.focus();
+
+	}
+
+	@Override
+	public void enter(IStateContext context) {
+		m_context = context;
+
+		try {
+			initializeShip(context);
+			initializeGalaxy(context);
 		} catch (WindowConstructionException e) {
 			m_logger.error("Error occured constructing demo world or world view. Reverting to MainMenu.", e);
 			m_context.setState(new MainMenu());
@@ -211,5 +241,6 @@ public class Playing implements IState {
 	@Override
 	public void update(int deltaTime) {
 		m_world.update(deltaTime);
+		m_galaxy.update(deltaTime);
 	}
 }
