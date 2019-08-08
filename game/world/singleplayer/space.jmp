@@ -10,7 +10,7 @@
       "y" : 52.0,
       "z" : 2.0
     },
-    "type" : "character",
+    "type" : "ship",
     "config" : "/artifact/ship/assaultboat/entity.jec",
     "direction" : 8
   }, {

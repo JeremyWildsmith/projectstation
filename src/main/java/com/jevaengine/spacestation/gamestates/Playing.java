@@ -22,6 +22,7 @@ import com.jevaengine.spacestation.IState;
 import com.jevaengine.spacestation.IStateContext;
 import com.jevaengine.spacestation.StationProjectionFactory;
 import com.jevaengine.spacestation.entity.character.SpaceCharacter;
+import com.jevaengine.spacestation.entity.character.SpaceShip;
 import com.jevaengine.spacestation.gas.GasSimulationNetwork;
 import com.jevaengine.spacestation.ui.*;
 import com.jevaengine.spacestation.ui.HudFactory.Hud;
@@ -65,7 +66,7 @@ public class Playing implements IState {
 	private final Logger m_logger = LoggerFactory.getLogger(Playing.class);
 
 	private SpaceCharacter m_player = null;
-	private SpaceCharacter m_spaceship = null;
+	private SpaceShip m_spaceship = null;
 
 	private Hud m_hud;
 	private LoadoutHud m_loadoutHud;
@@ -135,7 +136,7 @@ public class Playing implements IState {
 		FollowCamera camera = new FollowCamera(sceneBufferFactory);
 		camera.setZoom(GALAXY_CAMERA_ZOOM);
 
-		SpaceCharacter playerEntityBuffer = m_galaxy.getEntities().getByName(SpaceCharacter.class, "player");
+		SpaceShip playerEntityBuffer = m_galaxy.getEntities().getByName(SpaceShip.class, "player");
 
 		if (playerEntityBuffer != null) {
 			m_spaceship = playerEntityBuffer;

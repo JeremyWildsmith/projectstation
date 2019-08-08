@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.jevaengine.spacestation.entity.StationEntityFactory;
 import com.jevaengine.spacestation.entity.character.SpaceCharacterFactory;
+import com.jevaengine.spacestation.entity.character.SpaceShipFactory;
 import com.jevaengine.spacestation.item.StationItemFactory;
 import com.jevaengine.spacestation.ui.StationControlFactory;
 import io.github.jevaengine.IAssetStreamFactory;
@@ -49,6 +50,7 @@ import io.github.jevaengine.rpg.ui.RpgControlFactory;
 import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.ui.DefaultControlFactory;
 import io.github.jevaengine.ui.IControlFactory;
+import io.github.jevaengine.ui.style.IUIStyleFactory;
 import io.github.jevaengine.world.IEffectMapFactory;
 import io.github.jevaengine.world.IWorldFactory;
 import io.github.jevaengine.world.TiledEffectMapFactory;
@@ -195,11 +197,14 @@ public class Main implements WindowListener
 
 				@Inject
 				private ISceneModelFactory modelFactory;
+				@Inject
+				private IUIStyleFactory styleFactory;
 
 				@Override
 				public IEntityFactory get() {
+					SpaceShipFactory spaceshipFactory = new SpaceShipFactory(itemFactory, scriptBuilderFactory, audioClipFactory, animationSceneModelFactory, configurationFactory, styleFactory, particleEmitterFactory);
 					IEntityFactory base = new RpgEntityFactory(scriptBuilderFactory, audioClipFactory, configurationFactory, characterFactory, particleEmitterFactory, animationSceneModelFactory, modelFactory);
-					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory, rotueFactory);
+					return new StationEntityFactory(base, itemFactory, configurationFactory, animationSceneModelFactory, assetStreamFactory, rotueFactory, spaceshipFactory);
 				}
 			});
 

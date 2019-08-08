@@ -18,6 +18,7 @@
  */
 package com.jevaengine.spacestation.ui.starmap;
 
+import com.jevaengine.spacestation.entity.character.SpaceShip;
 import com.jevaengine.spacestation.ui.playing.CameraBehaviorInjector;
 import com.jevaengine.spacestation.ui.playing.PlayerMovementBehaviorInjector;
 import com.jevaengine.spacestation.ui.playing.WorldInteractionBehaviorInjector;
@@ -50,17 +51,18 @@ public final class StarmapWindowFactory {
 		m_windowFactory = windowFactory;
 	}
 
-	public StarmapWindow create(FollowCamera camera, IRpgCharacter character, IInteractionHandler[] interactionHandlers) throws WindowConstructionException {
+	public StarmapWindow create(FollowCamera camera, SpaceShip character, IInteractionHandler[] interactionHandlers) throws WindowConstructionException {
 		return this.create(camera, character, interactionHandlers, new WorldInteractionBehaviorInjector.DefaultActionHandler());
 	}
 
-	public StarmapWindow create(FollowCamera camera, IRpgCharacter character, IInteractionHandler[] interactionHandlers, WorldInteractionBehaviorInjector.IActionHandler actionHandler) throws WindowConstructionException {
+	public StarmapWindow create(FollowCamera camera, SpaceShip character, IInteractionHandler[] interactionHandlers, WorldInteractionBehaviorInjector.IActionHandler actionHandler) throws WindowConstructionException {
 			Observers observers = new Observers();
 		
 		Window window = m_windowFactory.create(PLAYING_VIEW_WINDOW);
 		m_windowManager.addWindow(window);
 
 		try {
+			new GunBehaviorInjector(character).inject(window);
 			new NavigateBehaviorInjector(character, character.getMovementResolver()).inject(window);
 			new WorldInteractionBehaviorInjector(character, actionHandler, interactionHandlers).inject(window);
 			new StarmapCameraBehaviorInjector(camera).inject(window);

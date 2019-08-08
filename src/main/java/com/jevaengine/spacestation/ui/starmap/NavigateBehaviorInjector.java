@@ -334,14 +334,27 @@ public class NavigateBehaviorInjector extends WindowBehaviourInjector {
 
 					@Override
 					public void render(Graphics2D g, int x, int y, float scale) {
-						g.setColor(Color.green);
+						g.setColor(Color.white);
 
 						Vector2D origin = projection.dot(getOrigin()).getXy().multiply(scale).round();
 						Vector2D navLOc = new Vector2D(x - origin.x, y - origin.y);
 
 						Vector2D start = projection.dot(m_source.getBody().getLocation().difference(NavigateTargetEntity.this.getBody().getLocation())).getXy().multiply(scale).round();
 						start = start.add(navLOc);
-						g.drawLine(navLOc.x, navLOc.y, start.x, start.y);
+
+                        g.setStroke(new BasicStroke());
+
+                        /*
+                        int length = (int)start.difference(navLOc).getLength();
+                        for(int i = 0; i < length; i+= 40 * scale) {
+                            Vector2F dir = new Vector2F(navLOc.difference(start)).normalize();
+                            Vector2D loc = start.add(dir.multiply(i).round());
+                            //g.fillOval(loc.x - 2, loc.y - 2, 4, 4);
+                            int offset = (int)(4 * scale);
+                            g.drawPolygon(new int[]{loc.x-offset, loc.x, loc.x+offset, loc.x}, new int[]{loc.y, loc.y + offset, loc.y, loc.y - offset}, 4);
+                        }*/
+
+                        g.drawLine(start.x, start.y, navLOc.x, navLOc.y);
 					}
 				};
 

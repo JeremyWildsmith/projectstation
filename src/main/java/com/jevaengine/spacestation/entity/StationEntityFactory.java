@@ -9,6 +9,8 @@ import com.jevaengine.spacestation.DamageCategory;
 import com.jevaengine.spacestation.DamageDescription;
 import com.jevaengine.spacestation.DamageSeverity;
 import com.jevaengine.spacestation.entity.atmos.*;
+import com.jevaengine.spacestation.entity.character.SpaceShip;
+import com.jevaengine.spacestation.entity.character.SpaceShipFactory;
 import com.jevaengine.spacestation.entity.network.*;
 import com.jevaengine.spacestation.entity.power.*;
 import com.jevaengine.spacestation.entity.projectile.LaserProjectile;
@@ -19,9 +21,11 @@ import io.github.jevaengine.IAssetStreamFactory.AssetStreamConstructionException
 import io.github.jevaengine.config.*;
 import io.github.jevaengine.rpg.entity.Door;
 import io.github.jevaengine.rpg.entity.RpgEntityFactory.DoorDeclaration;
+import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItemFactory;
 import io.github.jevaengine.rpg.item.IItemFactory.ItemContructionException;
+import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
@@ -63,14 +67,18 @@ public class StationEntityFactory implements IEntityFactory {
 
 	private final IRouteFactory m_routeFactory;
 
+	private final SpaceShipFactory m_spaceshipFactory;
+
 	@Inject
-	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory, IAssetStreamFactory assetStreamFactory, IRouteFactory routeFactory) {
+	public StationEntityFactory(IEntityFactory base, IItemFactory itemFactory, IConfigurationFactory configurationFactory, IAnimationSceneModelFactory animationSceneModelFactory, IAssetStreamFactory assetStreamFactory, IRouteFactory routeFactory, SpaceShipFactory spaceshipFactory) {
 		m_base = base;
 		m_configurationFactory = configurationFactory;
 		m_animationSceneModelFactory = animationSceneModelFactory;
 		m_itemFactory = itemFactory;
 		m_assetStreamFactory = assetStreamFactory;
 		m_routeFactory = routeFactory;
+
+		m_spaceshipFactory = spaceshipFactory;
 	}
 
 	@Override
@@ -213,6 +221,16 @@ public class StationEntityFactory implements IEntityFactory {
 
 					return new Wormhole(instanceName, model, decl.link);
 				} catch (ISceneModelFactory.SceneModelConstructionException | ValueSerializationException e) {
+					throw new IEntityFactory.EntityConstructionException(e);
+				}
+			}
+		}),
+		ship(SpaceShip.class, "ship", new EntityBuilder() {
+			@Override
+			public IEntity create(StationEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws IEntityFactory.EntityConstructionException {
+				try {
+					return entityFactory.m_spaceshipFactory.create(instanceName, context, auxConfig);
+				} catch (IRpgCharacterFactory.CharacterCreationException e) {
 					throw new IEntityFactory.EntityConstructionException(e);
 				}
 			}
